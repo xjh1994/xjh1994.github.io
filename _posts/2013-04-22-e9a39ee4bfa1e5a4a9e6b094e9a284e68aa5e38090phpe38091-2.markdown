@@ -1,0 +1,127 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 12:04:08+00:00
+layout: post
+slug: '%e9%a3%9e%e4%bf%a1%e5%a4%a9%e6%b0%94%e9%a2%84%e6%8a%a5%e3%80%90php%e3%80%91-2'
+title: 飞信天气预报【PHP】
+wordpress_id: 454
+categories:
+- 未分类
+---
+
+[php]
+&lt;?php
+//采集反应时间设置
+set_time_limit(0);
+
+//天气预报采集目标网址   杭州天气预报
+$url     = 'http://www.weather.com.cn/weather/101210101.shtml';
+
+//实例化采集机器
+$gather  = new gather();
+//获取目标网址HTML
+$html    = $gather-&gt;geturlfile($url);
+//获取内容
+$start   = '&lt;div class="weatherYubaoBox"&gt;';
+$end     = '&lt;div id="weatherYubao2" class="weatherYubao"&gt;';
+$content = $gather-&gt;get_sub_content($html, $start, $end);
+$text 	 = substr(SpHtml2Text($content), 42);
+
+//载入飞信类(类下载<a title="飞信类" href="http://code.google.com/p/php-fetion/downloads/list" target="_blank">http://code.google.com/p/php-fetion/downloads/list</a>)
+require './lib/PHPFetion.php';
+// 手机号、飞信密码
+$fetion = new PHPFetion('xxxxxxxxxxx', 'xxxxxxxx');
+//发送的号码,与天气预报信息
+$fetion-&gt;send('18758056856', $text);
+
+echo 'ok!发送成功!';
+
+/**
+* 采集类
+*/
+class gather {
+
+    public $pagestring = '';
+    private $db;
+
+    function __construct() {
+        global $db;
+        $this-&gt;db = $db;
+    }
+
+    function geturlfile($url) {
+        $url = trim($url);
+        $content = '';
+        if (extension_loaded('curl')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            $content = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $content = file_get_contents($url);
+        }
+        return trim($content);
+    }
+
+    function s($code) {
+        preg_match_all('/&lt;a.+?href=["|\']?([^&gt;"\' ]+)["|\']?\s*[^&gt;]*&gt;([^&gt;]+)&lt;\/a&gt;/is', $code, $arr);
+        return array('name' =&gt; $arr[2], 'url' =&gt; $arr[1]);
+    }
+
+    function get_sub_content($str, $start, $end) {
+        $start = trim($start);
+        $end = trim($end);
+        if ($start == '' || $end == '') {
+            return $str;
+        }
+        $str = explode($start, $str);
+        $str = explode($end, $str[1]);
+        return $str[0];
+    }
+
+    function vd($var) {
+        echo "&lt;div style=\"border:1px solid #ddd;background:#F7F7F7;padding:5px 10px;\"&gt;\r\n";
+        echo "&lt;pre style=\"font-family:Arial,Vrinda;font-size:14px;\"&gt;\r\n";
+        var_dump($var);
+        echo "\r\n&lt;/pre&gt;\r\n";
+        echo "&lt;/div&gt;";
+    }
+
+}
+
+//html转text
+function SpHtml2Text($str)
+{
+	 $str = preg_replace("/&lt;sty(.*)\/style&gt;|&lt;scr(.*)\/script&gt;|&lt;!--(.*)--&gt;/isU","",$str);
+	 $alltext = "";
+	 $start = 1;
+	 for($i=0;$i&lt;strlen($str);$i++)
+	 {
+	  if($start==0 &amp;&amp; $str[$i]=="&gt;")
+	  {
+	   $start = 1;
+	  }
+	  else if($start==1)
+	  {
+	   if($str[$i]=="&lt;")
+	   {
+		$start = 0;
+		$alltext .= " ";
+	   }
+	   else if(ord($str[$i])&gt;31)
+	   {
+		$alltext .= $str[$i];
+	   }
+	  }
+	 }
+	 $alltext = str_replace("　"," ",$alltext);
+	 $alltext = preg_replace("/&amp;([^;&amp;]*)(;|&amp;)/","",$alltext);
+	 $alltext = preg_replace("/[ ]+/s"," ",$alltext);
+	 return $alltext;
+}
+?&gt;
+[/php]

@@ -1,0 +1,30 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 10:10:51+00:00
+layout: post
+slug: html5-%e5%8f%82%e8%80%83%e6%89%8b%e5%86%8c-chm%e7%89%88w3school%e7%9a%84html5%e7%a6%bb%e7%ba%bf%e7%89%88
+title: w3school.chm 全套教程
+wordpress_id: 46
+categories:
+- HTML&amp;CSS
+- 原创
+tags:
+- chm
+- HTML5
+- 参考手册
+- 教程
+---
+
+# HTML5 参考手册 chm版(w3school的html5离线版)
+
+
+[ftp://jb51user:www.jb51.net@xl.jb51.net:8021/201203/books/html5_chm_jb51.rar](ftp://jb51user:www.jb51.net@xl.jb51.net:8021/201203/books/html5_chm_jb51.rar)
+
+
+# w3school.chm 全套教程
+
+
+
+
+#        [http://d4.pc6.com/xy1/W3CSchool.zip](http://d4.pc6.com/xy1/W3CSchool.zip)

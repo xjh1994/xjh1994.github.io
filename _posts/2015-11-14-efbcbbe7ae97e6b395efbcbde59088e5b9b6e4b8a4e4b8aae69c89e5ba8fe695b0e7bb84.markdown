@@ -1,0 +1,179 @@
+---
+author: xjh1994
+comments: true
+date: 2015-11-14 07:43:44+00:00
+layout: post
+slug: '%ef%bc%bb%e7%ae%97%e6%b3%95%ef%bc%bd%e5%90%88%e5%b9%b6%e4%b8%a4%e4%b8%aa%e6%9c%89%e5%ba%8f%e6%95%b0%e7%bb%84'
+title: ［算法］合并两个有序数组
+wordpress_id: 612
+categories:
+- 算法
+---
+
+**没有算法版本：**
+
+    
+    {
+        //两个有序数组的合并函数
+        public static int[] MergeList(int a[],int b[])
+        {
+            int result[];  
+            if(checkSort(a) && checkSort(b))  //检查传入的数组是否是有序的
+            {
+                result = new int[a.length+b.length];
+                
+                int i=0,j=0,k=0;   //i:用于标示a数组    j：用来标示b数组  k：用来标示传入的数组
+    
+                while(i a[j])
+                        return false;
+                    else change = false;
+            }
+            return true;        
+        }
+        
+        // 打印函数
+        public static void print(int b[])
+        {
+             for(int i=0; i
+
+
+**采用从后往前合并，首先计算出总长度，设置一个指针从a数组最后往前移动**
+
+    
+    #include 
+    #include 
+    #include 
+    using namespace std;
+    
+    #define MAX 1024
+    
+    void combine(int *a, int *b, int len1, int len2)
+    {
+    	if(a == NULL || b == NULL || (len1 + len2) > MAX)
+    		return ;
+    
+    	int new_point;
+    	int a_point = len1 - 1;
+    	int b_point = len2 - 1;
+    
+    	new_point = len1 + len2 -1;	//总的长度
+    
+    	while(a_point >= 0 && b_point >= 0)
+    	{
+    		if(a[a_point] > b[b_point])
+    		{
+    			a[new_point--] = a[a_point--];
+    		}
+    		else
+    		{
+    			a[new_point--] = b[b_point--];
+    		}
+    	}
+    
+    	while(a_point >= 0)
+    	{
+    		a[new_point--] = a[a_point--];
+    	}
+    
+    	while(b_point >= 0)
+    	{
+    		a[new_point--] = b[b_point--];
+    	}
+    
+    	return ;
+    }
+    
+    int main()
+    {
+    	int b[MAX] = {1,2,3,4};
+    	int a[MAX] = {5,6,7,8};
+    
+    	combine(a, b, 4, 4);
+    
+    	for(int i =0 ; i <= 4 + 4 -1; i++)
+    	{
+    		cout << a[i] << " ";
+    	}
+    
+    	return 0;
+    }
+    
+
+
+1、用temp数组作为中间变量，保存两个有序子数组的合并结果数组，再复制回原数组。
+空间复杂度O(N)，时间复杂度O(m+n)，m、n为两个有序子数组的长度
+//将有二个有序数列a[first...mid]和a[mid...last]合并。
+void mergearray(int a[], int first, int mid, int last, int temp[])
+{
+int i = first, j = mid + 1;
+int m = mid, n = last;
+int k = 0;
+
+while (i <= m && j <= n)
+{
+if (a[i] <= a[j])
+temp[k++] = a[i++];
+else
+temp[k++] = a[j++];
+}
+
+while (i <= m)
+temp[k++] = a[i++];
+
+while (j <= n)
+temp[k++] = a[j++];
+
+for (i = 0; i < k; i++)
+a[first + i] = temp[i];
+}
+
+2、没有中间变量temp，要求空间复杂度为O(1)，通过交换+移位实现
+空间复杂度O(1)，时间复杂度最坏为O(N*N)
+void swap(int *a, int *b)
+{
+int tmp;
+
+tmp = *a;
+*a = *b;
+*b = tmp;
+}
+
+void func(int a[], int n)
+{
+int i,j;
+
+if (n<=0)
+{
+return;
+}
+i = 0;
+j = n/2;
+
+while(j {
+if (a[i]<=a[j]) { i++; } else { swap(a[i], a[j]); for (int k=j-1;k>i; k--) // 每次发现一个a[i]>a[j]交换后，需要把i+1到j的子数组循环右移一
+{ // 位，(i+1)~（j）保持有序，这里可以优化
+swap(a[k], a[k+1]);
+}
+i++;
+j++;
+}
+}
+
+}
+3、优化第二种方法，交换+循环移位（不用中间变量，通过交换反转实现），第二种方法中，每次移动的单位是一个数，效率低，可以采用块循环移动（单位是连续几个数）进行优化
+空间复杂度O(1),时间复杂度应该比O(m+n)要小！
+void Reverse(int *a , int begin , int end ) //反转
+{
+for(; begin < end; begin++ , end--) swap(a[begin] , a[end]); } void RotateRight(int *a , int begin , int end , int k) //循环右移，a[begin:end]段向右循环移位k位 { int len = end - begin + 1; //数组的长度 k %= len; Reverse(a , begin , end - k); Reverse(a , end - k + 1 , end); Reverse(a , begin , end); } // 将有序数组a[begin...mid] 和 a[mid+1...end] 进行合并 void Merge(int *a , int begin , int end ) { int i , j , k; i = begin; j = 1 + ((begin + end)>>1); //位运算的优先级比较低，需要加一个括号
+while(i <= end && j <= end && i<j)
+{
+while(i <= end && a[i] < a[j])
+i++;
+k = j; //暂时保存指针j的位置
+while(j <= end && a[j] < a[i]) // 找到连续的j索引列都小于a[i]，进行块循环移动 j++; if(j > k)
+RotateRight(a , i , j-1 , j-k); //数组a[i...j-1]循环右移j-k次，a[i..j-1]始终有序
+i += (j-k+1); //第一个指针往后移动，因为循环右移后，数组a[i....i+j-k]是有序的
+}
+}
+
+转自：http://blog.163.com/l_greatsea/blog/static/204986044201521303816600/

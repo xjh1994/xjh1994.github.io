@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【LINUX】关机命令</title>
+  <meta name="description" content="Linux关机应该采用正确的关机方法。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/linux/2013/04/23/e3-80-90linux-e3-80-91-e5-85-b3-e6-9c-ba-e5-91-bd-e4-bb-a4.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【LINUX】关机命令</h1>
+    <p class="post-meta"><time datetime="2013-04-23T13:01:50+08:00" itemprop="datePublished">Apr 23, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Linux关机应该采用正确的关机方法。</p>
+
+<p>Windows由于是单用户、“假多”任务的情况，所以即使你的计算机关机，也不会对别人造成影响。不过在Linux中，由于每个程序都是在后台执行的，因此，在你看不到的屏幕背后可能有很多人同时在你的主机上工作。而且，若不正常关机可能会造成文件系统的损毁。所以，正常情况下，要关机时需要注意下面几件事情：</p>
+
+<p>(1)查看系统的使用状态。</p>
+
+<p>要看目前有谁在线，可以用who命令。要看网络的联机状态，可以用netstat -a命令。要看后台执行那个的程序可以执行ps-aux命令。</p>
+
+<p>(2)通知在线用户的关机时刻</p>
+
+<p>这个时候可以使用shutdown命令。</p>
+
+<p><strong>shutdown命令：</strong></p>
+
+<p>语法：shutdown [-t秒] [-arkhncfF] 时间 警告消息(单引号)</p>
+
+<p>-t:后面加描述表示过几秒之后关机。</p>
+
+<p>-k:不是真的关机，仅仅发出警告消息。</p>
+
+<p>-r:将系统服务停掉之后重启。</p>
+
+<p>-h:将系统服务停掉之后立即关机。</p>
+
+<p>-f:关机并开机之后，强制跳过fsck的磁盘检查。</p>
+
+<p>-F:系统重启之后，强制进行fsck的磁盘检查。</p>
+
+<p>-c:取消已经进行的shutdown命令内容。</p>
+
+<p>另外，重启关机命令有<strong>reboot、halt、poweroff。</strong>其实在默认情况下，都完成一样的工作。</p>
+
+<p>halt先调用shutdown，而shutdown最后调用halt。不过，shutdown可以根据目前已经启动的服务来逐次关闭服务后才关机；而halt能够在不理会目前系统情况下，进行硬件关机的特殊功能。</p>
+
+<p>除了这些，还有一个关机命令是<strong>init 0</strong></p>
+
+<p>init是切换执行等级的命令。Linux共有7种执行等级，比较重要的是下面4种等级：</p>
+
+<p><strong>run level 0:关机</strong></p>
+
+<p><strong>run level 3：纯命令行模式</strong></p>
+
+<p><strong>run level 5：含有图形界面模式</strong></p>
+
+<p><strong>run level 6：重启</strong></p>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

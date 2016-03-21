@@ -1,0 +1,143 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 05:05:49+00:00
+layout: post
+slug: php-%e5%be%ae%e4%bf%a1%e6%8e%a5%e5%8f%a3%e5%b0%81%e8%a3%85%e7%b1%bb
+title: 【PHP】 微信接口封装类
+wordpress_id: 95
+categories:
+- PHP&amp;MySQL
+- 编程
+tags:
+- PHP
+- 微信
+- 类
+---
+
+[php]
+<?php
+/**
+  * 微信公众平台接口PHP100封装功能类文件
+  * author codesth.com
+  * date 2013-4-23 PRC:E+8 13:04
+  * linkme QQ977135148 codesth.com
+  */
+
+define("TOKEN", "codeit");
+$wechatObj = new wechatCallbackapiTest();
+$wechatObj->weixin_run(); //执行接收器方法
+
+class wechatCallbackapiTest
+{
+   private $fromUsername;
+   private $toUsername;
+   private $times;
+   private $keyword;
+
+   public function weixin_run(){
+     $this->responseMsg();
+$arr[]=array("编点很靠谱！","aa","http://www.codesth.com/wp-content/uploads/2013/04/qrcode_for_gh_ab220ba32dd5_430-300x300.jpg","http://www.codesth.com");
+$arr[]=array("编点很靠谱！","aa","http://www.codesth.com/wp-content/uploads/2013/04/qrcode_for_gh_ab220ba32dd5_430-300x300.jpg","http://www.codesth.com");
+$arr[]=array("编点很靠谱！","aa","http://www.codesth.com/wp-content/uploads/2013/04/qrcode_for_gh_ab220ba32dd5_430-300x300.jpg","http://www.codesth.com");
+$this->fun_xml("news",$arr,array(2,0));
+   }
+
+  function t($n){
+   include("t_api.php");
+   $c_name=$t_api[$n];
+   $json=file_get_contents("http://m.weather.com.cn/data/101110310.html");
+   return json_decode($json);
+  }
+
+public function valid()
+    {
+        $echoStr = $_GET["echostr"];
+
+        //valid signature , option
+        if($this->checkSignature()){
+         echo $echoStr;
+         exit;
+        }
+    }
+
+    public function responseMsg()
+    {
+$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+if (!empty($postStr)){
+               $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+                $this->fromUsername = $postObj->FromUserName;
+                $this->toUsername = $postObj->ToUserName;
+                $this->keyword = trim($postObj->Content);
+$this->times = time();
+        }else {
+         echo "this a file for weixin API!";
+         exit;
+        }
+    }
+
+//微信封装类,
+//type: text 文本类型, news 图文类型
+//text,array(内容),array(ID)
+//news,array(array(标题,介绍,图片,超链接),...小于10条),array(条数,ID)
+
+private function fun_xml($type,$value_arr,$o_arr=array(0)){
+ //=================xml header============
+ $con="<xml>
+<ToUserName><![CDATA[{$this->fromUsername}]]></ToUserName>
+<FromUserName><![CDATA[{$this->toUsername}]]></FromUserName>
+<CreateTime>{$this->times}</CreateTime>
+<MsgType><![CDATA[{$type}]]></MsgType>";
+
+      //=================type content============
+ switch($type){
+
+   case "text" :
+ $con.="<Content><![CDATA[{$value_arr[0]}]]></Content>
+<FuncFlag>{$o_arr}</FuncFlag>";
+break;
+
+case "news" :
+ $con.="<ArticleCount>{$o_arr[0]}</ArticleCount>
+<Articles>";
+foreach($value_arr as $id=>$v){
+if($id>=$o_arr[0]) break; else null; //判断数组数不超过设置数
+         $con.="<item>
+<Title><![CDATA[{$v[0]}]]></Title>
+<Description><![CDATA[{$v[1]}]]></Description>
+<PicUrl><![CDATA[{$v[2]}]]></PicUrl>
+<Url><![CDATA[{$v[3]}]]></Url>
+</item>";
+}
+$con.="</Articles>
+<FuncFlag>{$o_arr[1]}</FuncFlag>";
+break;
+
+ } //end switch
+
+//=================end return============
+ echo $con."</xml>";
+}
+
+private function checkSignature()
+{
+        $signature = $_GET["signature"];
+        $timestamp = $_GET["timestamp"];
+        $nonce = $_GET["nonce"];
+
+$token = TOKEN;
+$tmpArr = array($token, $timestamp, $nonce);
+sort($tmpArr);
+$tmpStr = implode( $tmpArr );
+$tmpStr = sha1( $tmpStr );
+
+if( $tmpStr == $signature ){
+return true;
+}else{
+return false;
+}
+}
+}
+
+?>
+[/php]

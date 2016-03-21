@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【编程语言排行榜】2013年5月：UNIX下的Bash</title>
+  <meta name="description" content="2013年5月9日，Tiobe公司发布新一期编程语言排行榜。新一期榜单前10位没有太多的变化，只是Objective-C与C++，Ruby与JavsScript在互相交换位置罢了。今天我们要关注的是排在TOP 20后半部的一门语言——Bash。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/it%E8%B5%84%E8%AE%AF/linux/%E7%BC%96%E7%A8%8B/2013/05/09/e3-80-90-e7-bc-96-e7-a8-8b-e8-af-ad-e8-a8-80-e6-8e-92-e8-a1-8c-e6-a6-9c-e3-80-912013-e5-b9-b45-e6-9c-88-ef-bc-9aunix-e4-b8-8b-e7-9a-84bash.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【编程语言排行榜】2013年5月：UNIX下的Bash</h1>
+    <p class="post-meta"><time datetime="2013-05-09T12:37:56+08:00" itemprop="datePublished">May 9, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>2013年5月9日，Tiobe公司发布新一期编程语言排行榜。新一期榜单前10位没有太多的变化，只是Objective-C与C++，Ruby与JavsScript在互相交换位置罢了。今天我们要关注的是排在TOP 20后半部的一门语言——Bash。</p>
+
+<p>大家先请看本期TOP20榜单</p>
+
+<p><a href="http://img.cnbeta.com/newsimg/130509/1101200548369122.jpg"><img src="http://img.cnbeta.com/newsimg/130509/1101200548369122.jpg" alt="" /></a></p>
+
+<p>从2013年4月的编程语言排行榜我们惊异的发现Bash这门UNIX下的壳语言，竟然有了飞速的上升。从第34位最高上升到第13位。究竟这门语言有什么独特之处？</p>
+
+<p><a href="http://img.cnbeta.com/newsimg/130509/1101241616233161.jpg"><img src="http://img.cnbeta.com/newsimg/130509/1101241616233161.jpg" alt="" /></a></p>
+
+<p><strong>Bash语言2013年以来的增长势头</strong></p>
+
+<p><strong>Bash的诞生</strong></p>
+
+<p>Bash这个单词的来源十分晦涩，它的名字是一系列缩写：Bourne-Again SHell — 这是关于Bourne shell（sh）的一个双关语（Bourne again / born again）。</p>
+
+<p><a href="http://img.cnbeta.com/newsimg/130509/11012421708053299.jpg"><img src="http://img.cnbeta.com/newsimg/130509/11012421708053299.jpg" alt="" /></a></p>
+
+<p><strong>Bash语言之父Stephen R. Bourne</strong></p>
+
+<p>Bash 是大多数Linux系统以及Mac OS X v10.4默认的shell，它能运行于大多数Unix风格的操作系统之上，甚至被移植到了Microsoft Windows上的Cygwin系统中，以实现windows的POSIX虚拟接口。此外，它也被DJGPP项目移植到了MS-DOS上。</p>
+
+<p>Bash是Linux的敲门砖，如果不懂Bash那其他东西就不用学习了。Linux透过终端下达指令，都是通过Bash来执行。</p>
+
+<p><strong>Bash语法</strong></p>
+
+<p>用vi编辑器编辑一个hello文件如下：</p>
+
+<ol>
+  <li>
+    <p>#!/bin/bash</p>
+  </li>
+  <li>
+    <p># This is a very simple example</p>
+  </li>
+  <li>
+    <p>echo Hello World</p>
+  </li>
+</ol>
+
+<p>这样最简单的一个 BASH 程序就编写完了。这里有几个问题需要说明一下：</p>
+
+<p>一，第一行的 #! 是什么意思</p>
+
+<p>二，第一行的 /bin/bash 又是什么意思</p>
+
+<p>三，第二行是注释吗</p>
+
+<p>四，echo 语句</p>
+
+<p>如何执行该程序呢？有两种方法：一种是显式制定 BASH 去执行：</p>
+
+<p>$ bash hello 或$ sh hello（这里 sh 是指向 bash 的一个链接，“lrwxrwxrwx 1 root root 4 Aug 20 05:41 /bin/sh -&gt; bash”）</p>
+
+<p>或者可以先将 hello 文件改为可以执行的文件，然后直接运行它，此时由于 hello 文件第一行的 “#! /bin/bash” 的作用，系统会自动用/bin/bash 程序去解释执行 hello 文件的：</p>
+
+<ol>
+  <li>
+    <p>$ chmod u+x hello</p>
+  </li>
+  <li>
+    <p>$ ./hello</p>
+  </li>
+</ol>
+
+<p>此处没有直接 “$ hello”是因为当前目录不是当前用户可执行文件的默认目录，而将当前目录“.”设为默认目录是一个不安全的设置。</p>
+
+<p>需要注意的是，BASH 程序被执行后，实际上 Linux 系统是另外开设了一个进程来运行的。</p>
+
+<p><strong>Bash命令行参数</strong></p>
+
+<p>在使用wget的时候，我喜欢加上一个-c的参数，这样可以让wget启用断点续传功能。这里的-c就是一个命令行参数。</p>
+
+<p>在写c语言的时候，我们使用字符串数组存储命令行参数，像我们所熟悉的argv[]。当然我们也需要命令行参数的个数，这存储在名为argc的整型变量中。argc和argv是约定俗成的名称，当然你可以使用自己的名称作为main函数的形参。</p>
+
+<p>在编写Bash脚本的时候，也同样可以使用命令行参数。在Bash函数中也可以使用参数，特殊的是，Bash中的函数是没有参数列表的，例如function foo</p>
+
+<p>这样便完成了一个函数头的定义，但是没有任何的形参名称，这是由于Bash中特殊的参数传递方法所致。</p>
+
+<p>这里需要说明的是，在Bash编程中命令行参数和函数的形参都采用统一的规则。</p>
+
+<p><strong>Bash的函数规则</strong></p>
+
+<p>在Bash中，所有变量在赋值是赋值号左侧直接写变量名。而在引用变量的值时，变量名的左侧需要加上$符号。写过PHP脚本可能对此深有印象，不过PHP是赋值和引用都要写。</p>
+
+<p>Bash的参数是按照位置传递的，而且自动给出变量名称，例如$1就表示第一个参数，当然$2就是第二个参数，参数之间用空格区分。这样你可以顺序写到$n（n表示一个正整数），有几个参数都可以按照顺序引用。</p>
+
+<p>$0表示当前运行命令的名称，这个其实是特殊的参数，但是往往很少用到。</p>
+
+<p>如果你想得到参数的个数，它保存在一个特殊名称的变量里，叫做$#。</p>
+
+<p>$*和$@表示所有的参数，具体区别和其他一些特殊参数请见这里。</p>
+
+<p>注： 后面我们会用到一个$?参数，这表示上一条独立命令运行的结果。我们才c语言写程序的时候，常常以return 0作为程序正常退出的标志，这个0就被返回给Bash，而$?可以引用到上一个程序运行的结果。还记得Bash函数的参数和命令行参数是相同的吗？如果刚 刚执行完一个Bash函数，$?里就保存着这个函数的运行结果，即return的值。</p>
+
+<p>Bash学习资料（繁体版）<a href="http://linux.vbird.org/linux_basic/0320bash.php#bash">http://linux.vbird.org/linux_basic/0320bash.php#bash</a></p>
+
+<p>Bash相关资源下载：<a href="http://www.gnu.org/software/bash/">http://www.gnu.org/software/bash/</a></p>
+
+<p><strong>前10名编程语言走势图</strong></p>
+
+<p><a href="http://img.cnbeta.com/newsimg/130509/11012531780146716.jpg"><img src="http://img.cnbeta.com/newsimg/130509/11012531780146716.jpg" alt="" /></a></p>
+
+<p><strong>20到50名语言排行</strong></p>
+<table align="center" border="1" id="Table2">
+<tbody>
+<tr>
+Position
+Programming Language
+Ratings
+</tr>
+<tr>
+
+<td>21
+</td>
+
+<td>MATLAB
+</td>
+
+<td>0.591%
+</td>
+</tr>
+<tr>
+
+<td>22
+</td>
+
+<td>SAS
+</td>
+
+<td>0.587%
+</td>
+</tr>
+<tr>
+
+<td>23
+</td>
+
+<td>Ada
+</td>
+
+<td>0.583%
+</td>
+</tr>
+<tr>
+
+<td>24
+</td>
+
+<td>R
+</td>
+
+<td>0.543%
+</td>
+</tr>
+<tr>
+
+<td>25
+</td>
+
+<td>ABAP
+</td>
+
+<td>0.501%
+</td>
+</tr>
+<tr>
+
+<td>26
+</td>
+
+<td>COBOL
+</td>
+
+<td>0.458%
+</td>
+</tr>
+<tr>
+
+<td>27
+</td>
+
+<td>Fortran
+</td>
+
+<td>0.419%
+</td>
+</tr>
+<tr>
+
+<td>28
+</td>
+
+<td>Scheme
+</td>
+
+<td>0.396%
+</td>
+</tr>
+<tr>
+
+<td>29
+</td>
+
+<td>Prolog
+</td>
+
+<td>0.326%
+</td>
+</tr>
+<tr>
+
+<td>30
+</td>
+
+<td>Haskell
+</td>
+
+<td>0.323%
+</td>
+</tr>
+<tr>
+
+<td>31
+</td>
+
+<td>Erlang
+</td>
+
+<td>0.315%
+</td>
+</tr>
+<tr>
+
+<td>32
+</td>
+
+<td>Common Lisp
+</td>
+
+<td>0.307%
+</td>
+</tr>
+<tr>
+
+<td>33
+</td>
+
+<td>Scratch
+</td>
+
+<td>0.303%
+</td>
+</tr>
+<tr>
+
+<td>34
+</td>
+
+<td>D
+</td>
+
+<td>0.301%
+</td>
+</tr>
+<tr>
+
+<td>35
+</td>
+
+<td>Scala
+</td>
+
+<td>0.300%
+</td>
+</tr>
+<tr>
+
+<td>36
+</td>
+
+<td>Logo
+</td>
+
+<td>0.282%
+</td>
+</tr>
+<tr>
+
+<td>37
+</td>
+
+<td>NXT-G
+</td>
+
+<td>0.243%
+</td>
+</tr>
+<tr>
+
+<td>38
+</td>
+
+<td>F#
+</td>
+
+<td>0.240%
+</td>
+</tr>
+<tr>
+
+<td>39
+</td>
+
+<td>Smalltalk
+</td>
+
+<td>0.237%
+</td>
+</tr>
+<tr>
+
+<td>40
+</td>
+
+<td>APL
+</td>
+
+<td>0.226%
+</td>
+</tr>
+<tr>
+
+<td>41
+</td>
+
+<td>Forth
+</td>
+
+<td>0.220%
+</td>
+</tr>
+<tr>
+
+<td>42
+</td>
+
+<td>ActionScript
+</td>
+
+<td>0.204%
+</td>
+</tr>
+<tr>
+
+<td>43
+</td>
+
+<td>ML
+</td>
+
+<td>0.204%
+</td>
+</tr>
+<tr>
+
+<td>44
+</td>
+
+<td>RPG (OS/400)
+</td>
+
+<td>0.178%
+</td>
+</tr>
+<tr>
+
+<td>45
+</td>
+
+<td>Awk
+</td>
+
+<td>0.162%
+</td>
+</tr>
+<tr>
+
+<td>46
+</td>
+
+<td>Tcl
+</td>
+
+<td>0.152%
+</td>
+</tr>
+<tr>
+
+<td>47
+</td>
+
+<td>PL/I
+</td>
+
+<td>0.149%
+</td>
+</tr>
+<tr>
+
+<td>48
+</td>
+
+<td>LabVIEW
+</td>
+
+<td>0.138%
+</td>
+</tr>
+<tr>
+
+<td>49
+</td>
+
+<td>Ladder Logic
+</td>
+
+<td>0.137%
+</td>
+</tr>
+<tr>
+
+<td>50
+</td>
+
+<td>JScript.NET
+</td>
+
+<td>0.136%
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>下面是第50到100的编程语言排名</strong></p>
+
+<p>(Visual) FoxPro, ABC, Agilent VEE, Algol, Alice, Apex, ATLAS, AutoLISP, bc, BlitzMax, C shell, CFML, CL (OS/400), Clarion, Clipper, Clojure, Dart, Dylan, Eiffel, Emacs Lisp, Fantom, Gambas, Go, Groovy, Heron, Icon, IDL, Informix-4GL, J, JavaFX Script, Lasso, LPC, MUMPS, Oberon, OCaml, Occam, OpenCL, Oz, Pike, PowerShell, REXX, S, sed, SPARK, thinBasic, VBScript, VHDL, WebDNA, xBase, XSLT</p>
+
+<p>转自<a href="http://www.cnbeta.com/articles/236668.htm">http://www.cnbeta.com/articles/236668.htm</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,46 @@
+---
+author: xjh1994
+comments: true
+date: 2013-09-10 14:34:37+00:00
+layout: post
+slug: '%e6%89%b9%e5%a4%84%e7%90%86%e5%90%af%e5%8a%a8%e4%b8%8e%e5%81%9c%e6%ad%a2oracle%e6%9c%8d%e5%8a%a1'
+title: 批处理启动与停止Oracle服务
+wordpress_id: 485
+categories:
+- 未分类
+---
+
+[![批处理启动与停止Oracle服务](http://bcs.duapp.com/blogxjh/blog/cem0MNTWB1s661.jpg)](http://bcs.duapp.com/blogxjh/blog/cem0MNTWB1s661.jpg)
+
+装上Oracle11g之后我这台2G内存的PC内存占用达到了75%（估计是因为我开了两个实例==）。。。只能把Oracle的服务设成手动开启，但每次要用都要手动开启一遍，感觉很麻烦也浪费时间，于是用一点点批处理的知识写了个bat，想用的时候双击bat文件，然后就可以去倒杯茶喝了。。。
+
+启动：
+
+    
+    @echo off
+    @ ECHO 正在启动Oracle服务，先去倒杯茶吧==
+    net start "OracleDBConsoleoracle"
+    net start "OracleOraDb11g_home2TNSListener"
+    net start "OracleServiceORACLE"
+    @ ECHO 启动完毕 按任意键关闭窗口
+    pause
+    exit
+
+
+停止：
+
+    
+    @echo off
+    @ ECHO 正在停止Oracle服务，想干嘛干嘛去吧==
+    net stop "OracleDBConsoleoracle"
+    net stop "OracleOraDb11g_home2TNSListener"
+    net stop "OracleServiceORACLE"
+    @ ECHO 停止完毕 按任意键关闭窗口
+    pause
+    exit
+
+
+说明：服务名要和自己电脑上的一致，比如“OracleDBConsoleoracle”，默认安装的应该是“OracleDBConsoleorcl”，这个可以在windows服务里看到（运行services.msc）。
+创建批处理方法：新建一个文本文档，把上面代码拷贝到文档中（分两个，一个start.bat，一个stop.bat，写在一个bat里我不会=-=求大神教育），然后把后缀名改为bat。
+
+Oracle更新了，有流量和网速的同学可以去下载试试 [Oracle12c](http://www.oracle.com/technetwork/database/enterprise-edition/overview/index.html)

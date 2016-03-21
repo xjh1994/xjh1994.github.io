@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【Linux】各个Linux版本的本地root密码破解方法</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2013/07/12/e3-80-90linux-e3-80-91-e5-90-84-e4-b8-aalinux-e7-89-88-e6-9c-ac-e7-9a-84-e6-9c-ac-e5-9c-b0root-e5-af-86-e7-a0-81-e7-a0-b4-e8-a7-a3-e6-96-b9-e6-b3-95.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【Linux】各个Linux版本的本地root密码破解方法</h1>
+    <p class="post-meta"><time datetime="2013-07-12T06:54:58+08:00" itemprop="datePublished">Jul 12, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><img src="http://photocdn.sohu.com/20120105/Img331254178.jpg" alt="" /></p>
+
+<p>这段时间老碰到有人问及各个linux版本的本地root密码破解方法，我这里自己以及在网络上搜集了些资料，希望对看到了这文章而又恰好用得到的技术人员有点帮助：</p>
+
+<p>（一）RedHat/CentOS/Fedora 系统密码破解</p>
+
+<p>1.在grub选项菜单按E进入编辑模式</p>
+
+<p>2.编辑kernel 那行最后加上S (或者Single）</p>
+
+<p>3.按B，启动到single-user mode</p>
+
+<p>4.进入后执行下列命令</p>
+
+<ul>
+  <li>
+    <h1 id="mount--t-proc-proc-proc">mount -t proc proc /proc</h1>
+  </li>
+  <li>
+    <h1 id="mount--o-remountrw-">mount -o remount,rw /</h1>
+  </li>
+  <li>
+    <p>#passwd</p>
+  </li>
+  <li>
+    <p>#sync</p>
+  </li>
+  <li>#reboot</li>
+</ul>
+
+<p>（二）Debian linux 系统密码破解</p>
+
+<p>1.在grub选项菜单’Debian GNU/Linux,…(recovery mode)’，按e进入编辑模式</p>
+
+<p>2.编辑kernel那行最后面的 ro single 改成 rw single init=/bin/bash，按b执行重启</p>
+
+<p>3.进入后执行下列命令</p>
+
+<ul>
+  <li>
+    <p>#mount -a</p>
+  </li>
+  <li>
+    <p>#passwd root</p>
+  </li>
+  <li>
+    <p>#reboot</p>
+  </li>
+</ul>
+
+<p>（三）Freebsd 系统密码破解</p>
+
+<p>1.开机进入引导菜单</p>
+
+<p>2.选择每项(按4)进入单用户模式</p>
+
+<p>3.进入之后输入一列命令</p>
+
+<ul>
+  <li>
+    <p>root@#mount -a</p>
+  </li>
+  <li>
+    <p>root@#fsck -y</p>
+  </li>
+  <li>
+    <p>root@#passwd(修改密码命令)</p>
+  </li>
+  <li>
+    <p>root@#root(要破解密码的用户名)</p>
+  </li>
+  <li>
+    <p>Enter new unix password:</p>
+  </li>
+  <li>
+    <p>root@#init 6 (重启)</p>
+  </li>
+</ul>
+
+<p>（四）Solaris 系统密码破解</p>
+
+<p>1.在grub选项菜中选择solaris failasfe 项</p>
+
+<p>2.系统提示Do you wish to have it mounted read-write on /a ?[y,n,?] 选择y</p>
+
+<p>3.就进入单用户模式</p>
+
+<p>4.输入下列命令:passwd</p>
+
+<p><a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#114;&#111;&#111;&#116;&#064;&#035;&#105;&#110;&#105;&#116;">&#114;&#111;&#111;&#116;&#064;&#035;&#105;&#110;&#105;&#116;</a> 6 (重启)</p>
+
+<p>（五）NetBsd 系统密码破解</p>
+
+<p>1.开机：当出现提示符号并开始倒数五秒时， 键入以下指令：</p>
+
+<blockquote>
+  <p>boot -s (进入单用户模式命令)</p>
+</blockquote>
+
+<p>2.在以下的提示符号中</p>
+
+<p>Enter pathname of shell or RETURN for sh:</p>
+
+<p>按下 Enter。</p>
+
+<p>3.键入以下指令：</p>
+
+<ul>
+  <li>
+    <h1 id="mount--a">mount -a</h1>
+  </li>
+  <li>
+    <h1 id="fsck--y">fsck -y</h1>
+  </li>
+</ul>
+
+<p>4.使用 passwd 更改 root 的密码。</p>
+
+<p>5.使用 exit 指令进入多人模式。</p>
+
+<p>（六）SUSE 系统密码破解</p>
+
+<p>1.重新启动机器，在出现grub引导界面后，在启动linux的选项里加上init=/bin/bash，通过给内核传递init=/bin/bash参数使得OS在运行login程序之前运行bash，出现命令行。</p>
+
+<p>2.稍等片刻出现(none)#:命令行。</p>
+
+<p>3.这时输入mount -n / -o remount,rw 表示将根文件系统重新mount为可读写，有了读写权限后就可以通过passwd命令修改密码了。</p>
+
+<p>4.这时输入passwd命令就可以重置密码了</p>
+
+<p>5.修改完成后记得用mount -n / -o remount,ro将根文件系统置为原来的状态。</p>
+
+<p>原文地址：<a href="http://os.51cto.com/art/200910/159523.htm">http://os.51cto.com/art/200910/159523.htm</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

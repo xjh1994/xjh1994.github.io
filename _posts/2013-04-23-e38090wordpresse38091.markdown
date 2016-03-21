@@ -1,0 +1,295 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 12:46:35+00:00
+layout: post
+slug: '%e3%80%90wordpress%e3%80%91'
+title: 【WordPress】
+wordpress_id: 107
+categories:
+- WordPress
+- 原创
+- 开源项目
+tags:
+- WordPress
+---
+
+本站就是用WordPress搭建的哦！
+
+**以下是来自百度百科的介绍：**
+
+WordPress是一种使用PHP语言开发的[博客](http://baike.baidu.com/view/1509.htm)平台，用户可以在支持PHP和MySQL 数据库的服务器上架设自己的网志。也可以把 WordPress 当作一个[内容管理系统](http://baike.baidu.com/view/857578.htm)（CMS）来使用。WordPress 是一个免费的开源项目，在[GNU通用公共许可证](http://baike.baidu.com/view/20301.htm)下授权发布。目前最新版本为2013 年 1 月 25 日WordPress 3.5.1版。 WordPress 被认为是Michel Valdrighi所开发的网志平台b2/cafelog的正式继承者。“WordPress”这个名字出自 Christine Selleck 的主意，他是主要开发者Matt Mullenweg的朋友。
+
+
+
+
+WordPress起初是一款个人[博客系统](http://baike.baidu.com/view/2882559.htm)，并逐步演化成一款内容管理系统软件，它是使用[PHP](http://baike.baidu.com/view/99.htm)语言和[MySQL](http://baike.baidu.com/view/24816.htm)数据库开发的
+
+
+
+
+
+
+
+
+
+。用户可以在支持 PHP 和 MySQL[数据库](http://baike.baidu.com/view/1088.htm)的服务器上使用自己的 Blog。
+
+
+
+
+
+
+WordPress 功能强大，插件众多，易于扩充功能。安装使用都非常方便。
+
+
+
+
+WordPress 的原版是英文版的，[UTF-8](http://baike.baidu.com/view/25412.htm)[编码](http://baike.baidu.com/view/237708.htm)，目前最新版本为2012 年 12月 12日的3.5版，本版本的别称是“Elvin”，献给鼓手 Elvin Jones 等。WordPress 3.5要求 PHP 版本至少为 5.2.4（不支持第三方推出的“PHP 6.0”），[mysql](http://baike.baidu.com/view/24816.htm)版本至少为5.0。为满足日益庞大的中文用户需求开辟了中文官方站点且提供中文版程序下载。还有爱好者开发了中文语言包，使其可以支持中文。不过，由于使用的[编码](http://baike.baidu.com/view/237708.htm)原因，中文字符截断时会出现[乱码](http://baike.baidu.com/view/47.htm)。不过桑葚网友制作的中文 WordPress[工具箱](http://baike.baidu.com/view/1241761.htm)插件可以解决这个问题。
+
+
+
+
+WordPress有许多第三方开发的免费[模板](http://baike.baidu.com/view/160044.htm)，安装方式简单易用。不过要做一个自己的[模板](http://baike.baidu.com/view/160044.htm)，则需要你有一定的专业知识。比如你至少要懂的[HTML](http://baike.baidu.com/view/692.htm)代码、[CSS](http://baike.baidu.com/view/15916.htm)、PHP等相关知识。
+
+
+
+
+使用WordPress平台的发行商约占全球[网站](http://baike.baidu.com/view/4232.htm)的10%。而WordPress官方[网站](http://baike.baidu.com/view/4232.htm)的每月独立访问用户数则达到3亿。
+
+
+
+
+从3.0开始，WordPress已经内置多用户博客的功能，可以通过简单的设置就开设一个支持多域名的博客平台。
+
+
+
+
+WordPress 是目前世界上使用最广泛的博客系统，是一款开源的PHP软件。因为使用者众多，所以WordPress社区非常活跃，有丰富的插件模板资源。使用WordPress可以快速搭建独立的博客网站。
+
+
+
+
+WordPress 不仅仅是一个博客程序，也是一个优秀的小型CMS，很多非博客网站也是用WordPress搭建的。
+
+
+
+
+
+
+
+
+
+WordPress 拥有
+
+
+
+
+[![WordPress](http://f.hiphotos.baidu.com/baike/s%3D220/sign=3dc39f879f3df8dca23d8893fd1172bf/72f082025aafa40f06f75fadab64034f78f01988.jpg)](http://baike.baidu.com/picview/23618/23618/0/4bd1e8033e810d373912bbea.html)[  ](http://baike.baidu.com/picview/23618/23618/0/4bd1e8033e810d373912bbea.html)WordPress
+
+
+
+
+世界上最强大的插件和[模板](http://baike.baidu.com/view/160044.htm)，这也是WordPress非常流行的一个特性。当前WordPress插件数据库中有超过18000个插件，包括[SEO](http://baike.baidu.com/view/1047.htm)、[控件](http://baike.baidu.com/view/185331.htm)等等。个人可以根据它的核心程序提供的规则自己开发[模板](http://baike.baidu.com/view/160044.htm)和插件。这些插件可以快速地把你的[博客](http://baike.baidu.com/view/1509.htm)改变成[cms](http://baike.baidu.com/view/15867.htm)、forums、[门户](http://baike.baidu.com/view/8929.htm)等各种类型的站点。WordPress Theme 风格[模板](http://baike.baidu.com/view/160044.htm)是世界上的程序里最多的，类型复杂，品质可嘉，样式繁多，只需要把不同的[模板](http://baike.baidu.com/view/160044.htm)文件放到空间的 Theme 目录下就可以自由的在[后台](http://baike.baidu.com/view/179243.htm)变幻，方便使用，而且不管你安装的的什么语言包，都可以自由的使用这些风格。只需要把插件文件上传到你 FTP 的 plugin 目录下，就可以直接在后台启用管理，甚至功能强大点的插件会有一个自己的管理目录在后台出现，就象程序自带似的方便，这些插件囊括了几乎所有互联网上可以实现的功能。
+
+
+
+
+
+
+
+
+
+### 优点
+
+
+
+
+
+	
+  1. 
+
+
+WordPress 功能强大、扩展性强，这主要得益于其插件众多，易于扩充功能，基本上一个完整网站该有的功能，通过其第三方插件都能实现所有功能；
+
+
+	
+  2. 
+
+
+wordpress搭建的博客对seo搜索引擎友好，收录也快，排名靠前；
+
+
+	
+  3. 
+
+
+适合DIY，如果你是喜欢丰富内容的网站，那么wordpress可以很好地符合你的胃口。
+
+
+	
+  4. 
+
+
+主题很多，网站上一大片都是wordpress的主题，各色各样，应有尽有！
+
+
+
+
+
+### 缺点
+
+
+
+
+
+	
+  1. 
+
+
+wordpress源码系统初始内容基本只是一个框架，需要时间自己搭建；
+
+
+	
+  2. 
+
+
+插件虽多，但是不能安装太多插件，否则会拖累网站速度和降低用户体验；
+
+
+	
+  3. 
+
+
+服务器空间选择自由较小！
+
+
+	
+  4. 
+
+
+wordpress备份和网站转移比较繁琐，需要涉及到数据库！
+
+
+	
+  5. 
+
+
+静态化较差，确切地说是真正静态化做得不好，如果要想对整个网站生成真正静态化页面，还做不好，最多只能生成首页和文章页静态页面，所以只能对整站实现伪静态化！
+
+
+	
+  6. 
+	
+  7. 
+
+
+**建站流程**
+
+
+	
+  8. 
+
+
+**1. 注册域名**
+
+
+
+
+一般注册.com[域名](http://baike.baidu.com/view/43.htm)就可以了，而且价格也不贵，基本上是60元一年。
+
+
+
+
+**2. 申请虚拟主机**
+
+
+
+
+[虚拟主机](http://baike.baidu.com/view/7383.htm)运营商很多。国内主机速度快，但比较贵，而且空间一般比较小；国外主机便宜，且空间大多没有限制，但速度比国内主机慢。如何取舍就 看大家对于自己博客的定位了。如果只是用博客写写文章的话，推荐还是用国内的主机，如果是建论坛或者资源站点，经常需要上传附件的话，最好选用国外的不限空间的主机。
+
+
+
+
+**3. 在虚拟主机上绑定自己的域名**
+
+
+
+
+使用虚拟主机控制面板绑定申请的域名。
+
+
+
+
+大多数虚拟主机绑定域名都很简单，实在不会的话，可以找[虚拟主机](http://baike.baidu.com/view/7383.htm)的客服。
+
+
+
+
+**4. 下载WordPress程序**
+
+
+
+
+在WordPress中文官网上下载最新的WordPress程序。
+
+
+
+
+**5. 修改域名的DNS解析**
+
+
+
+
+为什么在浏览器上输入你的域名，就会显示你的主页呢。这就要靠[DNS](http://baike.baidu.com/view/22276.htm)解析了。域名注册商都会提供一个域名管理系统，在里面可以修改自己域名的DNS 解析。将DNS解析到自己购买的虚拟主机上就可以了。虚拟主机的地址在虚拟主机提供商的控制面板上可以查看到，一般在绑定域名的页面会显示。
+
+
+
+
+**6. 创建WordPress数据库**
+
+
+
+
+国外的主机的有一好处是可以创建[数据库](http://baike.baidu.com/view/1088.htm)。而国内主机一般要另行购买。
+
+
+
+
+在控制面板中创建数据库，记下数据库的主机地址、数据库名称、用户名、密码，这四个要素。
+
+
+
+
+**7. 修改**WordPress**的安装配置文件。**
+
+
+
+
+就是修改wordpress程序包中的wp-config-sample.php文件，将第6步中记下的主机地址、数据库名称、用户名、密码填入相应的位置就可以了，并重命名为wp-config.php
+
+
+
+
+**8. 上传**WordPress**程序至ixwebhosting主机域名空间**
+
+
+
+
+这步使用[ftp](http://baike.baidu.com/view/369.htm)上传就可以了。很简单。
+
+
+
+
+**9. 访问 域名/wp-admin/install.php进行wordpress安装**。填写博客信息及邮箱。
+
+
+
+
+这一步最轻松，完全傻瓜化，自动化。填邮箱的时候填第4步的域名邮箱比较好。当然也可以填自己的常用邮箱。
+
+
+
+WordPress下载地址：[http://cn.wordpress.org/wordpress-3.5.1-zh_CN.zip](http://cn.wordpress.org/wordpress-3.5.1-zh_CN.zip)
+
+

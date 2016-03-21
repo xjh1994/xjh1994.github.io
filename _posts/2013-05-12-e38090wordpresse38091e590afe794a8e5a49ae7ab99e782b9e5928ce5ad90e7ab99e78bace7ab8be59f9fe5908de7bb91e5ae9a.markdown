@@ -1,0 +1,129 @@
+---
+author: xjh1994
+comments: true
+date: 2013-05-12 08:26:57+00:00
+layout: post
+slug: '%e3%80%90wordpress%e3%80%91%e5%90%af%e7%94%a8%e5%a4%9a%e7%ab%99%e7%82%b9%e5%92%8c%e5%ad%90%e7%ab%99%e7%8b%ac%e7%ab%8b%e5%9f%9f%e5%90%8d%e7%bb%91%e5%ae%9a'
+title: 【WordPress】启用多站点和子站独立域名绑定
+wordpress_id: 171
+categories:
+- WordPress
+- 开源项目
+tags:
+- WordPress
+- 域名
+- 多站点
+- 子站
+---
+
+对于认真做个人站点的人来讲，WordPress的多站点功能WordPress网络的出现给大家带来了非常好的消息。最起码建站群的话不用每个站都得装一个WordPress，主题，插件等等。也不会占用多的空间和服务器资源，管理成本也是大大降低。
+
+WordPress多站点下的所有站点都是共用主题和插件的，同时每个站又可以个性化应用。加上子站可以绑定独立域名，这样一来就是非常不错的事情了。如果你想建立一个像提供博客平台的网站，让你的用户建立自己的页面；或者你要和你的女友建情侣博客，启用WordPress多站点是必选之路，当然你得还要为她绑定个独立域名，否则那就是要分手的事情了，呵呵。
+
+默认情况下WordPress多站点功能是未开启的，需要自己动手（请先做好各种作备份工作）：
+
+1.首先修改WordPress根目录下的wp-config.php这个文件，把“define('WP_ALLOW_MULTISITE', true);”这段代码加进去，WordPress的官方建议是加到/* That‘s all， stop editing！ Happy blogging. */这段代码的上面，然后保存。
+
+2.然后登录WordPress控制面板，会多出一个“配置网络”选项，进入并按照提示把停用所有插件，把
+
+
+<blockquote>
+
+> 
+> "define('MULTISITE', true );
+> 
+> 
+
+> 
+> define('SUBDOMAIN_INSTALL', true);
+> 
+> 
+
+> 
+> $base = '/';
+> 
+> 
+
+> 
+> define('DOMAIN_CURRENT_SITE', 'iguitar.info');
+> 
+> 
+
+> 
+> define('PATH_CURRENT_SITE', '/');
+> 
+> 
+
+> 
+> define('SITE_ID_CURRENT_SITE', 1 );
+> 
+> 
+
+> 
+> define('BLOG_ID_CURRENT_SITE', 1 );"
+> 
+> 
+</blockquote>
+
+
+加到wp-config.php文件中/* That’s all， stop editing！ Happy blogging. */这段代码的前面，保存文件。
+
+3.把下面的这段代码加入到.htaccess文件中，并覆盖掉其他 WordPress 规则。
+
+
+<blockquote>
+
+> 
+> "RewriteEngine On
+> 
+> 
+
+> 
+> RewriteBase /
+> 
+> 
+
+> 
+> RewriteRule ^index.php$ - [L]
+> 
+> 
+
+> 
+> # uploaded files
+> 
+> 
+
+> 
+> RewriteRule ^files/(.+) wp-includes/ms-files.php?file=$1 [L]
+> 
+> 
+
+> 
+> RewriteCond %{REQUEST_FILENAME} -f [OR]
+> 
+> 
+
+> 
+> RewriteCond %{REQUEST_FILENAME} -d
+> 
+> 
+
+> 
+> RewriteRule ^ – [L]
+> 
+> 
+
+> 
+> RewriteRule. index.php [L]"
+> 
+> 
+</blockquote>
+
+
+4.在安装子站的过程中会提示选择为新站点使用子域名或子文件夹方式来安装，如果提示要求一定要以一种的方式进行安装请照办，如果选择的是子域名方式来安装，请务必要做泛域名解析，例如你的主域名是youname.com，那么泛域名解析就是*youname.com.泛域名解析需要你的主机支持才行。
+
+5.最后就是子站独立域名的绑定工作，请先做好域名A记录。我们这里要使用WordPress官方推荐的WordPress MU Domain Mapping插件。安装该插件后，在域映射配置选项绑定主机的IP地址后，在域名选项把站点ID和要绑定的域名绑定在一起就ok了，要注意的是这一步工作，一定要把带有www.开头和没有www开头的都要绑定（www.youname.com/youname.com），否则没有绑定的就无法访问，并跳转到主站去了。
+
+6.成功建立子站后，所有的站点的固定链接都会被更改，请手动把原来的固定链接修改回来就可以了，如果在开启多站点前使用的WordPress默认的固定链接方式，则不会有这一步的变化。
+
+原创文章作者波罗。马可，波罗。马可的博客http://boromeke.com发布

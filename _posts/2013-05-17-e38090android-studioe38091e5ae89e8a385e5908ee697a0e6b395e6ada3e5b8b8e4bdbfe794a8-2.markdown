@@ -1,0 +1,59 @@
+---
+author: xjh1994
+comments: true
+date: 2013-05-17 05:52:59+00:00
+layout: post
+slug: '%e3%80%90android-studio%e3%80%91%e5%ae%89%e8%a3%85%e5%90%8e%e6%97%a0%e6%b3%95%e6%ad%a3%e5%b8%b8%e4%bd%bf%e7%94%a8-2'
+title: 【Android Studio】安装后无法正常使用
+wordpress_id: 465
+categories:
+- 未分类
+---
+
+好多朋友下载了谷歌最新发布的Android Studio安装后无法正常使用，以下给出解决办法，知道更多解决办法的朋友们可以在下方留言交流。
+
+错误：
+
+
+<blockquote>ERROR: cannot start Android Studio. No JDK found. Please validate either ANDROID_STUDIO_JDK, or JDK_HOME or JAVA_HOME points to valid JDK installation. ECHO is off. Press any key to continue . . .</blockquote>
+
+
+解决方法：（设置好系统变量）
+
+
+<blockquote>添加一个系统变量 `JDK_HOME` 值为 `c:\Program Files\Java\jdk1.7.0_21\`
+
+(c:\Programe Files可根据安装路径自己修改)
+
+
+
+**其它错误解决（英）：[http://stackoverflow.com/questions/16574189/android-studio-installation-on-windows-7-fails-no-jdk-found](http://stackoverflow.com/questions/16574189/android-studio-installation-on-windows-7-fails-no-jdk-found)**
+
+
+
+附：</blockquote>
+
+
+
+
+Android Studio v0.1 下载地址（推荐使用下载工具）
+
+
+
+
+：1、Windows 版本，[http://t.cn/zTDlsga](http://t.cn/zTDlsga)
+
+
+
+
+ 2、Mac OS X 版本，[http://t.cn/zTDlsgK](http://t.cn/zTDlsgK)
+
+
+
+
+3、Linux 版本，[http://t.cn/zTDlsgS](http://t.cn/zTDlsgS)
+
+
+
+
+更多 Android Studio 介绍，[http://t.cn/zTDlsgo](http://t.cn/zTDlsgo)

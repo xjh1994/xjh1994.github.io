@@ -1,0 +1,107 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 10:58:38+00:00
+layout: post
+slug: 2012%e5%b9%b4%e6%9c%80%e7%bb%8f%e5%85%b8%e7%9a%8410%e6%ac%be-html5-%e6%b8%b8%e6%88%8f
+title: 2012年最经典的10款 HTML5 游戏
+wordpress_id: 60
+categories:
+- HTML&amp;CSS
+- 创意
+tags:
+- HTML5
+- 游戏
+---
+
+在2012年，HTML5 游戏开发迈出了一大步。众多优秀的 [**HTML5**](http://www.cnblogs.com/lhb25/category/146076.html) 游戏让我们明白，我们并不需要高科技的演示或例子就能知道 HTML5 已经足够成熟，同时证明了开放的 Web 技术能与任何其他在游戏开发中使用的技术竞争。
+
+正如标题所说，这篇文章推荐的10款精彩的 [**HTML5**](http://www.cnblogs.com/lhb25/category/146076.html) 游戏把技术发挥到了极致，用事实证明，[**HTML5**](http://www.cnblogs.com/lhb25/category/146076.html) 能够可以创建出真实的，好玩的游戏。赶紧来体验这些精彩的游戏吧。（温馨提示：推荐使用 Chrome、Firefox、Safari 浏览器浏览和体验）
+
+
+### Cut the Rope
+
+
+割绳子游戏最初是由俄罗斯的游戏工作室 ZeptoLab 于2010年创建的。这是微软开发的 HTML5 版本。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/Cut-the-rope.jpg)](http://www.cuttherope.ie/)
+
+
+### A Grain of Truth
+
+
+A Grain of Truth 是波兰的 Rudowscy 兄弟开发的，是一款界面非常漂亮的点击冒险游戏。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/A-Grain-of-Truth.jpg)](http://www.zamolski.com/agot/)
+
+
+### Dune 2 Online
+
+
+这是在线版本的《沙丘魔堡》游戏，《沙丘魔堡》是实时策略游戏《星际争霸》、《帝国时代》和《命令与征服》之父。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/Dune-2-Online.jpg)](http://play-dune.com/)
+
+
+### Hex GL
+
+
+这是一款类似反重力赛车的游戏，充满未来感，使用基于 WebGL 的 Three.js 框架开发。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/HexGL.jpg)](http://hexgl.bkcore.com/)
+
+
+### Lux Ahoy
+
+
+Lux Ahoy 是一款烧焦的地球风格的回合制战斗游戏，通过控制角度和力量发射炮弹击中对手。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/LuxAhoy.jpg)](http://luxahoy.com/)
+
+
+### D.E.M.O.
+
+
+一款类似《反恐精英》的射击游戏，用来验证 Will Eastcott 和 Dave Evans 创建的游戏编辑工具：[PlayCanvas](http://playcanvas.com/)。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/D_E_M_O.jpg)](http://apps.playcanvas.com/playcanvas/scifi/latest)
+
+
+### BananaBread
+
+
+这款游戏使用了前沿的Emscripten——一个独特 LLVM 后端，可以将 LLVM 中间码编译成 JavaScript。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/bananaBread.jpg)](http://developer.mozilla.org/en-US/demos/detail/bananabread)
+
+
+### Save the Day
+
+
+这是一款简单的动作游戏，通过直升机在给定的时间内去搜救隐藏在地图上的幸存者。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/Save-the-day.jpg)](http://turbulenz.com/games/save-the-day/play)
+
+
+### Bombermine
+
+
+Bombermine 是一款实时的多人炸弹人游戏， 玩起来容易上瘾的。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/BomberMine.jpg)](http://bombermine.ru/)
+
+
+### BrowserQuest
+
+
+BrowserQuest 是经典之作，大型的 RPG 游戏，具有美观的艺术图形，由 [Little Workshop](http://www.littleworkshop.fr/) 和 [Mozilla](http://mozilla.org/) 开发。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/BrowserQuest.jpg)](http://browserquest.mozilla.org/)
+
+
+### onGameStart 2012 & onGameStart US 2013
+
+
+onGameStart 是一个大型的 HTML5 游戏会议，2013年3月15日将在美国纽约举办。
+
+[![](http://media.netmagazine.futurecdn.net/files/images/2012/12/HTML5games/onGameStart.jpg)](http://ongamestart.us/)

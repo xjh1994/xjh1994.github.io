@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【CSS】编写高效的CSS选择器</title>
+  <meta name="description" content="高效的CSS已经不是一个新话题，也不是一个我非得重拾的话题，但是，它却是自我在SKY工作以后，真正感兴趣并始终关注的一个话题。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/html&amp;css/2013/04/26/e3-80-90css-e3-80-91-e7-bc-96-e5-86-99-e9-ab-98-e6-95-88-e7-9a-84css-e9-80-89-e6-8b-a9-e5-99-a8.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【CSS】编写高效的CSS选择器</h1>
+    <p class="post-meta"><time datetime="2013-04-26T09:52:38+08:00" itemprop="datePublished">Apr 26, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>高效的CSS已经不是一个新话题，也不是一个我非得重拾的话题，但是，它却是自我在SKY工作以后，真正感兴趣并始终关注的一个话题。</p>
+
+<p>很多人或者忘记了，或者仅仅是没有意识到，CSS可以是高效的也可能导致低能。然而，我们可以不考虑当你自认为会的太少而使用了低效的CSS这种情况。</p>
+
+<p>这些规则只真正用在性能要求很高的网站上，这些网站对速度要求很高，任何一个页面可能含有成百上千个DOM元素。但是实践出真理，不管你是在打造下一个facebook 还是在开发一个本地的展示网页，多学点总是好的….</p>
+
+<p>CSS 选择器</p>
+
+<p>CSS 选择器对我们大多数人来说并不新鲜，较基础的选择器分别是类型（如 div），ID（如#header）和类（如.tweet）。</p>
+
+<p>较不寻常的包括基础的伪类（如:hover）和更复杂的CSS3以及 ‘正则’（‘regex’）选择器，比如：first-childor[class^=”grid-“]。</p>
+
+<p>选择器具有固有效率，引用<a href="http://stevesouders.com/">Steve Souders</a>的话来说，较有效到较不有效的CSS选择器的顺序是这样的：</p>
+
+<ol>
+  <li>
+    <p>ID,如#header</p>
+  </li>
+  <li>
+    <p>Class, 如.promo</p>
+  </li>
+  <li>
+    <p>Type, 如div</p>
+  </li>
+  <li>
+    <p>Adjacent sibling, 如h2 + p</p>
+  </li>
+  <li>
+    <p>Child, 如li &gt; ul</p>
+  </li>
+  <li>
+    <p>Descendant,如ul a</p>
+  </li>
+  <li>
+    <p>Universal,即*</p>
+  </li>
+  <li>
+    <p>Attribute, 如[type=”text”]</p>
+  </li>
+  <li>
+    <p>Pseudo-classes/-elements, 如a:hover</p>
+  </li>
+</ol>
+
+<p>引用自<a href="http://stevesouders.com/">Steve Souders</a>的Even Faster网站</p>
+
+<p>认识这很重要，虽然一个ID技术上更快而且表现更优，但几乎都不这样用。用Steve Souders的CSS测试器，我们可以发现<a href="http://stevesouders.com/efws/css-selectors/csscreate.php?n=1000&amp;sel=%23id&amp;body=background%3A+%23CFD&amp;ne=1000">一个 ID 选择器</a> 和 <a href="http://stevesouders.com/efws/css-selectors/csscreate.php?n=1000&amp;sel=.class&amp;body=background%3A+%23CFD&amp;ne=1000">一个类选择器</a> 在再渲染速度方面差别很小。</p>
+
+<p>在一台Windows机器上的Firefox6中，我获得了关于一个简单的类选择器的平均再渲染数据。ID选择器给出了12.5的平均值，所以实际上它要比一个类再渲染得慢一点。</p>
+
+<p>ID与类之间的速度差异几乎是不相干的。</p>
+
+<p>对一个类型（<a>）的选择测试，相比一个类或ID给出了<a href="http://stevesouders.com/efws/css-selectors/csscreate.php?n=1000&amp;sel=a&amp;body=background%3A+%23CFD&amp;ne=1000">慢得多的再渲染</a>。</a></p>
+
+<p>对一个层次非常多的子孙选择器的测试给出了 <a href="http://stevesouders.com/efws/css-selectors/csscreate.php?n=1000&amp;sel=div+div+div+div+div+div+a&amp;body=background%3A+%23CFD&amp;ne=1000">大约440的数值</a>!</p>
+
+<p>通过这我们可以发现IDs/classes与types/descendants的差别非常巨大…它们自身之间的差异很细微。</p>
+
+<p>注意 这些数值在不同的机器和浏览器变化非常大。我极力建议你自己运行一下。</p>
+
+<p> </p>
+
+<p>组合选择器</p>
+
+<p>你可以单独使用一种标准选择器，如#nav，来选择所有以”nav”为ID的元素，你也可以使用组合选择器，如#nav a，来选择任何在ID为’nav’的元素里面的链接元素。</p>
+
+<p>现在，我们从左到右读这个组合标签。我们先找到#nav ，然后再找到里面的元素。但是我们的浏览器不是这样解析的，它是从右到左来解析这些组合选择器的。</p>
+
+<p>当我们看到#nav里面有个a，而浏览器看到的却是有个a在 #nav里面，这些细微的差异对浏览器的性能有重大影响，同事学习他们是很有价值的。</p>
+
+<p>如果想知道浏览器这样解析的原因，请参考<a href="http://stackoverflow.com/questions/5797014/css-selectors-parsed-right-to-left-why">this discussion on Stack Overflow</a>.</p>
+
+<p>对浏览器来说，从最右边的元素（它最想渲染的元素）开始，然后回溯到DOM树比从DOM树的最高层开始选择向下寻找，甚至可能达不到最右边的选择器（关键的选择器）要高效。</p>
+
+<p>这对CSS选择器的性能有重大影响….</p>
+
+<p> </p>
+
+<table>
+<tbody>
+<tr>
+
+<td rowspan="2">
+
+
+关键选择器这里讨论的关键选择器, 是处在复杂选择器最右端的选择器，也是浏览器最先解析的选择器。
+
+让我们回到讨论开始的地方，哪种选择器最高效？哪种选择器作为关键选择器会影响选择器的性能；当我们书写CSS代码的时候，正是这个关键选择器影响选择器的效率。
+
+一个关键选择器是这样的：
+
+    
+    <span style="font-size: medium;">						#content.intro{}</span>
+
+
+天生高效选择器如类型选择器是不是就会有更高的性能？浏览器会寻找.Intro的所有实例（数量不会很多），然后向上查找DOM树，以确定该关键选择器是否在以“content’”为ID的元素里面。
+
+然后，以下的选择器性能就不怎么好了：
+
+    
+    <span style="font-size: medium;">						#content*{}</span>
+
+
+这个选择器做的工作是这样子的，它先查找每个页面（是每个单个的页面），然后去看看它们是否有一个 #content 的父元素。这是一个非常不高效的选择器，因为它的关键选择器执行开销太大了。
+
+运用这些知识我们就能在分类和选择元素时做更好的选择。
+
+ 
+
+
+
+</td>
+
+<td> 
+</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<tbody>
+<tr>
+
+<td rowspan="2">
+
+
+
+
+假设我们有一个非常庞大的页面，非常的大并且是一个还有一个庞大的网站。在这个也面上，有上百甚至上千哥<a>标签。社交媒体的链接只占很少的一部分，并且包含在ID为#social的<ul>里面。假设这些链接是，Twitter, facebook, Dribble 和 Google+。我们在这个页面上有四个社交媒体链接，还有上百个其他的链接。
+
+以下这个选择器代价很高而且性能不好：
+
+    
+    <span style="font-size: medium;">						#social a{}</span>
+
+
+浏览器将访问扫描页面上的上千个链接，然后才选择上#social节点下的四个链接。我们的关键选择器匹配了大量的我们并不感兴趣的标签。为了消除这个问题，我们可以为每一个包含在社交媒体<ul>块下面的<a>标签指定更明确和显式的选择器.social-link。但是这跟我们所知道的恰恰相反；我们知道了，当我们使用精简的标签的时候，尽量不要使用多余的类。
+
+
+
+
+
+<td>
+
+
+ 
+
+</td>
+
+
+
+
+
+
+
+
+
+<table>
+<tbody>
+<tr>
+
+<td rowspan="2">
+
+
+
+
+这就是为什么我觉得性能是如此的有意思；在网页标准最佳实践和速度之间，需要一个平衡。
+
+我们通常会这么写：
+
+    
+    <span style="font-size: medium;">						<ul id="social">
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Dribbble</a></li>
+        <li><a href="#">Google+</a></li>
+    </ul></span>
+
+
+CSS:
+
+    
+    <span style="font-size: medium;">						#social a{}</span>
+
+
+现在我们改为：
+
+    
+    <span style="font-size: medium;">						<ul id="social">
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Dribbble</a></li>
+        <li><a href="#">Google+</a></li>
+    </ul></span>
+
+
+对应的CSS:
+
+    
+    <span style="font-size: medium;">						#social .social-link{}</span>
+
+
+这是一个全新的关键选择器，匹配更少的元素，意味着浏览器可以更快地找到它们并给它们赋予样式。同时，实际上，我们可以进一步精简选择器，使用.social-link{}，而不需要过渡的约束它；阅读下一章节来了解详情。
+
+所以，概括的说，你的关键选择器是其中一个决定浏览器的工作量，所以你需要好好的留意它。
+
+ 
+
+
+### 过度修饰的选择器
+
+
+现在我们已经了解了关键选择器是什么，它是后续工作的基础，我们现在来看看如何进一步优化它。使用更明确的关键选择器就是，你需要避免过度使用修饰选择器。以下是一个过度修饰的选择器：
+
+
+
+
+
+
+
+
+
+<table>
+<tbody>
+<tr>
+
+<td>1
+</td>
+
+<td>html body .wrapper #content a{}
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+这个选择太啰唆，起码有三个选择器是完全没必要的。精简样式应该为：
+
+    
+    <span style="font-size: medium;">						#content a{}</span>
+
+
+那又如何？这意味着浏览器需要扫描所有的标签，检查它里面是否包含一个ID叫做“content”的标签，如此在html标签中不停查找。这样会导致浏览器做了多余的检查工作，并且是完全没必要的工作。知道了这点后，我们可以看看下面更接近实际的例子：
+
+    
+    <span style="font-size: medium;">						#nav li a{}</span>
+
+
+精简为：
+
+    
+    <span style="font-size: medium;">						#nav a{}</span>
+
+
+我们知道如果标签a在li标签里面，li标签又在#nav里面，那么我们可以从选择器中去掉li。然后，因为nav拥有一个ID，这个ID是唯一的，所以它赋予的元素是完全不相干的，我们可以去掉ul。过度修饰的选择器会导致浏览器需要做更多的工作；从选择器中去除不必要的部分，让你的选择器更简洁，性能更高吧。
+
+所有这些都是必要的吗?
+
+简短的答案是：可能不是。
+
+长一点的答案是：它依赖于你正在创建的网站。如果你在做你的下一个作品，那么超越CSS选择器性能去追寻干净的代码吧，因为你其实并不想关注它。
+
+如果你在创建下一版的Amazon, 而页面速度的微秒变化确实会有不同，那么可能需要，但即使那样也可能不。
+
+浏览器只会在CSS解析速度方面越来越好，甚至移动浏览器也一样。你很可能从来也不会注意到浏览器中的很慢的CSS选择器，但是...
+
+ 
+
+
+### 但是
+
+
+它仍然正在发生着，不管浏览器有多么快，它们仍然必须做所有我们谈论到的工作。即使你不需要甚至不想实施其中任何一条，它当然仍是值得知道的东西。记得选择器可能会代价很高，还有你应该在可能的地方避免使用代价更大的选择器。那意味着，如果你发现自己写了一些东西诸如：
+
+    
+    <span style="font-size: medium;">						div:nth-of-type(3) ul:last-child li:nth-of-type(odd) *{ font-weight:bold }</span>
+
+
+那么可能你做得不对。现在我自己在高效选择器的世界也是一个新手，因此如果我遗漏了什么，或者你有什么需要添加的，请在评论里发表它！
+
+
+### 更多关于高效的CSS选择器
+
+
+我怎么推荐[Steve Souders](http://stevesouders.com/)的网站与书也不过分。对你需要的延伸阅读来说，那足够了。这伙计知道的很多！
+
+转自php100
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+</a></ul></ul></a></td></tr></tbody></table>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

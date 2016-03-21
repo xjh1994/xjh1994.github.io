@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Android内存泄漏及解决方案汇总</title>
+  <meta name="description" content="安卓系统本来内存就不够用，如果开发着对内存管理不加以优化，任由内存泄露，那么只会让安卓的软件生态越来越差。所以总结一下安卓开发中会出现的内存泄露问题，在开发中尽量避免内存泄露。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/java/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/2016/03/18/android-e5-86-85-e5-ad-98-e6-b3-84-e6-bc-8f-e6-b1-87-e6-80-bb.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Android内存泄漏及解决方案汇总</h1>
+    <p class="post-meta"><time datetime="2016-03-18T11:36:21+08:00" itemprop="datePublished">Mar 18, 2016</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>安卓系统本来内存就不够用，如果开发着对内存管理不加以优化，任由内存泄露，那么只会让安卓的软件生态越来越差。所以总结一下安卓开发中会出现的内存泄露问题，在开发中尽量避免内存泄露。</p>
+
+<p>首先推荐一个工具：LeakCanary，可以帮助我们监测应用出现的内存泄露情况使用起来也很方便。</p>
+
+<p>Github地址在这里：<a href="https://github.com/square/leakcanary">https://github.com/square/leakcanary</a>。还有一个叫MAT，可以研究一下。</p>
+
+<p>有兴趣的还可以看一下Bugly出的几篇文章：<a href="http://bugly.qq.com/bbs/forum.php?mod=viewthread&amp;tid=21&amp;extra=page%3D1">《内存泄露从入门到精通三部曲》</a></p>
+
+<p>下面进入正题，安卓开发内存泄露的几种情况：</p>
+
+<p>一：Java的内存泄露</p>
+
+<p>1、静态集合类引起内存泄露：在内存对象明明已经不需要的时候，还仍然保留着这块内存和它的访问方式（引用）</p>
+
+<p>举例：</p>
+
+<p>Vector v = new  Vector( 10 );
+for  ( int  i = 1 ;i &lt; 100 ; i ++ ){
+Object o = new  Object();
+v.add(o);
+o = null ;
+}</p>
+
+<p>在这个例子中，循环申请Object 对象，并将所申请的对象放入一个Vector 中，如果仅仅释放引用本身（o=null），那么Vector 仍然引用该对象，所以这个对象对GC 来说是不可回收的。因此，如果对象加入到Vector 后，还必须从Vector 中删除。</p>
+
+<p>解决方法：将Vector对象设置为null。</p>
+
+<p>2、当集合里面的对象属性被修改后，再调用remove（）方法时不起作用</p>
+
+<p>Set<person> set = new HashSet<person>();
+Person p1 = new Person("name1","pwd1",25);
+Person p2 = new Person("name2","pwd2",26);
+Person p3 = new Person("name3","pwd3",27);
+set.add(p1);
+set.add(p2);
+set.add(p3);
+System.out.println("总共有:"+set.size()+" 个元素!"); //共有3个元素
+p3.setAge(2); //修改p3的年龄,此时p3元素对应的hashcode值发生改变</person></person></p>
+
+<p>set.remove(p3); //此时remove不掉，造成内存泄漏</p>
+
+<p>set.add(p3); //重新添加，居然添加成功
+System.out.println(“总共有:”+set.size()+” 个元素!”); //结果：总共有4个元素!
+for (Person person : set)
+{
+System.out.println(person);
+}</p>
+
+<p>3、监听器</p>
+
+<p>一个应用当中会用到很多监听器，我们会调用一个控件的诸如addXXXListener()等方法来增加监听器，但往往在释放对象的时候却没有记住去删除这些监听器，从而增加了内存泄漏的机会。</p>
+
+<p>4、单例模式
+不正确使用单例模式是引起内存泄露的一个常见问题，单例对象在被初始化后将在JVM的整个生命周期中存在（以静态变量的方式），如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露，考虑下面的例子：
+class A{
+public A(){
+B.getInstance().setA(this);
+}
+….
+}
+//B类采用单例模式
+class B{
+private A a;
+private static B instance=new B();
+public B(){}
+public static B getInstance(){
+return instance;
+}
+public void setA(A a){
+this.a=a;
+}
+//getter…
+}
+显然B采用singleton模式，它持有一个A对象的引用，而这个A类的对象将不能被回收。想象下如果A是个比较复杂的对象或者集合类型会发生什么情况</p>
+
+<p>二：安卓的内存泄漏</p>
+
+<p>1、对象没有反注册</p>
+
+<p>2、资源未关闭</p>
+
+<p>对于使用了BraodcastReceiver，ContentObserver，File，Cursor，Stream，Bitmap等资源的使用，应该在Activity销毁时及时关闭或者注销，否则这些资源将不会被回收，造成内存泄漏。</p>
+
+<p>3、Bitmap没有及时回收</p>
+
+<p>4、ListView Item没有复用</p>
+
+<p>5、Handler造成的内存泄漏</p>
+
+<p>这个就多见不怪了，我看过很多人包括我自己还有几年开发经验的人，用Handler图方便都是这样的：</p>
+
+<p>public class MainActivity extends AppCompatActivity {
+private Handler mHandler = new Handler() {
+@Override
+public void handleMessage(Message msg) {
+//…
+}
+};
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+loadData();
+}
+private void loadData(){
+//…request
+Message message = Message.obtain();
+mHandler.sendMessage(message);
+}
+}</p>
+
+<p>由于mHandler是Handler的非静态匿名内部类的实例，所以它持有外部类Activity的引用，我们知道消息队列是在一个Looper线程中不断轮询处理消息，那么当这个Activity退出时消息队列中还有未处理的消息或者正在处理消息，而消息队列中的Message持有mHandler实例的引用，mHandler又持有Activity的引用，所以导致该Activity的内存资源无法及时回收，引发内存泄漏。</p>
+
+<p>解决办法：采用WeakReference弱引用</p>
+
+<p>public class MainActivity extends AppCompatActivity {
+private MyHandler mHandler = new MyHandler(this);
+private TextView mTextView ;
+private static class MyHandler extends Handler {
+private WeakReference<context> reference;
+public MyHandler(Context context) {
+reference = new WeakReference&lt;&gt;(context);
+}
+@Override
+public void handleMessage(Message msg) {
+MainActivity activity = (MainActivity) reference.get();
+if(activity != null){
+activity.mTextView.setText("");
+}
+}
+}
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+mTextView = (TextView)findViewById(R.id.textview);
+loadData();
+}
+private void loadData() {
+//...request
+Message message = Message.obtain();
+mHandler.sendMessage(message);
+}
+}</context></p>
+
+<p>创建一个静态Handler内部类，然后对Handler持有的对象使用弱引用，这样在回收时也可以回收Handler持有的对象，这样虽然避免了Activity泄漏，不过Looper线程的消息队列中还是可能会有待处理的消息，所以我们在Activity的Destroy时或者Stop时应该移除消息队列中的消息，更准确的做法如下：</p>
+
+<p>public class MainActivity extends AppCompatActivity {
+private MyHandler mHandler = new MyHandler(this);
+private TextView mTextView ;
+private static class MyHandler extends Handler {
+private WeakReference<context> reference;
+public MyHandler(Context context) {
+reference = new WeakReference&lt;&gt;(context);
+}
+@Override
+public void handleMessage(Message msg) {
+MainActivity activity = (MainActivity) reference.get();
+if(activity != null){
+activity.mTextView.setText("");
+}
+}
+}
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+mTextView = (TextView)findViewById(R.id.textview);
+loadData();
+}
+private void loadData() {
+//...request
+Message message = Message.obtain();
+mHandler.sendMessage(message);
+}
+@Override
+protected void onDestroy() {
+super.onDestroy();
+mHandler.removeCallbacksAndMessages(null);
+}
+}</context></p>
+
+<p>使用mHandler.removeCallbacksAndMessages(null);是移除消息队列中所有消息和所有的Runnable。当然也可以使用mHandler.removeCallbacks();或mHandler.removeMessages();来移除指定的Runnable和Message。</p>
+
+<p>6、线程造成的内存泄露</p>
+
+<p>//——————test1
+new AsyncTask&lt;Void, Void, Void&gt;() {
+@Override
+protected Void doInBackground(Void… params) {
+SystemClock.sleep(10000);
+return null;
+}
+}.execute();
+//——————test2
+new Thread(new Runnable() {
+@Override
+public void run() {
+SystemClock.sleep(10000);
+}
+}).start();</p>
+
+<p>上面的异步任务和Runnable都是一个匿名内部类，因此它们对当前Activity都有一个隐式引用。如果Activity在销毁之前，任务还未完成，那么将导致Activity的内存资源无法回收，造成内存泄漏。</p>
+
+<p>解决办法：使用静态内部类</p>
+
+<p>static class MyAsyncTask extends AsyncTask&lt;Void, Void, Void&gt; {
+private WeakReference<context> weakReference;
+public MyAsyncTask(Context context) {
+weakReference = new WeakReference&lt;&gt;(context);
+}
+@Override
+protected Void doInBackground(Void... params) {
+SystemClock.sleep(10000);
+return null;
+}
+@Override
+protected void onPostExecute(Void aVoid) {
+super.onPostExecute(aVoid);
+MainActivity activity = (MainActivity) weakReference.get();
+if (activity != null) {
+//...
+}
+}
+}
+static class MyRunnable implements Runnable{
+@Override
+public void run() {
+SystemClock.sleep(10000);
+}
+}
+//——————
+new Thread(new MyRunnable()).start();
+new MyAsyncTask(this).execute();</context></p>
+
+<h3 id="section">一些建议</h3>
+
+<p>1、对于生命周期比Activity长的对象如果需要应该使用ApplicationContext</p>
+
+<p>2、在涉及到Context时先考虑ApplicationContext，当然它并不是万能的，对于有些地方则必须使用Activity的Context，对于Application，Service，Activity三者的Context的应用场景如下：</p>
+
+<p><img src="http://img1.tuicool.com/UnmUnq.png!web" alt="" /><strong>其中：</strong>NO1表示Application和Service可以启动一个Activity，不过需要创建一个新的task任务队列。而对于Dialog而言，只有在Activity中才能创建</p>
+
+<p>3、对于需要在静态内部类中使用非静态外部成员变量（如：Context、View )，可以在静态内部类中使用弱引用来引用外部类的变量来避免内存泄漏</p>
+
+<p>4、对于生命周期比Activity长的内部类对象，并且内部类中使用了外部类的成员变量，可以这样做避免内存泄漏：</p>
+
+<ol>
+  <li>
+    <p>将内部类改为静态内部类</p>
+  </li>
+  <li>
+    <p>静态内部类中使用弱引用来引用外部类的成员变量</p>
+  </li>
+</ol>
+
+<p>5、对于不再需要使用的对象，显示的将其赋值为null，比如使用完Bitmap后先调用recycle()，再赋为null6、保持对对象生命周期的敏感，特别注意单例、静态对象、全局性集合等的生命周期</p>
+
+<p>参考资料：</p>
+
+<p>http://blog.csdn.net/seelye/article/details/8269705</p>
+
+<p>http://www.tuicool.com/articles/qMf6zmR</p>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

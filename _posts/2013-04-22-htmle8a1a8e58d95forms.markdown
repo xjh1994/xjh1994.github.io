@@ -1,0 +1,315 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 10:21:59+00:00
+layout: post
+slug: html%e8%a1%a8%e5%8d%95forms
+title: HTML表单(Forms)
+wordpress_id: 164
+categories:
+- HTML&amp;CSS
+tags:
+- HTML
+- 表单
+---
+
+HTML表单(Form)是HTML的一个重要部分，主要用于采集和提交用户输入的信息。
+
+举个简单的例子，一个让用户输入姓名的HTML表单(Form)。示例代码如下：
+
+    
+    <form action="http://www.codesth.com/html/asdocs/html_tutorials/yourname.asp" method="get">
+
+
+
+    
+    请输入你的姓名：
+
+
+
+    
+    <input type="text" name="yourname">
+
+
+
+    
+    <input type="submit" value="提交">
+
+
+
+    
+    </form>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/053_form_input_text.html)
+
+学习HTML表单(Form)最关键要掌握的有三个要点：
+
+
+
+	
+  * 表单控件(Form Controls)
+
+	
+  * Action
+
+	
+  * Method
+
+
+先说表单控件(Form Controls)，通过HTML表单的各种控件，用户可以输入文字信息，或者从选项中选择，以及做提交的操作。比如上面的例句里，input type= "text"就是一个表单控件，表示一个单行输入框。
+
+用户填入表单的信息总是需要程序来进行处理，表单里的action就指明了处理表单信息的文件。比如上面例句里的http://www.admin5.com/html/asdocs/html_tutorials/yourname.asp。
+
+至于method，表示了发送表单信息的方式。method有两个值：get和post。get的方式是将表单控件的name/value信息经过编码之后，通过URL发送(你可以在地址栏里看到)。而post则将表单的内容通过http发送，你在地址栏看不到表单的提交信息。那什么时候用get，什么时候用post呢？一般是这样来判断的，如果只是为取得和显示数据，用get；一旦涉及数据的保存和更新，那么建议用post。
+
+
+## HTML表单(Form)常用控件(Controls)
+
+
+HTML表单(Form)常用控件有：
+<table >
+<tbody >
+<tr >
+
+<td >表单控件(Form Contros)
+</td>
+
+<td >说明
+</td>
+</tr>
+<tr >
+
+<td >input type="text"
+</td>
+
+<td >单行文本输入框
+</td>
+</tr>
+<tr >
+
+<td >input type="submit"
+</td>
+
+<td >将表单(Form)里的信息提交给表单里action所指向的文件
+</td>
+</tr>
+<tr >
+
+<td >input type="checkbox"
+</td>
+
+<td >复选框
+</td>
+</tr>
+<tr >
+
+<td >input type="radio"
+</td>
+
+<td >单选框
+</td>
+</tr>
+<tr >
+
+<td >select
+</td>
+
+<td >下拉框
+</td>
+</tr>
+<tr >
+
+<td >textArea
+</td>
+
+<td >多行文本输入框
+</td>
+</tr>
+<tr >
+
+<td >input type="password"
+</td>
+
+<td >密码输入框(输入的文字用*表示)
+</td>
+</tr>
+</tbody>
+</table>
+
+
+### 表单控件(Form Control)：单行文本输入框(input type="text")
+
+
+单行文本输入框允许用户输入一些简短的单行信息，比如用户姓名。例句如下：
+
+    
+    <input type="text" name="yourname">
+
+
+[演示示例](http://www.admin5.com/html/html_examples/053_form_input_text.html)
+
+
+### 表单控件(Form Control)：复选框(input type="checkbox")
+
+
+复选框允许用户在一组选项里，选择多个。示例代码：
+
+    
+    <input type="checkbox" name="fruit" value ="apple">苹果<br>
+
+
+
+    
+    <input type="checkbox" name="fruit" value ="orange">桔子<br>
+
+
+
+    
+    <input type="checkbox" name="fruit" value ="mango">芒果<br>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/055_form_input_check.html)
+
+用checked表示缺省已选的选项。
+
+    
+    <input type="checkbox" name="fruit" value ="orange" checked>桔子<br>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/056_form_input_check_checked.html)
+
+
+### 表单控件(Form Control)：单选框(input type="radio")
+
+
+使用单选框，让用户在一组选项里只能选择一个。示例代码：
+
+    
+    <input type="radio" name="fruit" value = "Apple">苹果<br>
+
+
+
+    
+    <input type="radio" name="fruit" value = "Orange">桔子<br>
+
+
+
+    
+    <input type="radio" name="fruit" value = "Mango">芒果<br>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/057_form_input_radio.html)
+
+用checked表示缺省已选的选项。
+
+    
+    <input type="radio" name="fruit" value = "Orange" checked>桔子<br>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/058_form_input_radio_checked.html)
+
+
+### 表单控件(Form Control)：下拉框(select)
+
+
+下拉框(Select)既可以用做单选，也可以用做复选。单选例句如下：
+
+    
+    <select name="fruit" >
+
+
+
+    
+      <option value="apple">苹果
+
+
+
+    
+      <option value="orange">桔子
+
+
+
+    
+      <option value="mango">芒果
+
+
+
+    
+    </select>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/059_form_select_01.html)
+
+如果要变成复选，加muiltiple即可。用户用Ctrl来实现多选。例句：
+
+    
+    <select name="fruit" multiple>
+
+
+[演示示例](http://www.admin5.com/html/html_examples/060_form_select_multiple.html)
+
+用户还可以用size属性来改变下拉框(Select)的大小。
+
+[演示示例](http://www.admin5.com/html/html_examples/061_form_select_multiple_size1.html)
+
+
+### 表单控件(Form Control)：多行输入框(textarea)
+
+
+多行输入框(textarea)主要用于输入较长的文本信息。例句如下：
+
+    
+    <textarea name="yoursuggest" cols ="50" rows = "3"></textarea>
+
+
+其中cols表示textarea的宽度，rows表示textarea的高度。
+
+[演示示例](http://www.admin5.com/html/html_examples/062_form_textarea.html)
+
+
+### 表单控件(Form Control)：密码输入框(input type="password")
+
+
+密码输入框(input type="password")主要用于一些保密信息的输入，比如密码。因为用户输入的时候，显示的不是输入的内容，而是黑点符号。。例句如下：
+
+    
+    <input type="password" name="yourpw">
+
+
+[演示示例](http://www.admin5.com/html/html_examples/054_form_input_text_password.html)
+
+
+### 表单控件(Form Control)：提交(input type="submit")
+
+
+通过提交(input type=submit)可以将表单(Form)里的信息提交给表单里action所指向的文件。例句如下：
+
+    
+    <input type="submit" value="提交">
+
+
+[演示示例](http://www.admin5.com/html/html_examples/053_form_input_text.html)
+
+
+### 表单控件(Form Control)：图片提交(input type="image")
+
+
+input type=image 相当于 input type=submit，不同的是，input type=image 以一个图片作为表单的提交按钮，其中 src 属性表示图片的路径。
+
+    
+    <input type="image" src ="<a href="http://www.admin5.com/html/images/icons/go.gif">images/icons/go.gif</a>"
+
+
+
+    
+    alt = "提交" NAME="imgsubmit">
+
+
+[演示示例](http://www.admin5.com/html/html_examples/064_form_input_image.html)
+
+
+
+如何编写 ASP 网页获取 HTML 表单的提交信息，请参见教程：[ASP和HTML表单](http://www.admin5.com/html/asp/010_asp_html_forms.html)。
+
+转自[站长网](http://www.admin5.com/html/html_tutorials/030_html_frame.html)

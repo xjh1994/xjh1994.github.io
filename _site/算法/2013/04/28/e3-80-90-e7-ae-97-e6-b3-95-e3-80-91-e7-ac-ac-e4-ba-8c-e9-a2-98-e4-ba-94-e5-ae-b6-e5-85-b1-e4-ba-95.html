@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【算法】第二题 五家共井</title>
+  <meta name="description" content="古代数学巨著《九章算数》中有这么一道题叫“五家共井，甲二绠（汲水用的井绳）不足，如（接上）乙一绠；乙三绠不足，如丙一绠；">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E7%AE%97%E6%B3%95/2013/04/28/e3-80-90-e7-ae-97-e6-b3-95-e3-80-91-e7-ac-ac-e4-ba-8c-e9-a2-98-e4-ba-94-e5-ae-b6-e5-85-b1-e4-ba-95.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【算法】第二题 五家共井</h1>
+    <p class="post-meta"><time datetime="2013-04-28T23:33:03+08:00" itemprop="datePublished">Apr 28, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>古代数学巨著《九章算数》中有这么一道题叫“五家共井，甲二绠（汲水用的井绳）不足，如（接上）乙一绠；乙三绠不足，如丙一绠；</p>
+
+<p>丙四绠不足，如丁一绠；丁五绠不足，如戊一绠；戊六绠不足，如甲一绠，皆及。</p>
+
+<p>意思就是说五家人共用一口井，甲家的绳子用两条不够，还要再用乙家的绳子一条才能打到井水；乙家的绳子用三条不够，还要再用丙家的绳子</p>
+
+<p>一条才能打到井水；丙家的绳子用四条不够，还要再用丁家的绳子一条才能打到井水；丁家的绳子用五条不够，还要再用戊家的绳子一条才能打</p>
+
+<p>到井水；戊家的绳子用六条不够，还要再用甲家的绳子一条才能打到井水。</p>
+
+<p>最后问：井有多深？每家的绳子各有多长？</p>
+
+<p>分析：同样这套题也是属于不定方程，拿这个题目的目地就是让大家能够在不定方程组这种范畴问题上做到“举一反三”，根据题意</p>
+
+<p>我们设井深为h，各家分别为a,b,c,d,e，则可以列出如下方程组：</p>
+
+<p>2a+b=h   ①</p>
+
+<p>3b+c=h   ②</p>
+
+<p>4c+d=h   ③</p>
+
+<p>5d+e=h   ④</p>
+
+<p>6e+a=h   ⑤</p>
+
+<p>首先我们看下普通青年的想法，他们的想法是找a,b,c,d,e之间的对应关系。</p>
+
+<p>依次将②代入①，③代入②，④代入③，⑤代入④可得如下方程组：</p>
+
+<p>a=b+c/2</p>
+
+<p>b=c+d/3</p>
+
+<p>c=d+e/4</p>
+
+<p>d=e+a/5</p>
+
+<p>从计算机的角度来说，我不希望有小数的出现，所以我可推断： c一定是2的倍数，d一定是3的倍数，e一定是4的倍数，a一定是5的倍数，根据这种关系我们</p>
+
+<p>就可以有如下代码：</p>
+
+<p><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 1 namespace Test
+ 2 {
+ 3     class Program
+ 4     {
+ 5         static void Main(string[] args)
+ 6         {
+ 7             int a, b, c, d, e, h;
+ 8 
+ 9             a = b = c = d = e = h = 0;
+10 
+11             bool flag = true;
+12 
+13             while (flag)
+14             {
+15                 //4的倍数
+16                 e += 4;
+17 
+18                 a = 0;
+19 
+20                 while (flag)
+21                 {
+22                     //5的倍数
+23                     a += 5;
+24 
+25                     d = e + a / 5;
+26 
+27                     c = d + e / 4;
+28 
+29                     if (c % 2 != 0)
+30                         continue;
+31 
+32                     if (d % 3 != 0)
+33                         continue;
+34 
+35                     b = c + d / 3;
+36 
+37                     if (b + c / 2 &lt; a)
+38                         break;
+39 
+40                     if (b + c / 2 == a)
+41                         flag = false;
+42                 }
+43             }
+44 
+45             h = 2 * a + b;
+46 
+47             Console.WriteLine("a={0},b={1},c={2},d={3},e={4} ------h={5}n", a, b, c, d, e, h);
+48 
+49             Console.Read();
+50         }
+51     }
+52 }
+</code></pre>
+</div>
+
+<p><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" /></p>
+
+<p><img src="http://pic002.cnblogs.com/images/2012/214741/2012080616245576.png" alt="" /></p>
+
+<p>同样我们的时间复杂度是O(N2)，急需优化。</p>
+
+<p>我们再来看看文艺青年的想法，他们的想法是找a,b,c,d,e中的某个数与h的对应关系。</p>
+
+<p>比如我就找c与h的对应关系，上面的①②③④⑤可写成如下方程组：</p>
+
+<p>b=h-2a   ⑥</p>
+
+<p>c=h-3b   ⑦</p>
+
+<p>d=h-4c   ⑧</p>
+
+<p>e=h-5d   ⑨</p>
+
+<p>a=h-6e   ⑩</p>
+
+<p>将⑥，⑧，⑨，⑩分别代入⑦，一阵痉挛后可知：</p>
+
+<p>c=(148/721)h</p>
+
+<p>上面的公式也就表明了c和h的比例关系，我们令 h=721k,则 c=148k，将其代入⑥，⑦，⑧，⑨，⑩可得如下方程组</p>
+
+<p>a=265k</p>
+
+<p>b=191k</p>
+
+<p>c=148k</p>
+
+<p>d=129k</p>
+
+<p>e=76k</p>
+
+<p>x=721k</p>
+
+<p>又因为k&gt;0，所以题目有无数个解。这里我就取0&lt;k&lt;5，否则绳子已经到达极限了，需要用蛟龙号去深潜了。</p>
+
+<p><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 1 namespace Test
+ 2 {
+ 3     class Program
+ 4     {
+ 5         static void Main(string[] args)
+ 6         {
+ 7             for (int k = 1; k &lt; 5; k++)
+ 8             {
+ 9                 int h = 721 * k;
+10 
+11                 int a = 265 * k;
+12 
+13                 int b = 191 * k;
+14 
+15                 int c = 148 * k;
+16 
+17                 int d = 129 * k;
+18 
+19                 int e = 76 * k;
+20 
+21                 Console.WriteLine("a={0},b={1},c={2},d={3},e={4} ------h={5}n", a, b, c, d, e, h);
+22             }
+23 
+24             Console.Read();
+25         }
+26     }
+27 }
+</code></pre>
+</div>
+
+<p><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" /></p>
+
+<p><img src="http://pic002.cnblogs.com/images/2012/214741/2012080616452883.png" alt="" /></p>
+
+<p>相信大家以后遇到类似的问题，应该会胸有成竹了。</p>
+
+<p>转自博客园</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

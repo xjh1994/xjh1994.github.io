@@ -1,0 +1,267 @@
+---
+author: xjh1994
+comments: true
+date: 2013-07-01 13:55:31+00:00
+layout: post
+slug: '%e3%80%90c%e3%80%91%e5%a4%8d%e6%95%b0%e8%ae%a1%e7%ae%97%e5%99%a8'
+title: 【C++】复数计算器
+wordpress_id: 472
+categories:
+- 未分类
+---
+
+要求：
+
+
+
+	
+  * 实现对复数所有运算的支持（加减乘除）
+
+	
+  * 要求使用类、运算符重载、插入提取运算符的重载等
+
+
+Complex.h
+
+[php]
+#ifndef COMPLEX_H
+#define COMPLEX_H
+using namespace std;
+
+class Complex
+{
+public:
+	Complex();
+	Complex(double _real, double _imag);
+	double GetReal() {return real;}
+	double GetImag() {return imag;}
+	Complex operator + (Complex &);
+	Complex operator + (double);
+	Complex operator - (Complex &);
+	Complex operator - (double);
+	Complex operator * (Complex &);
+	Complex operator * (double);
+	Complex operator / (Complex &);
+	Complex operator / (double);
+	Complex operator = (Complex);
+	friend ostream &operator << (ostream &output, Complex &c);
+	friend istream &operator >> (istream &output, Complex &c);
+private:
+	double real, imag;
+};
+
+#endif
+[/php]
+
+Complex.cpp
+
+[php]
+#include <iostream>
+#include "complex.h"
+using namespace std;
+
+Complex::Complex ()
+{
+	real = 0;
+	imag = 0;
+}
+
+Complex::Complex(double _real, double _imag)
+{
+	real = _real;
+	imag = _imag;
+}
+
+Complex Complex::operator + (Complex &c)
+{
+	Complex temp;
+	temp.real = real + c.real;
+	temp.imag = imag + c.imag;
+	return temp;
+}
+
+Complex Complex::operator + (double d)
+{
+	Complex temp;
+	temp.real = real + d;
+	temp.imag = imag + d;
+	return temp;
+}
+
+Complex Complex::operator - (Complex &c)
+{
+	Complex temp;
+	temp.real = real - c.real;
+	temp.imag = imag - c.imag;
+	return temp;
+}
+
+Complex Complex::operator - (double d)
+{
+	Complex temp;
+	temp.real = real - d;
+	temp.imag = imag - d;
+	return temp;
+}
+
+Complex Complex::operator * (Complex &c)
+{
+	Complex temp;
+	temp.real = (real * c.real) - (imag * c.imag);
+	temp.imag = (real * c.imag) + (imag * c.real);
+	return temp;
+}
+
+Complex Complex::operator * (double d)
+{
+	Complex temp;
+	temp.real = real * d;
+	temp.imag = imag * d;
+	return temp;
+}
+
+Complex Complex::operator / (Complex &c)
+{
+	Complex temp;
+	temp.real = (real * c.real) - (imag * (-c.imag));
+	temp.imag = (real * (-c.imag)) + (imag * c.real);
+	return temp;
+}
+
+Complex Complex::operator / (double d)
+{
+	Complex temp;
+	temp.real = real / d;
+	temp.imag = imag / d;
+	return temp;
+}
+
+Complex Complex::operator = (Complex c)
+{
+	real = c.real;
+	imag = c.imag;
+	return *this;
+}
+
+ostream &operator << (ostream &output, Complex &c)
+{
+	if(c.imag == 1)
+		cout << c.real << "+" << "i";
+	else if(c.imag == -1)
+		cout << c.real << "-" << "i";
+	else if(c.imag > 0)
+		cout << c.real << "+" << c.imag << "i";
+	else if(c.imag < 0)
+		cout << c.real << "-" << (-c.imag) << "i";
+	else
+		cout << c.real;
+	return output;
+}
+
+istream &operator >> (istream &input, Complex &c)
+{
+	cin >> c.real >> c.imag;
+	return input;
+}
+[/php]
+
+main.cpp
+
+[php]
+#include <iostream>
+#include "complex.h"
+using namespace std;
+
+int menu_select();
+void Com_Plus();
+void Com_Substract();
+void Com_Multiply();
+void Com_Divide();
+
+int main()
+{
+	char choice;
+
+	for(;;)
+	{
+		choice = menu_select();
+		switch(choice)
+		{
+		case 1:
+			Com_Plus();
+			break;
+		case 2:
+			Com_Substract();
+			break;
+		case 3:
+			Com_Multiply();
+			break;
+		case 4:
+			Com_Divide();
+			break;
+		case 5:
+			cout << "\n*******************欢迎下次使用*****************\n\n";
+			exit(0);
+		}
+	}
+
+	return 0;
+}
+
+int menu_select()
+{
+	char c;
+	cout << "*********************************************\n";
+	cout << "*               复数计算器 v1.0             *\n";
+	cout << "*               1. 加法               *\n";
+	cout << "*               2. 减法               *\n";
+	cout << "*               3. 乘法               *\n";
+	cout << "*               4. 除法               *\n";
+	cout << "*               5. 退出               *\n";
+	cout << "*********************************************\n";
+	cout << "\n请输入: ";
+
+	do
+	{
+		cin.get(c);
+	}while(c < '1' || c > '5');
+
+	return c - 48;
+}
+
+void Com_Plus()
+{
+	Complex c1, c2;
+	cout << "请分别输入两个复数的实部和虚部(如\"1 1 2 2\"表示\"(1+i) + (2+2i)\"): \n";
+	cin >> c1 >> c2;
+	cout << c1 << " + " << c2 << " = " << c1 + c2;
+	cout << endl;
+}
+
+void Com_Substract()
+{
+	Complex c1, c2;
+	cout << "请分别输入两个复数的实部和虚部(如\"1 1 2 2\"表示\"(1+i) - (2+2i)\"): \n";
+	cin >> c1 >> c2;
+	cout << c1 << " - " << c2 << " = " << c1 - c2;
+	cout << endl;
+}
+
+void Com_Multiply()
+{
+	Complex c1, c2;
+	cout << "请分别输入两个复数的实部和虚部(如\"1 1 2 2\"表示\"(1+i) * (2+2i)\"): \n";
+	cin >> c1 >> c2;
+	cout << c1 << " * " << c2 << " = " << c1 * c2;
+	cout << endl;
+}
+
+void Com_Divide()
+{
+	Complex c1, c2;
+	cout << "请分别输入两个复数的实部和虚部(如\"1 1 2 2\"表示\"(1+i) / (2+2i)\"): \n";
+	cin >> c1 >> c2;
+	cout << c1 << " / " << c2 << " = " << c1 / c2;
+	cout << endl;
+}
+[/php]

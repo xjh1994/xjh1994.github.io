@@ -1,0 +1,48 @@
+---
+author: xjh1994
+comments: true
+date: 2013-09-16 23:08:49+00:00
+layout: post
+slug: jsp%e4%bf%9d%e5%ad%98%e6%96%87%e4%bb%b6%e7%9a%84%e8%b7%af%e5%be%84%e9%94%99%e8%af%af%e9%97%ae%e9%a2%98
+title: JSP保存文件的路径错误问题
+wordpress_id: 493
+categories:
+- 未分类
+---
+
+[![JSP](http://bcs.duapp.com/blogxjh/blog/L9787121063220.jpg)](http://bcs.duapp.com/blogxjh/blog/L9787121063220.jpg)
+
+初学JSP，在保存文件到txt的时候出现了问题。
+以下是保存文件的代码:
+`
+String Msg = "姓名:" + Name + "
+Email: "
++ "[" + Email + "](")
+留言:"
++ "" + Message + "
+`
+
+
+
+* * *
+
+
+
+`";
+String path = request.getRealPath("/message");
+out.println(path);
+try {
+FileWriter fw = new FileWriter(path + "/message.txt", true);
+BufferedWriter bw = new BufferedWriter(fw);
+bw.write(Msg);
+bw.flush();
+bw.close();
+fw.close();
+}
+catch(Exception e) {
+out.println(e.getMessage());
+}
+`
+报错这一行出了问题：FileWriter fw = new FileWriter(path + "/message.txt", true);
+解决方法：将String path = request.getRealPath(".");改为String path = request.getRealPath("/message");
+因为我是在虚拟目录下的message目录运行程序的，而“.”代表根目录。

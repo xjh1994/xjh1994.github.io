@@ -1,0 +1,61 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 12:36:53+00:00
+layout: post
+slug: '%e3%80%90php%e3%80%91-%e6%a3%80%e6%b5%8b%e9%a1%b5%e9%9d%a2%e6%98%af%e5%90%a6%e8%a2%ab%e7%99%be%e5%ba%a6%e6%94%b6%e5%bd%95'
+title: 【PHP】 检测页面是否被百度收录
+wordpress_id: 105
+categories:
+- PHP&amp;MySQL
+- 编程
+tags:
+- PHP
+- 收录
+- 百度
+---
+
+[php]
+<?php
+/*
+* 检测百度是否收录网页 返回1则表示收录 返回0表示没有收录
+* @ param string $url传入的url
+*  powed by 编点
+*/
+function checkBaidu($url){
+    $url='http://www.baidu.com/s?wd='.$url;
+
+    $curl=curl_init();
+    curl_setopt($curl,CURLOPT_URL,$url);
+    curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+    $rs=curl_exec($curl);
+    curl_close($curl);
+
+    $arr=parse_url($url);
+
+    if(strpos($arr['query'],'http://')){
+        $arr['query']=str_replace('http://','',str_replace('wd=','',$arr['query']));
+    }else{
+        $arr['query']=str_replace('wd=','',$arr['query']);
+    }
+
+    if(strpos($arr['query'],'?')){
+        $str=strstr($arr['query'],'?');
+        $arr['query']=str_replace($str,'',$arr['query']);
+    }
+
+    if(strpos($arr['query'],'/')){
+        $narr=explode('/',$arr['query']);
+        $arr['query']=$narr[0];
+    }
+
+    if(strpos($rs,'<b>'.$arr['query'].'</b>')){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+echo checkBaidu('http://www.codesth.com/');
+?>
+[/php]

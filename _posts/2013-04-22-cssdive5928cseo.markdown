@@ -1,0 +1,35 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 10:46:27+00:00
+layout: post
+slug: cssdiv%e5%92%8cseo
+title: CSS+DIV和SEO
+wordpress_id: 55
+categories:
+- HTML&amp;CSS
+---
+
+**1、精简的代码**
+使用[DIVCSS](http://www.divcss5.com/)布局，页面代码精简，这一点相信对XHTML有所了解的都知道。观看更多的[HTML](http://www.divcss5.com/html/)教程内容。代码精简提高了百度蜘蛛的爬行效率以及高效性，能在最短的时间内爬完整个页面，同时这样对收录质量有一定好处;
+
+**2、提高访问速度、增加用户体验性**
+使得加载速度得到很大的提高，那么用户点击页面的等待时间就越少，用户体验性的增加相应的带来就是网站受到搜索引擎的喜欢，进而提高网站排名。
+
+**3、**[**div+css**](http://www.divcss5.com/)**结构清晰**
+结构清晰网站网页代码很容易被搜索引擎搜索到，天生就是适合优化了seo，降低网页大小，让网页体积变得更小。
+
+**4.缩短改版时间**
+只要简单的修改几个[CSS](http://www.divcss5.com/)文件就可以重新设计一个有成百上千页面的站点。这样可以大大节约工作的时间，提高了工作效率。
+
+**5.更方便搜索引擎的搜索**
+用只包含结构化内容的HTML代替嵌套的标签，搜索引擎将更有效地搜索到你的内容，并可能给你一个较高的评价。
+
+[DIVCSS5](http://www.divcss5.com/)综合总结，现在搜索引擎对网站各方面考察比较细致，如果您能从细节上做好，精简代码，让网页同等带宽同等服务器处理速度，稍微有所提高访问速度，这样细节也会被搜索引擎记录下并对你SEO排名有好处。通过以上几点总结希望大家能合理理解[CSS DIV](http://www.divcss5.com/)作用以及能对CSS有一定认识。
+
+扩展阅读：
+1、[优化CSS代码](http://www.divcss5.com/jiqiao/j240.shtml)
+2、[压缩HTML代码](http://www.divcss5.com/jiqiao/j326.shtml)
+3、[压缩CSS](http://www.divcss5.com/jiqiao/j240.shtml)
+
+转自[http://www.divcss5.com/wenji/w439.shtml](http://www.divcss5.com/wenji/w439.shtml)

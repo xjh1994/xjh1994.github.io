@@ -1,0 +1,932 @@
+---
+author: xjh1994
+comments: true
+date: 2013-07-04 01:47:39+00:00
+layout: post
+slug: '%e3%80%90c%e3%80%91%e5%ad%a6%e7%94%9f%e6%88%90%e7%bb%a9%e7%ae%a1%e7%90%86%e7%b3%bb%e7%bb%9f'
+title: 【C++】学生成绩管理系统
+wordpress_id: 473
+categories:
+- 未分类
+---
+
+Student.h   //学生类表示单元
+
+Grade.h     //成绩类表示单元
+
+Student.cpp  //学生类实现单元
+
+Grade.cpp    //成绩类实现单元
+
+main.cpp    //主程序实现
+
+测试数据grade.txt：
+
+1405120209 xjh 90 80 70
+
+1405120210 xml 90 90 80
+
+1405120211 wx 100 60 50
+
+1405120212 wxp 90 85 95
+
+1405120213 cy 68 80 95
+
+1405120214 jx 90 68 87
+
+1405120215 qpf 90 57 98
+
+1405120216 zf 90 76 76
+
+1405120217 sx 84 94 72
+
+1405120218 wc 97 47 83
+
+1405120219 gxy 98 99 97
+
+Student.h
+
+[php]
+#ifndef STUDENT_H
+#define STUDENT_H
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int menu_select();
+void output();
+
+class Student
+{
+public:
+	Student() { Status = true; chinese = 0; maths = 0; english = 0;}
+	Student(string _id, string _name, double _chinese, double _maths, double _english);
+	void SetStudent();
+	void SetScore();
+	void SetScore(string _id, string _name, double _chinese, double _maths, double _english);
+	string GetId() const;
+	string GetName() const;
+	double GetChinese() const;
+	double GetMaths() const;
+	double GetEnglish() const;
+	double GetTp() const;		//总分total points
+	bool IsEmpty();				//取学生状态
+	void Set();					//置学生状态0，非空
+	void Clear();				//置学生状态1,空
+	void Show();
+	Student &operator = (const Student &stu0)
+	{
+		id = stu0.id;
+		name = stu0.name;
+		chinese = stu0.chinese;
+		maths = stu0.maths;
+		english = stu0.english;
+
+		return *this;
+	}
+	string id, name;					//学号、姓名
+	double chinese, maths, english;		//语文成绩、数学成绩、英语成绩
+private:
+	bool Status;						//学生状态
+};
+
+#endif
+[/php]
+
+Grade.h
+
+[php]
+#ifndef GRADE_H
+#define GRADE_H
+
+#include <iostream>
+#include "Student.h"
+#include <string>
+using namespace std;
+
+#define StuNum 1000		//学生最大人数
+
+int menu_select();
+void output();
+
+class Grade
+{
+public:
+	Grade() { Num = 0; }
+	void Add();
+	void Erase();
+	void Change();
+	void Search();
+	void Sort();			//总分排序
+	void GetHigh();			//最高分
+	void GetLow();			//最低分
+	void GetAverage();		//平均分
+	void GetPassRate();		//通过率
+	void LoadFromFile();
+	void List();
+private:
+	Student Stu[StuNum];	//学生
+	int Num;				//已经输入成绩的学生人数
+	int FindFree();			//查找空的学生空间
+};
+
+#endif
+[/php]
+
+Student.cpp
+
+[php]
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include "Student.h"
+using namespace std;
+
+Student::Student(string _id, string _name, double _chinese, double _maths, double _english)
+{
+	id = _id;	name = _name;
+	chinese = _chinese;		maths = _maths;		english = _english;
+}
+
+void Student::SetStudent()
+{
+	char choice;
+	string _id, _name;
+	double _chinese = 100.0, _maths = 100.0, _english = 100.0;
+
+	cout << "1:只输入学生信息，不输入成绩\n";
+	cout << "2:输入学生信息和成绩\n";
+	cout << "3:退出\n";
+	cout << "请输入序号: ";
+	choice = menu_select();
+
+	if(choice == 1)
+	{
+		cout << "请依次输入学生学号和姓名: ";
+		cin >> _id >> _name;
+		id = _id;	name = _name;
+		cout << "已经添加如下学生：" << endl;
+		Show();
+	}
+	else if(choice == 2)
+	{
+		cout << "请依次输入学生学号、姓名、语文、数学、英语成绩： \n";
+		cin >> _id >> _name >> _chinese >> _maths >> _english;
+		id = _id;	name = _name;
+		chinese = _chinese;		maths = _maths;		english = _english;
+		cout << "已经添加如下学生：" << endl;
+		Show();
+	}
+	else if(choice == 3)
+	{
+		exit(0);
+	}
+	else
+	{
+		cout << "输入错误，请重新输入！";
+		cin.get();
+	}
+}
+
+void Student::SetScore()
+{
+	char choice;
+	double _chinese = 100.0, _maths = 100.0, _english = 100.0;
+
+	cout << "1:修改语文成绩\n";
+	cout << "2:修改数学成绩\n";
+	cout << "3:修改英语成绩\n";
+	cout << "4:修改所有成绩\n";
+	cout << "5:退出\n";
+	cout << "请输入序号: ";
+	choice = menu_select();
+
+	if(choice == 1)
+	{
+		cout << "请输入学生语文成绩: ";
+		cin >> _chinese;
+		chinese = _chinese;
+	}
+	else if(choice == 2)
+	{
+		cout << "请输入学生数学成绩： \n";
+		cin >> _maths;
+		maths = _maths;
+	}
+	else if(choice == 3)
+	{
+		cout << "请输入学生英语成绩： \n";
+		cin >> _english;
+		english = _english;
+	}
+	else if(choice == 4)
+	{
+		cout << "请依次输入学生语文、数学、英语成绩： \n";
+		cin >> _chinese >> _maths >> _english;
+		chinese = _chinese;		maths = _maths;		english = _english;
+	}
+	else if(choice == 5)
+	{
+		exit(0);
+	}
+	else
+	{
+		cout << "输入错误，请重新输入！";
+		cin.get();
+	}
+}
+
+void Student::SetScore(string _id, string _name, double _chinese, double _maths, double _english)
+{
+	id = _id;	name = _name;
+	chinese = _chinese; maths = _maths; english = _english;
+}
+
+string Student::GetId() const
+{
+	return id;
+}
+
+string Student::GetName() const
+{
+	return name;
+}
+
+double Student::GetChinese() const
+{
+	return chinese;
+}
+
+double Student::GetMaths() const
+{
+	return maths;
+}
+
+double Student::GetEnglish() const
+{
+	return english;
+}
+
+double Student::GetTp() const
+{
+	return chinese + maths + english;
+}
+
+bool Student::IsEmpty()
+{
+	return Status;
+}
+
+void Student::Set()
+{
+	Status = false;
+}
+
+void Student::Clear()
+{
+	Status = true;
+}
+
+void Student::Show()
+{
+	cout << setiosflags(ios::left) << setw(15) << id << setw(15) << name << setw(10) << chinese
+		 << setw(10) << maths << setw(10) << english << setw(10) << GetTp() << endl;
+}
+[/php]
+
+Grade.cpp
+
+[php]
+#include <iostream>
+#include "Grade.h"
+#include "Student.h"
+#include <fstream>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+int Grade::FindFree()
+{
+	for(int i = 0; i < StuNum; i++)
+		if(Stu[i].IsEmpty())
+			return i;
+	return -1;	//已记满
+}
+
+void Grade::Add()
+{
+	cout << "*********************添加学生成绩***************\n";
+	int pointer = FindFree();
+	if(pointer == -1)
+		cout << "成绩系统已记满";
+	else
+	{
+		cout << "成绩系统中" << Num << "条学生信息" << endl;
+		Stu[pointer].SetStudent();
+		Stu[pointer].Set();
+		Num++;
+	}
+}
+
+void Grade::Erase()
+{
+	int i;
+	string name;
+	cout << "*********************删除学生成绩***************\n";
+	cout << "成绩系统中" << Num << "条学生信息" << endl;
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "输入要删除的学生姓名：";
+		cin >> name;
+		for(i = 0; i < StuNum; i++)
+		{
+			if(!Stu[i].IsEmpty() && Stu[i].GetName() == name)
+			{
+				Stu[i].Clear();
+				Num--;
+				cout << "已经删除" << name << "的信息。" << endl;
+				break;
+			}
+		}
+		if(i == StuNum)
+		{
+			cout << "该名字不存在！" << endl;
+			cin.get();
+		}
+	}
+}
+
+void Grade::Change()
+{
+	int i;
+	string name;
+	cout << "*********************修改学生成绩***************\n";
+	cout << "成绩系统中" << Num << "条学生信息" << endl;
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "输入要修改成绩的学生姓名：";
+		cin >> name;
+		for(i = 0; i < StuNum; i++)
+		{
+			if(!Stu[i].IsEmpty() && Stu[i].GetName() == name)
+			{
+				Stu[i].SetScore();
+				cout << "已经修改" << name << "的信息如下：" << endl;
+				output();
+				Stu[i].Show();
+				break;
+			}
+		}
+		if(i == StuNum)
+		{
+			cout << "该名字不存在！" << endl;
+			cin.get();
+		}
+	}
+}
+
+void Grade::Search()
+{
+	int i;
+	string id, name;
+	char choice;
+	cout << "*********************查询学生成绩***************\n";
+	cout << "成绩系统中" << Num << "条学生信息" << endl;
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "1:按姓名查找\n";
+		cout << "2:按学号查找\n";
+		cout << "3:退出\n";
+		cout << "请输入序号: ";
+		choice = menu_select();
+
+		if(choice == 1)
+		{
+			cout << "输入要查找的学生姓名：";
+			cin >> name;
+			for(i = 0; i < StuNum; i++)
+			{
+				if(!Stu[i].IsEmpty() && Stu[i].GetName() == name)
+				{
+					cout << "已经找到" << name << "的信息：" << endl;
+					output();
+					Stu[i].Show();
+					break;
+				}
+			}
+			if(i == StuNum)
+			{
+				cout << "该名字不存在！" << endl;
+				cin.get();
+			}
+		}
+		else if(choice == 2)
+		{
+			cout << "输入要查找的学生学号：";
+			cin >> id;
+			for(i = 0; i < StuNum; i++)
+			{
+				if(!Stu[i].IsEmpty() && Stu[i].GetId() == id)
+				{
+					cout << "已经找到" << id << "的信息：" << endl;
+					output();
+					Stu[i].Show();
+					break;
+				}
+			}
+			if(i == StuNum)
+			{
+				cout << "该学号不存在！" << endl;
+				cin.get();
+			}
+		}
+		else if(choice == 3)
+		{
+			exit(0);
+		}
+		else
+		{
+			cout << "输入错误，请重新输入！";
+			cin.get();
+		}
+	}
+}
+
+void Grade::Sort()
+{
+	int i, j;
+	Student _Stu[StuNum], Temp;
+
+	for(i = 0; i < Num; i++)
+	{
+		for(j = i + 1; j < Num; j++)
+		{
+			if(_Stu[i].GetTp() > _Stu[j].GetTp())
+			{
+				Temp = _Stu[i];
+				_Stu[i] = _Stu[j];
+				_Stu[j] = Temp;
+			}
+		}
+	}
+	output();
+	for(i = 0; i < Num; i++)
+	{
+		_Stu[i].Show();
+	}
+}
+
+void Grade::GetHigh()
+{
+	int i, stu_num = 0;	//stu_num最高分学生标号
+	char choice;
+	double highest = 0.0;
+
+	cout << "*********************最高分********************\n";
+
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "1:语文\n";
+		cout << "2:数学\n";
+		cout << "3:英语\n";
+		cout << "4:退出\n";
+		cout << "请输入序号: ";
+		choice = menu_select();
+
+		if(choice == 1)
+		{
+			highest = Stu[0].GetChinese();
+			for(i = 0; i < Num - 1; i++)
+			{
+				if(highest < Stu[i + 1].GetChinese())
+				{
+					highest = Stu[i + 1].GetChinese();
+					stu_num = i + 1;
+				}
+			}
+			cout << "语文最高分是" << highest << endl;
+			output();
+			Stu[stu_num].Show();
+		}
+		else if(choice == 2)
+		{
+			stu_num = 0;
+			highest = Stu[0].GetMaths();
+			for(i = 0; i < Num - 1; i++)
+			{
+				if(highest < Stu[i + 1].GetMaths())
+				{
+					highest = Stu[i + 1].GetMaths();
+					stu_num = i + 1;
+				}
+			}
+			cout << "数学最高分是" << highest << endl;
+			output();
+			Stu[stu_num].Show();
+		}
+		else if(choice == 3)
+		{
+			stu_num = 0;
+			highest = Stu[0].GetEnglish();
+			for(i = 0; i < Num - 1; i++)
+			{
+				if(highest < Stu[i + 1].GetEnglish())
+				{
+					highest = Stu[i + 1].GetEnglish();
+					stu_num = i + 1;
+				}
+			}
+			cout << "英语最高分是" << highest << endl;
+			output();
+			Stu[stu_num].Show();
+		}
+		else if(choice == 4)
+		{
+			exit(0);
+		}
+		else
+		{
+			cout << "输入错误，请重新输入！";
+			cin.get();
+		}
+	}
+}
+
+void Grade::GetLow()
+{
+	int i, stu_num = 0;	//stu_num最低分学生标号
+	char choice;
+	double lowest = 0.0;
+	cout << "*********************最低分********************\n";
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "1:语文\n";
+		cout << "2:数学\n";
+		cout << "3:英语\n";
+		cout << "4:退出\n";
+		cout << "请输入序号: ";
+		choice = menu_select();
+
+		if(choice == 1)
+		{
+			stu_num = 0;
+			lowest = Stu[0].GetChinese();
+			for(i = 0; i < Num - 1; i++)
+			{
+				if(lowest > Stu[i + 1].GetChinese())
+				{
+					lowest = Stu[i + 1].GetChinese();
+					stu_num = i + 1;
+				}
+			}
+			cout << "语文最低分是" << lowest << endl;
+			output();
+			Stu[stu_num].Show();
+		}
+		else if(choice == 2)
+		{
+			stu_num = 0;
+			lowest = Stu[0].GetMaths();
+			for(i = 0; i < Num - 1; i++)
+			{
+				if(lowest > Stu[i + 1].GetMaths())
+				{
+					lowest = Stu[i + 1].GetMaths();
+					stu_num = i + 1;
+				}
+			}
+			cout << "数学最低分是" << lowest << endl;
+			output();
+			Stu[stu_num].Show();
+		}
+		else if(choice == 3)
+		{
+			stu_num = 0;
+			lowest = Stu[0].GetEnglish();
+			for(i = 0; i < Num - 1; i++)
+			{
+				if(lowest > Stu[i + 1].GetEnglish())
+				{
+					lowest = Stu[i + 1].GetEnglish();
+					stu_num = i + 1;
+				}
+			}
+			cout << "英语最低分是" << lowest << endl;
+			output();
+			Stu[stu_num].Show();
+		}
+		else if(choice == 4)
+		{
+			exit(0);
+		}
+		else
+		{
+			cout << "输入错误，请重新输入！";
+			cin.get();
+		}
+	}
+}
+
+void Grade::GetAverage()
+{
+	int i;
+	char choice;
+	double sum = 0.0, average = 0.0;
+
+	cout << "**********************平均分*******************\n";
+
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "1:语文\n";
+		cout << "2:数学\n";
+		cout << "3:英语\n";
+		cout << "4:退出\n";
+		cout << "请输入序号: ";
+		choice = menu_select();
+
+		if(choice == 1)
+		{
+			sum = 0.0;
+			for(i = 0; i < Num; i++)
+			{
+				sum += Stu[i].GetChinese();
+			}
+			average = sum / Num;
+			cout << "语文平均分是" << average << endl;
+		}
+		else if(choice == 2)
+		{
+			sum = 0.0;
+			for(i = 0; i < Num; i++)
+			{
+				sum += Stu[i].GetMaths();
+			}
+			average = sum / Num;
+			cout << "数学平均分是" << average << endl;
+		}
+		else if(choice == 3)
+		{
+			sum = 0.0;
+			for(i = 0; i < Num; i++)
+			{
+				sum += Stu[i].GetEnglish();
+			}
+			average = sum / Num;
+			cout << "英语平均分是" << average << endl;
+		}
+		else if(choice == 4)
+		{
+			exit(0);
+		}
+		else
+		{
+			cout << "输入错误，请重新输入！";
+			cin.get();
+		}
+	}
+}
+
+void Grade::GetPassRate()
+{
+	int i;
+	char choice;
+	int num_pass = 0;	//通过（大于60分）的人数
+	double passrate = 0.0;
+	cout << "***********************通过率******************\n";
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		cout << "1:语文\n";
+		cout << "2:数学\n";
+		cout << "3:英语\n";
+		cout << "4:退出\n";
+		cout << "请输入序号: ";
+		choice = menu_select();
+
+		if(choice == 1)
+		{
+			num_pass = 0.0;
+			for(i = 0; i < Num; i++)
+			{
+				if(Stu[i].GetChinese() >= 60)
+					num_pass++;
+			}
+			passrate = double(num_pass) / Num * 100;
+			cout << "语文通过率是" << passrate << "%" << endl;
+		}
+		else if(choice == 2)
+		{
+			num_pass = 0.0;
+			for(i = 0; i < Num; i++)
+			{
+				if(Stu[i].GetMaths() >= 60)
+					num_pass++;
+			}
+			passrate = double(num_pass) / Num * 100;
+			cout << "数学通过率是" << passrate << "%" << endl;
+		}
+		else if(choice == 3)
+		{
+			num_pass = 0.0;
+			for(i = 0; i < Num; i++)
+			{
+				if(Stu[i].GetEnglish() >= 60)
+					num_pass++;
+			}
+			passrate = double(num_pass) / Num * 100;
+			cout << "英语通过率是" << passrate << "%" << endl;
+		}
+		else if(choice == 4)
+		{
+			exit(0);
+		}
+		else
+		{
+			cout << "输入错误，请重新输入！";
+			cin.get();
+		}
+	}
+}
+
+void Grade::LoadFromFile()
+{
+	char _id[21], _name[31];
+	double _chinese = 100, _maths = 100, _english = 100;
+	ifstream in;
+	int i;
+	string filename;
+
+	cout << "输入读取的文件名： ";
+	cin >> filename;
+
+	in.open(filename.c_str(), ios::in);
+	if(!in)
+	{
+		cout << "打开文件失败！\n";
+		cin.get();
+	}
+	else
+	{
+		Num = 0;
+		for(i = 0; !in.eof(); i++)
+		{
+			if(in && !in.eof())
+			{
+				in >> _id >> _name >> _chinese >> _maths >> _english;
+				Stu[i].SetScore(_id, _name, _chinese, _maths, _english);
+				Stu[i].Set();
+			}
+			if(!Stu[i].IsEmpty())
+				Num++;
+		}
+		cout << "已导入" << Num << "条记录。" << endl;
+		in.close();
+	}
+}
+
+void Grade::List()
+{
+	int i;
+
+	if(!Num)
+		cout << "成绩系统已空！\n";
+	else
+	{
+		output();
+		for(i = 0; i < Num; i++)
+		{
+			Stu[i].Show();
+		}
+	}
+}
+[/php]
+
+main.cpp
+
+[php]
+#include <iostream>
+#include "Student.h"
+#include "Grade.h"
+#include <iomanip>
+using namespace std;
+
+int menu_select();
+void output();
+
+int main()
+{
+	char choice;
+	string c;
+	Grade g;
+
+	for(;;)
+	{
+		cout << "***********************************************\n";
+		cout << "*            学生成绩管理系统 v1.0  .beta     *\n";
+		cout << "*                                             *\n";
+		cout << "*               1. 添加学生成绩               *\n";
+		cout << "*               2. 删除学生成绩               *\n";
+		cout << "*               3. 修改学生成绩               *\n";
+		cout << "*               4. 查询学生成绩               *\n";
+		cout << "*               5. 成绩最高分                 *\n";
+		cout << "*               6. 成绩最低分                 *\n";
+		cout << "*               7. 成绩平均分                 *\n";
+		cout << "*               8. 成绩通过率                 *\n";
+		cout << "*               9. 从文件读取成绩             *\n";
+		cout << "*               0. 列出所有学生成绩           *\n";
+		cout << "*               ctrl+c. 退出                 *\n";
+		cout << "***********************************************\n";
+		cout << "\n请输入(0 ~ 9): ";
+
+		choice = menu_select();
+
+		switch(choice)
+		{
+		case 1:
+			g.Add();
+			while(cout << "是否要继续添加？(y/n): " && cin >> c &&
+				c == "y" || c == "yes" || c == "Y" || c == "YES")
+			{
+				g.Add();
+			}
+			break;
+		case 2:
+			g.Erase();
+			while(cout << "是否要继续删除？(y/n): " && cin >> c &&
+				c == "y" || c == "yes" || c == "Y" || c == "YES")
+			{
+				g.Erase();
+			}
+			break;
+		case 3:
+			g.Change();
+			while(cout << "是否要继续修改？(y/n): " && cin >> c &&
+				c == "y" || c == "yes" || c == "Y" || c == "YES")
+			{
+				g.Change();
+			}
+			break;
+		case 4:
+			g.Search();
+			while(cout << "是否要继续查询？(y/n): " && cin >> c &&
+				c == "y" || c == "yes" || c == "Y" || c == "YES")
+			{
+				g.Search();
+			}
+			break;
+		case 5:
+			g.GetHigh();
+			break;
+		case 6:
+			g.GetLow();
+			break;
+		case 7:
+			g.GetAverage();
+			break;
+		case 8:
+			g.GetPassRate();
+			break;
+		case 9:
+			g.LoadFromFile();
+			break;
+		case 0:
+			g.List();
+			break;
+		}
+	}
+
+	return 0;
+}
+
+int menu_select()
+{
+	char c;
+
+	do
+	{
+		cin.get(c);
+	}while(c < '0' || c > '9');
+
+	return c - 48;
+}
+
+void output()
+{
+	cout << endl << setiosflags(ios::left) << setw(15) << "学号" << setw(15) << "姓名" << setw(10) << "语文"
+			 << setw(10) << "数学" << setw(10) << "英语" << setw(10) << "总分" << endl;
+}
+[/php]

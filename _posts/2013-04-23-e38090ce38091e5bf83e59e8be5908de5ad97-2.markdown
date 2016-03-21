@@ -1,0 +1,260 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 12:31:28+00:00
+layout: post
+slug: '%e3%80%90c%e3%80%91%e5%bf%83%e5%9e%8b%e5%90%8d%e5%ad%97-2'
+title: 【C++】心型名字
+wordpress_id: 461
+categories:
+- 未分类
+---
+
+**适用于windowsNT,windows7,8**
+
+[sourcecode language="plain"]
+#include<windows.h>
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+#include<string>
+using namespace std;
+void main()
+{int m,n,i(0),y,m1,d1,s,m2,d2;
+string d,f,h;
+char a[6];
+char e;
+ofstream k;
+SYSTEMTIME t;
+GetLocalTime(&t);
+y=t.wYear;
+m1=t.wMonth;
+d1=t.wDay;
+s=t.wSecond;
+m2=t.wMinute;
+d2=t.wHour;
+cout<<setfill(' ')<<setw(30)<<' '<<"本软件由何晏波制作"<<endl;
+cout<<setfill(' ')<<setw(25)<<' '<<"软件专利号21-2012-F-(6095)-041"<<endl;
+cout<<setfill(' ')<<setw(30)<<' '<<"版权支持——西华大学"<<endl;
+part2:cout<<"*请输入你的性别:"<<endl;
+cin>>d;
+if(d!="女"&&d!="男")
+{cout<<"请输入中文!"<<endl;
+goto part2;}
+if(d=="女")
+{while(1){part3:cout<<"*请输入你的名字:(每次输完请键Enter键)"<<endl;
+cin>>a;
+f=a;
+if(f=="何晏波")
+{while(1){cout<<"\a输入错误,何晏波是一位男士!";}
+}
+if(strlen(a)!=4&&strlen(a)!=6)
+{cout<<"请输入中文!"<<endl;
+goto part3;}
+if(strlen(a)==4)
+{cout<<setfill(' ')<<setw(30)<<' '<<'*'<<' '<<'*'<<' '<<'*'\
+<<setfill(' ')<<setw(6)<<' '<<'*'<<' '<<'*'<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(4)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<'*';
+cout<<setfill(' ')<<setw(6)<<' '<<a<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(30)<<' '<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<"I MISS YOU"<<setfill(' ')<<setw(2)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(31)<<' '<<'*';
+cout<<setfill(' ')<<setw(12)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(32)<<' '<<'*';
+cout<<setfill(' ')<<setw(11)<<'*'<<endl;
+cout<<setfill(' ')<<setw(34)<<' '<<'*';
+cout<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(36)<<' '<<'*'<<' '<<' '<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(38)<<' '<<'*'<<endl;
+k.open("C:\\LOVE.txt",ios::app|ios::out);//如果将头文件改为*.h那么ios::ate与ios::app的结果一致，
+//请思考为什么?
+k<<y<<"年"<<m1<<"月"<<d1<<"日"<<d2<<"时"<<m2<<"分"<<s<<"秒"<<endl;
+k<<setfill(' ')<<setw(30)<<' '<<'*'<<' '<<'*'<<' '<<'*'\
+<<setfill(' ')<<setw(6)<<' '<<'*'<<' '<<'*'<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(29)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(4)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+k<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(2)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*'<<endl;
+k<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<'*';
+k<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+k<<setfill(' ')<<setw(29)<<' '<<'*';
+k<<setfill(' ')<<setw(6)<<' '<<a<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(30)<<' '<<'*';
+k<<setfill(' ')<<setw(2)<<' '<<"I MISS YOU"<<setfill(' ')<<setw(2)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(31)<<' '<<'*';
+k<<setfill(' ')<<setw(12)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(32)<<' '<<'*';
+k<<setfill(' ')<<setw(11)<<'*'<<endl;
+k<<setfill(' ')<<setw(34)<<' '<<'*';
+k<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(36)<<' '<<'*'<<' '<<' '<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(38)<<' '<<'*'<<endl;
+system("he.mp3");
+k.close();}
+if(strlen(a)==6)
+{cout<<setfill(' ')<<setw(30)<<' '<<'*'<<' '<<'*'<<' '<<'*'\
+<<setfill(' ')<<setw(6)<<' '<<'*'<<' '<<'*'<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(4)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<a<<setfill(' ')<<setw(5)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(30)<<' '<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<"I LOVE YOU"<<setfill(' ')<<setw(2)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(31)<<' '<<'*';
+cout<<setfill(' ')<<setw(12)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(32)<<' '<<'*';
+cout<<setfill(' ')<<setw(10)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(34)<<' '<<'*';
+cout<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(36)<<' '<<'*'<<' '<<' '<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(38)<<' '<<'*'<<endl;
+k.open("C:\\LOVE.txt",ios::app|ios::out);
+k<<y<<"年"<<m1<<"月"<<d1<<"日"<<d2<<"时"<<m2<<"分"<<s<<"秒"<<endl;
+k<<setfill(' ')<<setw(30)<<' '<<'*'<<' '<<'*'<<' '<<'*'\
+<<setfill(' ')<<setw(6)<<' '<<'*'<<' '<<'*'<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(29)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(4)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+k<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(2)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*'<<endl;
+k<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+k<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<'*';
+k<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+k<<setfill(' ')<<setw(29)<<' '<<'*';
+k<<setfill(' ')<<setw(5)<<' '<<a<<setfill(' ')<<setw(5)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(30)<<' '<<'*';
+k<<setfill(' ')<<setw(2)<<' '<<"I LOVE YOU"<<setfill(' ')<<setw(2)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(31)<<' '<<'*';
+k<<setfill(' ')<<setw(12)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(32)<<' '<<'*';
+k<<setfill(' ')<<setw(10)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(34)<<' '<<'*';
+k<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(36)<<' '<<'*'<<' '<<' '<<' '<<'*'<<endl;
+k<<setfill(' ')<<setw(38)<<' '<<'*'<<endl;
+k.open("C:\\LOVE.txt",ios::app|ios::out);
+system("he.mp3");
+k.close();}
+cout<<"*你想继续吗?(y/n)"<<endl;
+cin>>e;
+if(e=='y')
+goto part2;
+else
+break;}}
+if(d=="男")
+{while(1){part4:cout<<"*请输入你的名字:(每次输完请键Enter键)"<<endl;
+cin>>a;
+f=a;
+if(f=="何晏波")
+{while(1){cout<<"\a本程序的设计者";}
+}
+if(strlen(a)!=4&&strlen(a)!=6)
+{cout<<"请输入中文!"<<endl;
+goto part4;}
+if(strlen(a)==4)
+{cout<<setfill(' ')<<setw(30)<<' '<<'*'<<' '<<'*'<<' '<<'*'\
+<<setfill(' ')<<setw(6)<<' '<<'*'<<' '<<'*'<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(4)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<'*';
+cout<<setfill(' ')<<setw(6)<<' '<<a<<setfill(' ')<<setw(7)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(30)<<' '<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<"BEST FRIEND"<<setfill(' ')<<setw(2)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(31)<<' '<<'*';
+cout<<setfill(' ')<<setw(12)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(32)<<' '<<'*';
+cout<<setfill(' ')<<setw(10)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(34)<<' '<<'*';
+cout<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(36)<<' '<<'*'<<' '<<' '<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(38)<<' '<<'*'<<endl;
+k.open("C:\\LOVE.txt",ios::app|ios::out);
+k<<y<<"年"<<m1<<"月"<<d1<<"日"<<d2<<"时"<<m2<<"分"<<s<<"秒"<<endl;
+k<<a;
+k.close();}
+if(strlen(a)==6)
+{cout<<setfill(' ')<<setw(30)<<' '<<'*'<<' '<<'*'<<' '<<'*'\
+<<setfill(' ')<<setw(6)<<' '<<'*'<<' '<<'*'<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(4)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(7)<<' '\
+<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(28)<<' '<<setfill('*')<<setw(1)<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<'*';
+cout<<setfill(' ')<<setw(8)<<' '<<setfill('*')<<setw(1)<<'*'<<endl;
+cout<<setfill(' ')<<setw(29)<<' '<<'*';
+cout<<setfill(' ')<<setw(5)<<' '<<a<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(30)<<' '<<'*';
+cout<<setfill(' ')<<setw(2)<<' '<<"BEST BROTHER"<<setfill(' ')<<setw(1)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(31)<<' '<<'*';
+cout<<setfill(' ')<<setw(12)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(32)<<' '<<'*';
+cout<<setfill(' ')<<setw(10)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(34)<<' '<<'*';
+cout<<setfill(' ')<<setw(6)<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(36)<<' '<<'*'<<' '<<' '<<' '<<'*'<<endl;
+cout<<setfill(' ')<<setw(38)<<' '<<'*'<<endl;
+k.open("C:\\LOVE.txt",ios::app|ios::out);
+k<<y<<"年"<<m1<<"月"<<d1<<"日"<<d2<<"时"<<m2<<"分"<<s<<"秒"<<endl;
+k<<a;
+k.close();}
+cout<<"*你想继续吗?(y/n)"<<endl;
+cin>>e;
+if(e=='y')
+goto part2;
+else
+break;}}}
+[/sourcecode]

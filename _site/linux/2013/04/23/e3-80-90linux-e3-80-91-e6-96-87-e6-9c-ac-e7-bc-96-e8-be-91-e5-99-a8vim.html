@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【LINUX】 文本编辑器VIM</title>
+  <meta name="description" content="Vim是从 vi 发展出来的一个文本编辑器。代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。和Emacs并列成为类Unix系统用户最喜欢的编辑器。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/linux/2013/04/23/e3-80-90linux-e3-80-91-e6-96-87-e6-9c-ac-e7-bc-96-e8-be-91-e5-99-a8vim.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【LINUX】 文本编辑器VIM</h1>
+    <p class="post-meta"><time datetime="2013-04-23T12:56:11+08:00" itemprop="datePublished">Apr 23, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Vim是从 vi 发展出来的一个文本编辑器。代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。和Emacs并列成为类Unix系统用户最喜欢的编辑器。</p>
+
+<p><strong>主要功能</strong></p>
+
+<p>根据设定可以和原始vi完全兼容
+多缓冲编辑
+任意个数的分割窗口（横，竖）
+具备列表和字典功能的脚本语言
+可以在脚本中调用 Perl, Ruby, Python, Tcl, MzScheme
+单词缩写功能
+动态单词补完
+多次撤销和重做
+对应400种以上文本文件的语法高亮
+C/C++, Perl, Java, Ruby, Python 等40种以上语言的自动缩排
+利用ctags的标签中跳转
+崩溃后文件恢复
+光标位置和打开的缓冲状态的保存 复原（session功能）
+可以对两个文件进行差分，同步功能的diff模式
+远程文件编辑
+Omni补完（上下文相关的补完）</p>
+
+<p>一、我们为什么要学习vim编辑器？</p>
+
+<p>Linux的命令行界面下面有非常多的文本编辑器。比如经常听说的就有Emacs、pico、nano、joe与vim等。vim可以看做是vi的高级版。我们为什么一定要学习vim呢？有以下几个原因：</p>
+
+<p>(1)所有的Unix like系统都会内置vi文本编辑器，其他的文本编辑器则不一定会存在。</p>
+
+<p>(2)很多软件的编辑接口都会主动调用vi。</p>
+
+<p>(3)vim具有程序编辑的能力，可以主动以字体颜色辨别语法的正确性，方便程序设计。</p>
+
+<p>(4)程序简单，编辑速度快。</p>
+
+<p>二、下面先介绍一下vi的基本使用方法及其相关命令。</p>
+
+<p>vim编辑器的三种模式：一般模式、编辑模式和命令行模式。</p>
+
+<p>在一般模式中可以进行删除、复制和粘贴的功能，但是无法编辑文件内容。从一般模式切换到编辑模式可以按下i、I、o、O、a、A、r、R键。按下Esc键可以回到一般模式。在一般模式中输入：、/、？三个中的任意一个可以将光标移到最下面的一行。在这个模式中可以提供查找数据的操作，而读取、保存、大量替换字符、离开vii、显示行号等操作则是在此模式中完成的。需要注意的是，编辑模式与命令行模式之间是不能互相切换的。</p>
+
+<p>下面列出平时用的最多的vi命令：</p>
+
+<p>移动光标的方法：</p>
+
+<p>[Ctrl]+[f]：屏幕向下移动一页，相当于[PageDown]按键。</p>
+
+<p>[Ctrl]+[b]：屏幕向上移动一页，相当于[PageUp]按键。</p>
+
+<p>0或功能键[Home]：移动到这一行的最前面字符处。</p>
+
+<p>$或功能键[End]：移动到这一行的最后面字符处。</p>
+
+<p>G：移动到这个文件的最后一行。</p>
+
+<p>gg：移动到这个文件的第一行，相当于1G.</p>
+
+<p>N[Enter]：N为数字，光标向下移动N行。</p>
+
+<p>查找和替换：</p>
+
+<p>/word：向下寻找一个名称为word的字符串。</p>
+
+<p>?word：向上寻找一个名称为word的字符串。</p>
+
+<p>:n1,n2s/word1/word2/g：在第n1行和n2行之间寻找word1这个字符串，并且将其替换为word2.</p>
+
+<p>:1,$s/word1/word2/g：从第一行到最后一行寻找word1这个字符串，并且将其替换为word2.</p>
+
+<p>:1,$s/word1/word2/gc：从第一行到最后一行寻找word1这个字符串，并且将其替换为word2.且在替换前显示提示字符给用户确认是否需要替换。</p>
+
+<p>删除、复制和粘贴：</p>
+
+<p>x,X：在一行字中，x为向后删除一个字符（相当于[Del]键），X为向前删除一个字符（相当于[Backspace]）。</p>
+
+<p>dd：删除光标所在的一整行。</p>
+
+<p>ndd：删除光标所在的向下n行。</p>
+
+<p>yy：复制光标所在的一行。</p>
+
+<p>nyy：复制光标所在的向下n行。</p>
+
+<p>p,P：p为将已复制的内容在光标的下一行粘贴，P则为粘贴在光标的上一行。</p>
+
+<p>u：复原前一个操作。</p>
+
+<p>[Ctrl]+r：重做上一个操作。</p>
+
+<p>.：小数点，重复前一个操作。</p>
+
+<p>一般模式切换到编辑模式：</p>
+
+<p>i,I：进入插入模式，i为从目前光标所在处插入。I为在目前所在行的第一个非空格字符处开始插入。</p>
+
+<p>a，A：进入插入模式。a为从目前光标所在处的下一个字符处开始插入。A为从所在行的最后一个字符处开始插入。</p>
+
+<p>o，O：进入插入模式。o为在下一行插入。O为在上一行插入。</p>
+
+<p>r，R：进入替换模式。r只替换光标所在那个字符一次。R会一直替换光标所在字符，直到按下Esc键。</p>
+
+<p>一般模式切换到命令行：</p>
+
+<p>:w：将编辑的数据写入到硬盘中。</p>
+
+<p>:q：离开vi.后面加！为强制离开。</p>
+
+<p>:wq：保存后离开。:wq!为强制保存后离开。</p>
+
+<p>目前主要的编辑器都有恢复功能，vim也不例外。vim是通过“保存”文件来挽回数据的。</p>
+
+<p>每当我们在用vim编辑时，vim都会自动在被编辑的文件的目录下面再新建一个名为filename.swap的文件。这就是一个暂存文件，我们对文件filename所做的操作都会被记录到这个文件当中。如果系统意外崩溃，导致文件没有正常保存，那么这个暂存文件就会发挥作用。下面用一个例子来说明(Note：我用的是Ubuntu)。</p>
+
+<p>打开终端，输入命令，将etc目录下面的manpath.config复制到tmp目录下面，并且更改当前工作目录为tmp：</p>
+
+<p>cp /etc/manpath.config /tmp</p>
+
+<p>cd /tmp</p>
+
+<p>用vim编辑manpath.config文件：vim manpath.config。</p>
+
+<p>我们在vim的一般模式下按下Ctrl+z组合键，vim就会被丢到后台执行。回到命令提示符环境后，我们模拟将vim的工作不正常中断。</p>
+
+<p>kill -9 %1;强制杀死制定的进程。</p>
+
+<p>这样导致暂存盘无法通过正常的流程结束，所以暂存文件不会消失，而是继续保留下来。当再次编辑那个文件时(输入命令vim manpath.config)，出现(ubuntu 11.10)：</p>
+
+<p><img src="http://hi.csdn.net/attachment/201112/4/0_1322998945AXt9.gif" alt="" /></p>
+
+<p>这时，有六个按钮可以使用：</p>
+
+<p>O(pen for Read-Only):打开成只读文件。</p>
+
+<p>E(dit):用正常方式打开要编辑的文件，并不会载入暂存文件的内容。这很容易出现两个用户相互改变对方的文件的问题。</p>
+
+<p>R(ecover)：加载暂存文件的内容。</p>
+
+<p>D(elete)：如果你确定这个暂存文件是没有用的，则可以删除。</p>
+
+<p>Q(uit)：不进行任何操作，回到命令行。</p>
+
+<p>A(bort)：忽略这个编辑行为，和Q类似。</p>
+
+<p>需要注意的是：这个暂存文件不会应为你结束vim后自动删除，必须要手动删除。否则每次打开对应的文件时都会出现这样的提示。</p>
+
+<p>三、vim的功能</p>
+
+<p>【1】块选择：</p>
+
+<p>这个功能可以让我们复制一个矩形区域的内容，十分方便。</p>
+
+<p>v:字符选择，会将光标经过的地方反白选择；</p>
+
+<p>V:行选择；</p>
+
+<p>Ctrl+v：块选择；</p>
+
+<p>y：复制反白的地方；</p>
+
+<p>d：删除反白的地方。</p>
+
+<p>示例如下：</p>
+
+<p><img src="http://hi.csdn.net/attachment/201112/4/0_1322999816u2L9.gif" alt="" /></p>
+
+<p>需要注意的是，粘贴时候也是粘贴在一个块的范围内，而不是以行为单位来处理的。</p>
+
+<p>【2】多文件编辑</p>
+
+<p>我们在两个或多个文件之间复制粘贴内容时，这个功能会让我们方便很多。</p>
+
+<p>使用命令vim name1 name2 name3…(各个文件名之间用空格隔开)可以同时打开多个文件。</p>
+
+<p>:n：编辑下一个文件；</p>
+
+<p>:N：编辑上一个文件；</p>
+
+<p>:files：列出目前vim打开的所有文件。</p>
+
+<p>【3】多窗口功能</p>
+
+<p>可以在一个窗口中打开多个文件。</p>
+
+<p>输入命令:sp{filename}便可以实现这个功能。如果想要在新窗口启动另外一个文件，则加入文件名。如果省略文件名，则打开的是同一个文件。</p>
+
+<p>用一个例子来说明。</p>
+
+<p>vim manpath.config打开一个文件。在一般模式下输入:sp。发现打开的是同一个文件。如果再输入:sp /etc/hosts。则变成：</p>
+
+<p><img src="http://hi.csdn.net/attachment/201112/4/0_1323000544z0Dl.gif" alt="" /></p>
+
+<p>其他的按键功能：</p>
+
+<p>Ctrl+w+j:先按下Ctrl不放，再按下w后放开所有的按键，再按下j(或向下箭头键)，则光标可以移到下方的窗口；</p>
+
+<p>Ctrl+w+k：同上，不过光表移到上面的窗口；</p>
+
+<p>Ctrl+w+q：离开。</p>
+
+<p>【4】vim环境设置</p>
+
+<p>需要注意的是，vim会将i我们的以前的行为都记录下来，以方便我们操作。它保存在文件：~/.viminfo中。</p>
+
+<p>vim常用的环境设置参数命令如下：</p>
+
+<p>:set nu  设置行号</p>
+
+<p>:set nonu 取消行号</p>
+
+<p>:set hlsearch 设置高亮度查找</p>
+
+<p>:set nohlsearch 取消高亮度查找</p>
+
+<p>:set backup 自动备份文件</p>
+
+<p>:set ruler 开启右下角状态栏说明</p>
+
+<p>:set showmode 显示左下角的INSERT之类的状态栏</p>
+
+<p>:set backspace={0,1,2} 设置退格键功能。为2时可以删任意字符。为0或1时仅可以删除刚才输入的字符。</p>
+
+<p>:set all 显示目前所有的环境参数值</p>
+
+<p>:set 显示与系统默认值不同的参数值</p>
+
+<p>:syntax on/off 是否开启依据相关程序语法显示不同的颜色</p>
+
+<p>:set bg=dark/light 是否显示不同的颜色色调</p>
+
+<p>但是我们没有必要每次使用vim都要重新设置一次各个参数值。我们可以通过配置文件来直接规定我们习惯的vim操作环境。整体vim的设置值一般是放在/etc/vimrc中的。我们一般不要修改这个文件。我们可以通过修改~/.vimrc这个文件，如果不存在，可以手动创建。然后将我们所希望的设置值写入。例如，我们可以这样写：</p>
+
+<p><strong>[cpp][/cpp]</strong> <a href="http://blog.csdn.net/xiajun07061225/article/details/7039413#">view plain</a><a href="http://blog.csdn.net/xiajun07061225/article/details/7039413#">copy</a><a href="http://blog.csdn.net/xiajun07061225/article/details/7039413#">print</a><a href="http://blog.csdn.net/xiajun07061225/article/details/7039413#">?</a></p>
+
+<ol>
+  <li>
+    <p>vim ~/.vimrc</p>
+  </li>
+  <li>
+    <p>set hlsearch（注意：set前面也可以加冒号，结果一样）</p>
+  </li>
+  <li>
+    <p>set backspace=2</p>
+  </li>
+  <li>
+    <p>set ruler</p>
+  </li>
+  <li>
+    <p>set showmode</p>
+  </li>
+  <li>
+    <p>set nu</p>
+  </li>
+  <li>
+    <p>syntax on</p>
+  </li>
+</ol>
+
+<p>创建并保存这个文件之后，当下次重新以vim编辑某个文件时，该文件的默认环境就是这么设置的。</p>
+
+<p>如有错误，还请大家包含、指正。</p>
+
+<p>转自<a href="http://blog.csdn.net/xiajun07061225/article/details/7039413">http://blog.csdn.net/xiajun07061225/article/details/7039413</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,22 @@
+---
+author: xjh1994
+comments: true
+date: 2013-09-29 14:37:08+00:00
+layout: post
+slug: '%e6%96%b0%e6%95%b0%e6%8d%ae%e6%98%be%e7%a4%baios7%e6%b5%8b%e8%af%95%e7%89%88%e8%a3%85%e6%9c%ba%e7%8e%87%e5%8e%86%e5%8f%b2%e6%9c%80%e9%ab%98'
+title: 新数据显示iOS7测试版装机率历史最高
+wordpress_id: 490
+categories:
+- 未分类
+---
+
+![](http://img2.itsogo.net/Upfile2/2013/7/739635680863.jpg)
+
+
+　　[威锋网](http://www.weiphone.com/) 7 月 3 日消息，据移动网络优化公司 Onswipe 最新公布的数据，在苹果历来几个 iOS 版本的测试版中，iOS 7 测试版的装机率是最高的。
+
+iOS 6 向开发者发布的日期为 2012 年 6 月 11 日，据 Onswipe 的数据显示，两周后在所有访问 Onswipe 公司网站的移动设备中，运行 iOS 6 测试版的设备占 0.25%。iOS 7 测试版的发布时间为 6 月 10 日，截止 7 月 1 日(大概 20 天)，在所有访问 Onswipe 公司网站的移动设备中，运行 iOS 7 测试版的设备达到 0.46%。
+
+其中运行 iOS 7 测试版的 iPhone 占所有 iPhone 的 0.77%，运行 iOS 7 测试版的 iPad 占所有 iPad 的 0.28%（iPad 版 iOS 7 测试版上周才发布）。相比之下，运行 iOS 6 测试版的 iPhone 为 0.38%、iPad 为 0.19%。
+
+Onswipe CEO Jason Baptiste 表示，在 Onswipe 平台上，开发者在 iOS 7 上花费的时间将近是 iOS 6 的一倍。和以往的版本相比，iOS 7 发生了本质的改变，开发者需要花费更多的时间为 iOS 7 的巨变做准备。

@@ -1,0 +1,46 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 14:22:02+00:00
+layout: post
+slug: '%e3%80%90discuz%e3%80%91%e8%ae%ba%e5%9d%9b%e6%b0%b4%e5%8d%b0%e8%ae%be%e7%bd%ae%e6%96%b9%e6%b3%95'
+title: '【Discuz】论坛水印设置方法 '
+wordpress_id: 115
+categories:
+- Discuz
+tags:
+- Discuz
+- 论坛水印
+---
+
+<table cellpadding="0" cellspacing="0" >
+<tbody >
+<tr >
+
+<td id="postmessage_32813" >[Discuz](http://www.zhanhelp.com/discuz/)论坛的水印设置其实很简单，只需要覆盖一个图片，然后后台对应设置即可，这里推荐大家使用png图片格式来设置水印，png透明图片比较容易处理，后台设置png也比较简单。设置具体建下图：
+
+<ignore_js_op>![Discuz!论坛 水印设置方法](http://www.zhanhelp.com/forum.php?mod=attachment&aid=MjU2M3wwYzZlM2VlMXwxMzY2NzI2ODU4fDB8NDQ5MQ%3D%3D&noupdate=yes) 
+
+具体设置方法：
+
+一、后台--全局--水印设置：
+
+文章图片水印设置：建议选择#9；
+水印添加条件:100x100，比水印图片大即可；
+水印图片类型:PNG 类型水印；
+水印融合度:不用设置；
+JPEG 水印质量:不用设置。
+
+二、后台设置完成后需要在FTP上代替static/image/common/watermark.png图片。
+
+不会使用FTP的同学可以查看：[FTP上传文件的方法](http://www.zhanhelp.com/thread-812-1-1.html)
+
+设置水印后的好处，防止网站资源被盗取，保护资源的版权，同时也是进一步对本站会员的宣传和推广。
+
+注意：水印图不要太大，太大的话小鱼水印图大小的图片是无法添加水印的。
+
+转自站帮网
+</td>
+</tr>
+</tbody>
+</table>

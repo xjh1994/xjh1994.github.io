@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>C语言文件操作函数大全</title>
+  <meta name="description" content="clearerr（清除文件流的错误旗标）相关函数 feof表头文件 #include定义函数 void clearerr(FILE * stream);函数说明 clearerr（）清除参数stream指定的文件流所使用的错误旗标。返回值">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2013/06/19/c-e8-af-ad-e8-a8-80-e6-96-87-e4-bb-b6-e6-93-8d-e4-bd-9c-e5-87-bd-e6-95-b0-e5-a4-a7-e5-85-a8.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">C语言文件操作函数大全</h1>
+    <p class="post-meta"><time datetime="2013-06-19T22:28:03+08:00" itemprop="datePublished">Jun 19, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>clearerr（清除文件流的错误旗标）
+相关函数 feof
+表头文件 #include<stdio.h>
+定义函数 void clearerr(FILE * stream);
+函数说明 clearerr（）清除参数stream指定的文件流所使用的错误旗标。
+返回值</stdio.h></p>
+
+<p>fclose（关闭文件）
+相关函数 close，fflush，fopen，setbuf
+表头文件 #include<stdio.h>
+定义函数 int fclose(FILE * stream);
+函数说明 fclose()用来关闭先前fopen()打开的文件。此动作会让缓冲区内的数据写入文件中，并释放系统所提供的文件资源。
+返回值 若关文件动作成功则返回0，有错误发生时则返回EOF并把错误代码存到errno。
+错误代码 EBADF表示参数stream非已打开的文件。
+范例 请参考fopen（）。</stdio.h></p>
+
+<p>fdopen（将文件描述词转为文件指针）
+相关函数 fopen，open，fclose
+表头文件 #include<stdio.h>
+定义函数 FILE * fdopen(int fildes,const char * mode);
+函数说明 fdopen()会将参数fildes 的文件描述词，转换为对应的文件指针后返回。参数mode 字符串则代表着文件指针的流形态，此形态必须和原先文件描述词读写模式相同。关于mode 字符串格式请参考fopen()。
+返回值 转换成功时返回指向该流的文件指针。失败则返回NULL，并把错误代码存在errno中。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp =fdopen(0,”w+”);
+fprintf(fp,”%s/n”,”hello!”);
+fclose(fp);
+}</stdio.h></stdio.h></p>
+
+<p>执行 hello!</p>
+
+<p>feof（检查文件流是否读到了文件尾）
+相关函数 fopen，fgetc，fgets，fread
+表头文件 #include<stdio.h>
+定义函数 int feof(FILE * stream);
+函数说明 feof()用来侦测是否读取到了文件尾，尾数stream为fopen（）所返回之文件指针。如果已到文件尾则返回非零值，其他情况返回0。
+返回值 返回非零值代表已到达文件尾。</stdio.h></p>
+
+<p>fflush（更新缓冲区）
+相关函数 write，fopen，fclose，setbuf
+表头文件 #include<stdio.h>
+定义函数 int fflush(FILE* stream);
+函数说明 fflush()会强迫将缓冲区内的数据写回参数stream指定的文件中。如果参数stream为NULL，fflush()会将所有打开的文件数据更新。
+返回值 成功返回0，失败返回EOF，错误代码存于errno中。
+错误代码 EBADF 参数stream 指定的文件未被打开，或打开状态为只读。其它错误代码参考write（）。</stdio.h></p>
+
+<p>fgetc（由文件中读取一个字符）
+相关函数 open，fread，fscanf，getc
+表头文件 include<stdio.h>
+定义函数 nt fgetc(FILE * stream);
+函数说明 fgetc()从参数stream所指的文件中读取一个字符。若读到文件尾而无数据时便返回EOF。
+返回值 getc()会返回读取到的字符，若返回EOF则表示到了文件尾。
+范例
+#include<stdio.h>
+main()
+{
+FILE *fp;
+int c;
+fp=fopen(“exist”,”r”);
+while((c=fgetc(fp))!=EOF)
+printf(“%c”,c);
+fclose(fp);
+}</stdio.h></stdio.h></p>
+
+<p>fgets（由文件中读取一字符串）
+相关函数 open，fread，fscanf，getc
+表头文件 include<stdio.h>
+定义函数 har * fgets(char * s,int size,FILE * stream);
+函数说明 fgets()用来从参数stream所指的文件内读入字符并存到参数s所指的内存空间，直到出现换行字符、读到文件尾或是已读了size-1个字符为止，最后会加上NULL作为字符串结束。
+返回值 gets()若成功则返回s指针，返回NULL则表示有错误发生。
+范例
+#include<stdio.h>
+main()
+{
+char s[80];
+fputs(fgets(s,80,stdin),stdout);
+}</stdio.h></stdio.h></p>
+
+<p>执行 this is a test /<em>输入</em>/
+this is a test /<em>输出</em>/</p>
+
+<p>fileno（返回文件流所使用的文件描述词）
+相关函数 open，fopen
+表头文件 #include<stdio.h>
+定义函数 int fileno(FILE * stream);
+函数说明 fileno()用来取得参数stream指定的文件流所使用的文件描述词。
+返回值 返回文件描述词。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp;
+int fd;
+fp=fopen(“/etc/passwd”,”r”);
+fd=fileno(fp);
+printf(“fd=%d/n”,fd);
+fclose(fp);
+}</stdio.h></stdio.h></p>
+
+<p>执行 fd=3</p>
+
+<p>fopen（打开文件）
+相关函数 open，fclose
+表头文件 #include<stdio.h>
+定义函数 FILE * fopen(const char * path,const char * mode);
+函数说明 参数path字符串包含欲打开的文件路径及文件名，参数mode字符串则代表着流形态。
+mode有下列几种形态字符串:
+r 打开只读文件，该文件必须存在。
+r+ 打开可读写的文件，该文件必须存在。
+w 打开只写文件，若文件存在则文件长度清为0，即该文件内容会消失。若文件不存在则建立该文件。
+w+ 打开可读写文件，若文件存在则文件长度清为零，即该文件内容会消失。若文件不存在则建立该文件。
+a 以附加的方式打开只写文件。若文件不存在，则会建立该文件，如果文件存在，写入的数据会被加到文件尾，即文件原先的内容会被保留。
+a+ 以附加方式打开可读写的文件。若文件不存在，则会建立该文件，如果文件存在，写入的数据会被加到文件尾后，即文件原先的内容会被保留。
+上述的形态字符串都可以再加一个b字符，如rb、w+b或ab＋等组合，加入b 字符用来告诉函数库打开的文件为二进制文件，而非纯文字文件。不过在POSIX系统，包含Linux都会忽略该字符。由fopen()所建立的新文件会具有S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH(0666)权限，此文件权限也会参考umask值。
+返回值 文件顺利打开后，指向该流的文件指针就会被返回。若果文件打开失败则返回NULL，并把错误代码存在errno 中。
+附加说明 一般而言，开文件后会作一些文件读取或写入的动作，若开文件失败，接下来的读写动作也无法顺利进行，所以在fopen()后请作错误判断及处理。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp;
+fp=fopen(“noexist”,”a+”);
+if(fp= =NULL) return;
+fclose(fp);
+}</stdio.h></stdio.h></p>
+
+<p>fputc（将一指定字符写入文件流中）
+相关函数 fopen，fwrite，fscanf，putc
+表头文件 #include<stdio.h>
+定义函数 int fputc(int c,FILE * stream);
+函数说明 fputc 会将参数c 转为unsigned char 后写入参数stream 指定的文件中。
+返回值 fputc()会返回写入成功的字符，即参数c。若返回EOF则代表写入失败。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp;
+char a[26]=”abcdefghijklmnopqrstuvwxyz”;
+int i;
+fp= fopen(“noexist”,”w”);
+for(i=0;i&lt;26;i++)
+fputc(a,fp);
+fclose(fp);
+}</stdio.h></stdio.h></p>
+
+<p>fputs（将一指定的字符串写入文件内）
+相关函数 fopen，fwrite，fscanf，fputc，putc
+表头文件 #include<stdio.h>
+定义函数 int fputs(const char * s,FILE * stream);
+函数说明 fputs()用来将参数s所指的字符串写入到参数stream所指的文件内。
+返回值 若成功则返回写出的字符个数，返回EOF则表示有错误发生。
+范例 请参考fgets（）。
+fread（从文件流读取数据）
+相关函数 fopen，fwrite，fseek，fscanf
+表头文件 #include<stdio.h>
+定义函数 size_t fread(void * ptr,size_t size,size_t nmemb,FILE * stream);
+函数说明 fread()用来从文件流中读取数据。参数stream为已打开的文件指针，参数ptr 指向欲存放读取进来的数据空间，读取的字符数以参数size*nmemb来决定。Fread()会返回实际读取到的nmemb数目，如果此值比参数nmemb 来得小，则代表可能读到了文件尾或有错误发生，这时必须用feof()或ferror()来决定发生什么情况。
+返回值 返回实际读取到的nmemb数目。
+附加说明
+范例
+#include<stdio.h>
+#define nmemb 3
+struct test
+{
+char name[20];
+int size;
+}s[nmemb];
+int main(){
+FILE * stream;
+int i;
+stream = fopen(“/tmp/fwrite”,”r”);
+fread(s,sizeof(struct test),nmemb,stream);
+fclose(stream);
+for(i=0;i&lt;nmemb;i++)
+printf(“name[%d]=%-20s:size[%d]=%d/n”,i,s.name,i,s.size);
+}</stdio.h></stdio.h></stdio.h></p>
+
+<p>执行
+name[0]=Linux! size[0]=6
+name[1]=FreeBSD! size[1]=8
+name[2]=Windows2000 size[2]=11</p>
+
+<p>freopen（打开文件）
+相关函数 fopen，fclose
+表头文件 #include<stdio.h>
+定义函数 FILE * freopen(const char * path,const char * mode,FILE * stream);
+函数说明 参数path字符串包含欲打开的文件路径及文件名，参数mode请参考fopen()说明。参数stream为已打开的文件指针。Freopen()会将原stream所打开的文件流关闭，然后打开参数path的文件。
+返回值 文件顺利打开后，指向该流的文件指针就会被返回。如果文件打开失败则返回NULL，并把错误代码存在errno 中。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp;
+fp=fopen(“/etc/passwd”,”r”);
+fp=freopen(“/etc/group”,”r”,fp);
+fclose(fp);
+}</stdio.h></stdio.h></p>
+
+<p>fseek（移动文件流的读写位置）
+相关函数 rewind，ftell，fgetpos，fsetpos，lseek
+表头文件 #include<stdio.h>
+定义函数 int fseek(FILE * stream,long offset,int whence);
+函数说明 fseek()用来移动文件流的读写位置。参数stream为已打开的文件指针，参数offset为根据参数whence来移动读写位置的位移数。
+参数 whence为下列其中一种:
+SEEK_SET从距文件开头offset位移量为新的读写位置。SEEK_CUR 以目前的读写位置往后增加offset个位移量。
+SEEK_END将读写位置指向文件尾后再增加offset个位移量。
+当whence值为SEEK_CUR 或SEEK_END时，参数offset允许负值的出现。
+下列是较特别的使用方式:
+1) 欲将读写位置移动到文件开头时:fseek(FILE *stream,0,SEEK_SET);
+2) 欲将读写位置移动到文件尾时:fseek(FILE *stream,0,0SEEK_END);
+返回值 当调用成功时则返回0，若有错误则返回-1，errno会存放错误代码。
+附加说明 fseek()不像lseek()会返回读写位置，因此必须使用ftell()来取得目前读写的位置。
+范例
+#include<stdio.h>
+main()
+{
+FILE * stream;
+long offset;
+fpos_t pos;
+stream=fopen(“/etc/passwd”,”r”);
+fseek(stream,5,SEEK_SET);
+printf(“offset=%d/n”,ftell(stream));
+rewind(stream);
+fgetpos(stream,&amp;pos);
+printf(“offset=%d/n”,pos);
+pos=10;
+fsetpos(stream,&amp;pos);
+printf(“offset = %d/n”,ftell(stream));
+fclose(stream);
+}</stdio.h></stdio.h></p>
+
+<p>执行 offset = 5
+offset =0
+offset=10</p>
+
+<p>ftell（取得文件流的读取位置）
+相关函数 fseek，rewind，fgetpos，fsetpos
+表头文件 #include<stdio.h>
+定义函数 long ftell(FILE * stream);
+函数说明 ftell()用来取得文件流目前的读写位置。参数stream为已打开的文件指针。
+返回值 当调用成功时则返回目前的读写位置，若有错误则返回-1，errno会存放错误代码。
+错误代码 EBADF 参数stream无效或可移动读写位置的文件流。
+范例 参考fseek()。</stdio.h></p>
+
+<p>fwrite（将数据写至文件流）
+相关函数 fopen，fread，fseek，fscanf
+表头文件 #include<stdio.h>
+定义函数 size_t fwrite(const void * ptr,size_t size,size_t nmemb,FILE * stream);
+函数说明 fwrite()用来将数据写入文件流中。参数stream为已打开的文件指针，参数ptr 指向欲写入的数据地址，总共写入的字符数以参数size*nmemb来决定。Fwrite()会返回实际写入的nmemb数目。
+返回值 返回实际写入的nmemb数目。
+范例
+#include<stdio.h>
+#define set_s (x,y) {strcoy(s[x].name,y);s[x].size=strlen(y);}
+#define nmemb 3
+struct test
+{
+char name[20];
+int size;
+}s[nmemb];
+main()
+{
+FILE * stream;
+set_s(0,”Linux!”);
+set_s(1,”FreeBSD!”);
+set_s(2,”Windows2000.”);
+stream=fopen(“/tmp/fwrite”,”w”);
+fwrite(s,sizeof(struct test),nmemb,stream);
+fclose(stream);
+}</stdio.h></stdio.h></p>
+
+<p>执行 参考fread（）。</p>
+
+<p>getc（由文件中读取一个字符）
+相关函数 read，fopen，fread，fgetc
+表头文件 #include<stdio.h>
+定义函数 int getc(FILE * stream);
+函数说明 getc()用来从参数stream所指的文件中读取一个字符。若读到文件尾而无数据时便返回EOF。虽然getc()与fgetc()作用相同，但getc()为宏定义，非真正的函数调用。
+返回值 getc()会返回读取到的字符，若返回EOF则表示到了文件尾。
+范例 参考fgetc()。</stdio.h></p>
+
+<p>getchar（由标准输入设备内读进一字符）
+相关函数 fopen，fread，fscanf，getc
+表头文件 #include<stdio.h>
+定义函数 int getchar(void);
+函数说明 getchar()用来从标准输入设备中读取一个字符。然后将该字符从unsigned char转换成int后返回。
+返回值 getchar()会返回读取到的字符，若返回EOF则表示有错误发生。
+附加说明 getchar()非真正函数，而是getc(stdin)宏定义。
+范例
+#include<stdio.h>
+main()
+{
+FILE * fp;
+int c,i;
+for(i=0li&lt;5;i++)
+{
+c=getchar();
+putchar(c);
+}
+}</stdio.h></stdio.h></p>
+
+<p>执行 1234 /<em>输入</em>/
+1234 /<em>输出</em>/</p>
+
+<p>gets（由标准输入设备内读进一字符串）
+相关函数 fopen，fread，fscanf，fgets
+表头文件 #include<stdio.h>
+定义函数 char * gets(char *s);
+函数说明 gets()用来从标准设备读入字符并存到参数s所指的内存空间，直到出现换行字符或读到文件尾为止，最后加上NULL作为字符串结束。
+返回值 gets()若成功则返回s指针，返回NULL则表示有错误发生。
+附加说明 由于gets()无法知道字符串s的大小，必须遇到换行字符或文件尾才会结束输入，因此容易造成缓冲溢出的安全性问题。建议使用fgets()取代。
+范例 参考fgets()</stdio.h></p>
+
+<p>mktemp（产生唯一的临时文件名）
+相关函数 tmpfile
+表头文件 #include<stdlib.h>
+定义函数 char * mktemp(char * template);
+函数说明 mktemp()用来产生唯一的临时文件名。参数template所指的文件名称字符串中最后六个字符必须是XXXXXX。产生后的文件名会借字符串指针返回。
+返回值 文件顺利打开后，指向该流的文件指针就会被返回。如果文件打开失败则返回NULL，并把错误代码存在errno中。
+附加说明 参数template所指的文件名称字符串必须声明为数组，如:
+char template[ ]=”template-XXXXXX”；
+不可用char * template=”template-XXXXXX”；
+范例
+#include<stdlib.h>
+main()
+{
+char template[ ]=”template-XXXXXX”;
+mktemp(template);
+printf(“template=%s/n”,template);
+}</stdlib.h></stdlib.h></p>
+
+<p>putc（将一指定字符写入文件中）
+相关函数 fopen，fwrite，fscanf，fputc
+表头文件 #include<stdio.h>
+定义函数 int putc(int c,FILE * stream);
+函数说明 putc()会将参数c转为unsigned char后写入参数stream指定的文件中。虽然putc()与fputc()作用相同，但putc()为宏定义，非真正的函数调用。
+返回值 putc()会返回写入成功的字符，即参数c。若返回EOF则代表写入失败。
+范例 参考fputc（）。</stdio.h></p>
+
+<p>putchar（将指定的字符写到标准输出设备）
+相关函数 fopen，fwrite，fscanf，fputc
+表头文件 #include<stdio.h>
+定义函数 int putchar (int c);
+函数说明 putchar()用来将参数c字符写到标准输出设备。
+返回值 putchar()会返回输出成功的字符，即参数c。若返回EOF则代表输出失败。
+附加说明 putchar()非真正函数，而是putc(c，stdout)宏定义。
+范例 参考getchar()。</stdio.h></p>
+
+<p>rewind（重设文件流的读写位置为文件开头）
+相关函数 fseek，ftell，fgetpos，fsetpos
+表头文件 #include<stdio.h>
+定义函数 void rewind(FILE * stream);
+函数说明 rewind()用来把文件流的读写位置移至文件开头。参数stream为已打开的文件指针。此函数相当于调用fseek(stream,0,SEEK_SET)。
+返回值
+范例 参考fseek()</stdio.h></p>
+
+<p>setbuf（设置文件流的缓冲区）
+相关函数 setbuffer，setlinebuf，setvbuf
+表头文件 #include<stdio.h>
+定义函数 void setbuf(FILE * stream,char * buf);
+函数说明 在打开文件流后，读取内容之前，调用setbuf()可以用来设置文件流的缓冲区。参数stream为指定的文件流，参数buf指向自定的缓冲区起始地址。如果参数buf为NULL指针，则为无缓冲IO。Setbuf()相当于调用:setvbuf(stream,buf,buf?_IOFBF:_IONBF,BUFSIZ)
+返回值</stdio.h></p>
+
+<p>setbuffer（设置文件流的缓冲区）
+相关函数 setlinebuf，setbuf，setvbuf
+表头文件 #include<stdio.h>
+定义函数 void setbuffer(FILE * stream,char * buf,size_t size);
+函数说明 在打开文件流后，读取内容之前，调用setbuffer()可用来设置文件流的缓冲区。参数stream为指定的文件流，参数buf指向自定的缓冲区起始地址，参数size为缓冲区大小。
+返回值</stdio.h></p>
+
+<p>setlinebuf（设置文件流为线性缓冲区）
+相关函数 setbuffer，setbuf，setvbuf
+表头文件 #include<stdio.h>
+定义函数 void setlinebuf(FILE * stream);
+函数说明 setlinebuf()用来设置文件流以换行为依据的无缓冲IO。相当于调用:setvbuf(stream,(char * )NULL,_IOLBF,0);请参考setvbuf()。
+返回值</stdio.h></p>
+
+<p>setvbuf（设置文件流的缓冲区）
+相关函数 setbuffer，setlinebuf，setbuf
+表头文件 #include<stdio.h>
+定义函数 int setvbuf(FILE * stream,char * buf,int mode,size_t size);
+函数说明 在打开文件流后，读取内容之前，调用setvbuf()可以用来设置文件流的缓冲区。参数stream为指定的文件流，参数buf指向自定的缓冲区起始地址，参数size为缓冲区大小，参数mode有下列几种
+_IONBF 无缓冲IO
+_IOLBF 以换行为依据的无缓冲IO
+_IOFBF 完全无缓冲IO。如果参数buf为NULL指针，则为无缓冲IO。
+返回值</stdio.h></p>
+
+<p>ungetc（将指定字符写回文件流中）
+相关函数 fputc，getchar，getc
+表头文件 #include<stdio.h>
+定义函数 int ungetc(int c,FILE * stream);
+函数说明 ungetc()将参数c字符写回参数stream所指定的文件流。这个写回的字符会由下一个读取文件流的函数取得。
+返回值 成功则返回c 字符，若有错误则返回EOF。</stdio.h></p>
+
+<p>转自<a href="http://blog.csdn.net/qianwenhao/article/details/2160014/">http://blog.csdn.net/qianwenhao/article/details/2160014/</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

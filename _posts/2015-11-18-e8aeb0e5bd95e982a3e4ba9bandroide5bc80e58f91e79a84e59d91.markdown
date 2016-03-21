@@ -1,0 +1,22 @@
+---
+author: xjh1994
+comments: true
+date: 2015-11-18 02:41:00+00:00
+layout: post
+slug: '%e8%ae%b0%e5%bd%95%e9%82%a3%e4%ba%9bandroid%e5%bc%80%e5%8f%91%e7%9a%84%e5%9d%91'
+title: 记录那些Android开发的坑
+wordpress_id: 585
+categories:
+- 未分类
+---
+
+
+	
+  1. Fragment中给Adapter初始化数据context一定要在onAttach()方法之后，比如onCreateView()中。不能在成员变量中通过getActivity()获取Context，比如:
+    
+    SampleAdapter adapter = new SampleAdapter(getActivity(), datas);
+
+
+	
+  2. 
+

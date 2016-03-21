@@ -1,0 +1,43 @@
+---
+author: xjh1994
+comments: true
+date: 2013-08-13 16:47:45+00:00
+layout: post
+slug: '%e5%88%a9%e7%94%a8otg%e7%ba%bf%e8%bf%9e%e6%8e%a5%e6%89%8b%e6%9c%ba%e7%94%a8%e9%bc%a0%e6%a0%87%e5%9c%a8%e5%be%ae%e4%bf%a1%e4%b8%8a%e6%89%93%e9%a3%9e%e6%9c%ba'
+title: 利用OTG线连接手机用鼠标在微信上打飞机
+wordpress_id: 483
+categories:
+- 未分类
+---
+
+[caption id="attachment_213" align="alignnone" width="300"][![OTG](http://blog.xjh1994.com/wp-content/uploads/b7003af33a87e95023af851c10385343faf2b21193139439-300x242.jpg)](http://blog.xjh1994.com/wp-content/uploads/b7003af33a87e95023af851c10385343faf2b21193139439.jpg) OTG[/caption]
+
+所需设备：
+
+
+
+	
+  * 一部手机/平板
+
+	
+  * 一根OTG连接线
+
+	
+  * 一个USB鼠标
+
+
+首先，你的设备（手机/平板）要支持OTG连接。将手机插上OTG线小口的一端，再将OTG线另一端连上鼠标，如果你的手机支持OTG连接，那么手机上会出现鼠标，像电脑上一样的。此时你就可以用鼠标代替触摸屏控制手机了。
+
+本人亲测平板，效果甚佳。尽情享受打飞机的快感吧………………………………………………………
+
+[![打飞机](http://blog.xjh1994.com/wp-content/uploads/612edf3ajw1e7l9eoypmug206o08w4qq.gif)](http://blog.xjh1994.com/wp-content/uploads/612edf3ajw1e7l9eoypmug206o08w4qq.gif)
+
+
+
+附：
+
+OTG是On-The-Go的缩写，是近年发展起来的技术，2001年12月18日由USB Implementers Forum公布，主要应用于各种不同的设备或移动[设备间](http://baike.baidu.com/view/497412.htm)的联接，进行数据交换。特别是PDA、移动电话、消费类设备。改变如数码照相机、摄像机、打印机等[设备间](http://baike.baidu.com/view/497412.htm)多种不同制式连接器，多达7种制式的存储卡间数据交换的不便。
+
+OTG的使用非常简单,具体跟设备有点关系，但都大同小异，操作步骤如下图：
+
+[![c2cec3fdfc0392458239a0f28794a4c27c1ed21b0ff40582](http://blog.xjh1994.com/wp-content/uploads/c2cec3fdfc0392458239a0f28794a4c27c1ed21b0ff40582.jpg)](http://blog.xjh1994.com/wp-content/uploads/c2cec3fdfc0392458239a0f28794a4c27c1ed21b0ff40582.jpg) [![d009b3de9c82d158e310184c800a19d8bd3eb13532fa6a80](http://blog.xjh1994.com/wp-content/uploads/d009b3de9c82d158e310184c800a19d8bd3eb13532fa6a80.jpg)](http://blog.xjh1994.com/wp-content/uploads/d009b3de9c82d158e310184c800a19d8bd3eb13532fa6a80.jpg)

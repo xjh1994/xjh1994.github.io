@@ -1,0 +1,137 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 10:29:31+00:00
+layout: post
+slug: html%e6%a1%86%e6%9e%b6frames
+title: HTML框架(Frames)
+wordpress_id: 50
+categories:
+- HTML&amp;CSS
+tags:
+- HTML
+- 框架
+---
+
+使用框架(Frame)，你可以在浏览器窗口同时显示多个网页。每个Frame里设定一个网页，每个Frame里的网页相互独立。
+
+
+## Frameset
+
+
+<frameset></frameset>决定如何划分Frame。<frameset>有cols属性和rows属性。使用cols属性，表示按列分布Frame；使用rows属性，表示按行分布Frame。
+
+
+## Frame
+
+
+用<frame>这个Tag设定网页。<frame>里有src属性，src值就是网页的路径和文件名。
+
+下面的代码的目的是：将Frameset分成2列，第一列25%，表示第一列的宽度是窗口宽度的25%；第二列75%，表示第一列的宽度是窗口宽度的75%。第一列中显示a.html，第二列中显示b.html。
+
+    
+    <frameset cols="25%,75%">
+
+
+
+    
+       <frame src="../asdocs/html_tutorials/Frame_a.html">
+
+
+
+    
+       <frame src="../asdocs/html_tutorials/Frame_b.html">
+
+
+
+    
+    </frameset>
+
+
+
+
+## Iframe
+
+
+Iframe是Inline Frame的意思，用<iframe></iframe>可以将Frame置于一个HTML文件内。
+
+
+## 示例
+
+
+[列分Frame](http://www.admin5.com/html/html_examples/034_frame_cols.html)
+
+这个例子显示如何在浏览器里同时显示三个网页，三个网页是按列分布的。
+
+[行分Frame](http://www.admin5.com/html/html_examples/035_frame_rows.html)
+
+这个例子显示如何在浏览器里同时显示三个网页，三个网页是按行分布的。
+
+[混合Frameset](http://www.admin5.com/html/html_examples/036_frame_cols_rows_mix.html)
+
+这个例子既用到了cols属性，又用到了rows属性，将Frame进行灵活分布。
+
+[Frameset中的noresize属性](http://www.admin5.com/html/html_examples/039_frame_noresize.html)
+
+使用Noresize属性可以确保Frame的大小。如果不使用noresize属性，你可以用鼠标移动Frame的边界，来改变Frame的大小，如果设置了noresize属性，就不能移动边界了。
+
+[Frame用于导航](http://www.admin5.com/html/html_examples/037_frame_navigation.html)
+
+这个例子演示如何建立一个用于导航的Frame。这个导航Frame包含一个HTML，这个HTML（代码如下）包含了一个网页列表。点击网页列表中的任何一项，就会在第二个Frame中显示点击中的网页。
+
+    
+    <HTML>
+
+
+
+    
+    <HEAD>
+
+
+
+    
+    <TITLE> humorlist.html </TITLE>
+
+
+
+    
+    </HEAD>
+
+
+
+    
+    <BODY>
+
+
+
+    
+    <p><a href = "../asdocs/html_tutorials/Frame_a.html" target="showframe">笑话一<a></p>
+
+
+
+    
+    <p><a href = "../asdocs/html_tutorials/Frame_b.html"  target="showframe">笑话二<a></p>
+
+
+
+    
+    <p><a href = "../asdocs/html_tutorials/Frame_c.html"  target="showframe">笑话三<a></p>
+
+
+
+    
+    </BODY>
+
+
+
+    
+    </HTML>
+
+
+[Iframe的使用](http://www.admin5.com/html/html_examples/038_iframe.html)
+
+这个例子显示如何在一个HTML文件里用iframe嵌入一个网页。
+
+
+
+转自[站长网](http://www.admin5.com/html/html_tutorials/030_html_frame.html)

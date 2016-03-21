@@ -1,0 +1,620 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 12:39:23+00:00
+layout: post
+slug: '%e3%80%90asp%e3%80%91%e5%8d%a1%e7%89%87%e6%b8%b8%e6%88%8f'
+title: 【ASP】卡片游戏
+wordpress_id: 106
+categories:
+- ASP.NET
+tags:
+- ASP
+- 卡片
+- 游戏
+---
+
+[php]
+VERSION 5.00
+Begin VB.Form TestForm1
+   Caption         =   "TestForm1"
+   ClientHeight    =   6555
+   ClientLeft      =   60
+   ClientTop       =   345
+   ClientWidth     =   10560
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   6555
+   ScaleWidth      =   10560
+   StartUpPosition =   2  '屏幕中心
+   Begin VB.TextBox Text1
+      Height          =   5295
+      Left            =   8040
+      MultiLine       =   -1  'True
+      TabIndex        =   6
+      Text            =   "TestForm1.frx":0000
+      Top             =   480
+      Width           =   2415
+   End
+   Begin VB.CommandButton Command1
+      Caption         =   "Command1"
+      Height          =   495
+      Index           =   5
+      Left            =   7320
+      TabIndex        =   5
+      Top             =   6000
+      Width           =   1215
+   End
+   Begin VB.CommandButton Command1
+      Caption         =   "Command1"
+      Height          =   495
+      Index           =   4
+      Left            =   5880
+      TabIndex        =   4
+      Top             =   6000
+      Width           =   1215
+   End
+   Begin VB.CommandButton Command1
+      Caption         =   "Command1"
+      Height          =   495
+      Index           =   3
+      Left            =   4440
+      TabIndex        =   3
+      Top             =   6000
+      Width           =   1215
+   End
+   Begin VB.CommandButton Command1
+      Caption         =   "Command1"
+      Height          =   495
+      Index           =   2
+      Left            =   3000
+      TabIndex        =   2
+      Top             =   6000
+      Width           =   1215
+   End
+   Begin VB.CommandButton Command1
+      Caption         =   "Command1"
+      Height          =   495
+      Index           =   1
+      Left            =   1560
+      TabIndex        =   1
+      Top             =   6000
+      Width           =   1215
+   End
+   Begin VB.CommandButton Command1
+      Caption         =   "Command1"
+      Height          =   495
+      Index           =   0
+      Left            =   120
+      TabIndex        =   0
+      Top             =   6000
+      Width           =   1215
+   End
+   Begin VB.Timer Timer1
+      Interval        =   1000
+      Left            =   8400
+      Top             =   6000
+   End
+   Begin VB.Label Label3
+      Caption         =   "HP"
+      Height          =   255
+      Index           =   5
+      Left            =   6360
+      TabIndex        =   15
+      Top             =   3720
+      Width           =   1215
+   End
+   Begin VB.Label Label3
+      Caption         =   "SP"
+      Height          =   255
+      Index           =   4
+      Left            =   6360
+      TabIndex        =   14
+      Top             =   4080
+      Width           =   1215
+   End
+   Begin VB.Label Label3
+      Caption         =   "HP"
+      Height          =   255
+      Index           =   3
+      Left            =   3600
+      TabIndex        =   13
+      Top             =   3720
+      Width           =   1215
+   End
+   Begin VB.Label Label3
+      Caption         =   "SP"
+      Height          =   255
+      Index           =   2
+      Left            =   3600
+      TabIndex        =   12
+      Top             =   4080
+      Width           =   1215
+   End
+   Begin VB.Label Label3
+      Caption         =   "SP"
+      Height          =   255
+      Index           =   1
+      Left            =   840
+      TabIndex        =   11
+      Top             =   4080
+      Width           =   1215
+   End
+   Begin VB.Label Label3
+      Caption         =   "HP"
+      Height          =   255
+      Index           =   0
+      Left            =   840
+      TabIndex        =   10
+      Top             =   3720
+      Width           =   1215
+   End
+   Begin VB.Label Label2
+      Caption         =   "SP"
+      Height          =   255
+      Index           =   1
+      Left            =   3480
+      TabIndex        =   9
+      Top             =   2040
+      Width           =   1215
+   End
+   Begin VB.Label Label2
+      Caption         =   "HP"
+      Height          =   255
+      Index           =   0
+      Left            =   3480
+      TabIndex        =   8
+      Top             =   1800
+      Width           =   1215
+   End
+   Begin VB.Line Line1
+      BorderWidth     =   2
+      Visible         =   0   'False
+      X1              =   360
+      X2              =   720
+      Y1              =   120
+      Y2              =   120
+   End
+   Begin VB.Label Label1
+      Caption         =   "系统状态"
+      Height          =   375
+      Left            =   8040
+      TabIndex        =   7
+      Top             =   120
+      Width           =   2415
+   End
+   Begin VB.Shape Shape4
+      FillColor       =   &H0000FF00&
+      FillStyle       =   0  'Solid
+      Height          =   135
+      Left            =   840
+      Top             =   5520
+      Visible         =   0   'False
+      Width           =   1215
+   End
+   Begin VB.Shape Shape2
+      FillStyle       =   0  'Solid
+      Height          =   1095
+      Index           =   2
+      Left            =   6360
+      Top             =   4320
+      Width           =   1215
+   End
+   Begin VB.Shape Shape2
+      FillStyle       =   0  'Solid
+      Height          =   1095
+      Index           =   1
+      Left            =   3600
+      Top             =   4320
+      Width           =   1215
+   End
+   Begin VB.Shape Shape3
+      FillColor       =   &H00C0FFFF&
+      FillStyle       =   0  'Solid
+      Height          =   255
+      Left            =   0
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   255
+   End
+   Begin VB.Shape Shape2
+      FillStyle       =   0  'Solid
+      Height          =   1095
+      Index           =   0
+      Left            =   840
+      Top             =   4320
+      Width           =   1215
+   End
+   Begin VB.Shape Shape1
+      BackColor       =   &H000000FF&
+      BorderColor     =   &H000000FF&
+      FillColor       =   &H000000FF&
+      FillStyle       =   0  'Solid
+      Height          =   1095
+      Left            =   3480
+      Top             =   600
+      Width           =   1215
+   End
+End
+Attribute VB_Name = "TestForm1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+
+Private Type wAction
+    strAttack As String
+    strMagic As String
+    strbility As String
+    strBack As String
+    strOption As String
+    strRunAWay As String
+    strType As String
+    intModel As Integer
+End Type
+Private Type WFang
+    strName As String
+    intHP As Integer
+    intSP As Integer
+    intHPC As Integer
+    intSPC As Integer
+End Type
+
+Private Type DFang
+    intDHP As Integer
+    intDSP As Integer
+    intDCHP As Integer
+    intDCSP As Integer
+    strName As String
+End Type
+
+Dim boolW As Boolean, boolD As Boolean '布尔值，设置当前状态下，哪一方开始动作
+Dim boolWDone As Boolean, boolDDone As Boolean, boolALLWDone As Boolean '布尔值，判断当前图标是否已经动作完成。和我方所有图标的动作是否完成。
+Dim boolWAttackNow As Boolean '布尔值，表示我方进入战斗动画播放界面。
+Dim DMinJie As Integer, WMinJie As Integer '敌我双方的敏捷
+Dim intCurrentW As Integer '当前动作的图标
+Dim WElements() As wAction '初始化屏幕上三个战斗图标
+Dim strStateText As String '当前状态的文字描述
+Dim eWFang() As WFang
+Dim eDFang As DFang
+
+Private Sub Command1_Click(Index As Integer)
+'
+
+    boolWDone = False
+
+    Select Case Index
+        Case 0 '攻击
+            Call FAttackW(intCurrentW, "GONGJI")
+        Case 1 '魔法
+
+        Case 2 '技能
+
+        Case 3 '回避
+
+        Case 4 '选项
+
+        Case 5 '逃跑
+
+        Case Else
+
+    End Select
+
+    Call refreshState
+    Call closeAllButtom
+End Sub
+
+Private Sub Form_Load()
+'
+    Call initData1      '初始化部分用于测试的数值
+    Call initData2
+
+End Sub
+
+Private Sub Timer1_Timer()
+'
+
+    Call updateDF1  '更新敌方的位子移动
+    Call updateWF1  '更新我方的位置移动
+
+    Call checkWhoAttack '确定哪一方可以攻击
+    Call updateAttackW
+    Call fightNowW
+
+End Sub
+
+Private Sub updateDF1()
+'
+
+    Call refreshPOS
+
+End Sub
+Private Sub updateWF1()
+'
+
+    Call refreshWPOS
+
+End Sub
+Private Sub refreshWPOS()
+'
+    Dim l1 As Long, l2 As Long, l3 As Long
+    Dim i1 As Integer
+    Dim d1 As Double
+    d1 = Rnd
+
+    d1 = d1 * 10
+    l1 = d1
+    l2 = d1 * 100
+    For i1 = 0 To Me.Shape2.UBound
+        Select Case l1
+            Case Is >= 8
+                Call SMove(Me.Shape2(i1), "left", l2)
+            Case Is >= 5
+                Call SMove(Me.Shape2(i1), "right", l2)
+            Case Is >= 2
+                Call SMove(Me.Shape2(i1), "top", l2)
+            Case Is >= 0
+                Call SMove(Me.Shape2(i1), "buttom", l2)
+            Case Else
+
+        End Select
+    Next i1
+End Sub
+Private Sub refreshPOS()
+'
+    Dim l1 As Long, l2 As Long, l3 As Long
+    Dim d1 As Double
+    d1 = Rnd
+
+    d1 = d1 * 10
+    l1 = d1
+    l2 = d1 * 100
+    l3 = d1 * 10
+'    Debug.Print l3
+'    Debug.Print l2
+    Select Case l1
+        Case Is >= 8
+'            Debug.Print "XIA"
+            Me.Shape1.Top = Me.Shape1.Top + l3
+            Sleep (l2)
+            Me.Shape1.Top = Me.Shape1.Top - l3
+        Case Is >= 5
+'            Debug.Print "SHANG"
+            Me.Shape1.Top = Me.Shape1.Top - l3
+            Sleep (l2)
+            Me.Shape1.Top = Me.Shape1.Top + l3
+        Case Is >= 2
+'            Debug.Print "ZUO"
+            Me.Shape1.Left = Me.Shape1.Left - l3
+            Sleep (l2)
+            Me.Shape1.Left = Me.Shape1.Left + l3
+        Case Is >= 0
+'            Debug.Print "YOU"
+            Me.Shape1.Left = Me.Shape1.Left + l3
+            Sleep (l2)
+            Me.Shape1.Left = Me.Shape1.Left - l3
+        Case Else
+'            Debug.Print l1
+    End Select
+
+    Me.Refresh
+
+End Sub
+
+Private Sub SMove(ByRef Sp1 As Shape, strTmp1 As String, lTime As Long)
+'
+    Dim llength As Long
+    llength = lTime / 10
+
+    Select Case strTmp1
+        Case "left"
+            Sp1.Left = Sp1.Left - llength
+            Sleep (lTime)
+            Sp1.Left = Sp1.Left + llength
+        Case "right"
+            Sp1.Left = Sp1.Left + llength
+            Sleep (lTime)
+            Sp1.Left = Sp1.Left - llength
+        Case "top"
+            Sp1.Top = Sp1.Top - llength
+            Sleep (lTime)
+            Sp1.Top = Sp1.Top + llength
+        Case "buttom"
+            Sp1.Top = Sp1.Top + llength
+            Sleep (lTime)
+            Sp1.Top = Sp1.Top - llength
+        Case Else
+
+    End Select
+
+End Sub
+
+'----------------------------------------------------------------
+'检查此时段是我方可以战斗了，还是敌方战斗。
+Private Sub checkWhoAttack()
+'
+    If boolWAttackNow = True Then
+        Exit Sub
+    End If
+
+    If boolALLWDone = True Or boolWDone = True Then '表示我方还处在战斗当中
+        Exit Sub
+    ElseIf boolDDone = True Then    '敌方进入战斗状态
+        strStateText = ""
+        Call refreshState
+        Call closeAllButtom
+        Exit Sub
+    End If
+
+    If DMinJie > WMinJie Then '战斗开始界面，判断哪一方的敏捷度高，哪一方开始攻击。
+        boolD = True
+        Me.Shape4.Visible = False
+        intCurrentW = 0
+        boolDDone = True
+    Else
+        boolW = True
+        Me.Shape4.Visible = True
+        boolALLWDone = True
+        boolWDone = False
+        Call openAllButtom
+    End If
+
+End Sub
+
+Private Sub initData1()
+'
+    DMinJie = 1
+    WMinJie = 5
+    boolD = False
+    boolW = False
+    boolWDone = False
+    boolDDone = False
+    boolALLWDone = False
+    boolWAttackNow = False
+    Call closeAllButtom
+
+End Sub
+
+Private Sub initData2()
+'
+    Dim i1 As Integer
+    ReDim WElements(3)
+
+    ReDim eWFang(3)
+
+    For i1 = 0 To UBound(eWFang) - 1
+        With eWFang(i1)
+            .intHP = 1000
+            .intHPC = 1000
+            .intSP = 500
+            .intSPC = 500
+            .strName = "我方卡片：" + CStr(i1)
+        End With
+    Next i1
+
+End Sub
+
+Private Sub FAttackW(intCurrentW1 As Integer, strAttack As String)
+'
+
+    WElements(intCurrentW1).strType = strAttack
+
+    Select Case strAttack
+        Case "GONGJI"
+            WElements(intCurrentW1).intModel = 0
+            strStateText = strStateText + "Shape:" + CStr(intCurrentW1) + ", " + strAttack + vbCrLf
+        Case Else
+
+    End Select
+    boolWDone = True
+
+End Sub
+
+'-----------------------------------------------
+'判断我方的所有队员是否全都攻击完毕,如没有攻击完毕，则进入下个队员的动作选择。
+Private Sub updateAttackW()
+'
+    If boolWDone = True Then
+        intCurrentW = intCurrentW + 1
+        If intCurrentW > 2 Then
+            boolWDone = False
+            Me.Shape4.Visible = False
+            boolWAttackNow = True
+            boolALLWDone = False
+            Exit Sub
+        End If
+        Me.Shape4.Left = Me.Shape2(intCurrentW).Left
+        Call openAllButtom
+        boolWDone = False
+    End If
+
+End Sub
+
+Private Sub refreshState()
+'
+    Me.Text1.Text = ""
+    strStateText = strStateText + vbCrLf + "intCurrentW:" + CStr(intCurrentW) + vbCrLf
+
+    Me.Text1.Text = strStateText
+
+End Sub
+
+Private Sub closeAllButtom()
+'
+    Dim i1 As Integer
+
+    For i1 = 0 To Me.Command1.UBound
+        Me.Command1(i1).Enabled = False
+
+    Next i1
+End Sub
+
+Private Sub openAllButtom()
+'
+    Dim i1 As Integer
+
+    For i1 = 0 To Me.Command1.UBound
+        Me.Command1(i1).Enabled = True
+
+    Next i1
+End Sub
+
+Private Sub fightNowW()
+'
+    Dim i1 As Integer
+'    If boolWAttackNow = True Then
+'        MsgBox "开始战斗动画的播放"
+'        boolWAttackNow = False
+'        Me.Timer1.Enabled = False
+'    End If
+
+    If boolWAttackNow = False Then
+        Exit Sub
+    End If
+
+'    MsgBox "开始战斗动画的播放"
+    strStateText = strStateText + "开始战斗动画的播放" + vbCrLf
+    boolWAttackNow = False
+    Me.Timer1.Enabled = False
+    Call refreshState
+
+    For i1 = 0 To UBound(WElements) - 1
+        Call attackShape(Shape2(i1))
+    Next i1
+
+    strStateText = strStateText + "我方战斗完成"
+    Call refreshState
+    Me.Timer1.Enabled = True
+    boolDDone = True
+End Sub
+
+Private Sub attackShape(ByRef Shape1 As Shape)
+'
+
+    Shape1.Top = Shape1.Top - (Shape1.Height / 2)
+'    Sleep (1000)
+
+    Call AdrawLineW(Shape1.Top, Shape1.Left, Shape1.Width)   '画出攻击线
+
+'    Sleep (1000)
+    Shape1.Top = Shape1.Top + (Shape1.Height / 2)
+    Me.Line1.Visible = False
+
+End Sub
+
+Private Sub AdrawLineW(intY As Integer, intX As Integer, intWidth As Integer)
+'
+    Me.Line1.Visible = True
+    With Me.Line1
+        .X1 = intX + (intWidth / 2)
+        .X2 = Me.Shape1.Left + (Me.Shape1.Width / 2)
+        .Y1 = intY
+        .Y2 = Me.Shape1.Top + Me.Shape1.Height
+    End With
+    Me.Line1.BorderWidth = 5
+    Me.Refresh
+    Sleep (1000)
+'    Me.Line1.Visible = False
+
+End Sub
+[/php]

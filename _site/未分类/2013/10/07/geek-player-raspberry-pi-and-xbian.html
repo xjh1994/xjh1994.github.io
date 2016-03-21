@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>极客播放器—树莓派联合xbian打造客厅电视盒</title>
+  <meta name="description" content="xbian系统目前刚刚升级到1.0 Alpha版本，树莓派搭载xbian系统就是一个HTPC了。互联网的大佬们也认识到了占领客厅的重要性了，下一个阵地就是把液晶电视通过“盒子”之类的东西联系起来，通过大屏幕分享网络音视频资源、同时可以扩展手机和平板的显示内容，这是个发展方向，毋庸置疑的了。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2013/10/07/geek-player-raspberry-pi-and-xbian.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">极客播放器—树莓派联合xbian打造客厅电视盒</h1>
+    <p class="post-meta"><time datetime="2013-10-07T19:40:57+08:00" itemprop="datePublished">Oct 7, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>xbian系统目前刚刚升级到1.0 Alpha版本，树莓派搭载xbian系统就是一个HTPC了。互联网的大佬们也认识到了占领客厅的重要性了，下一个阵地就是把液晶电视通过“盒子”之类的东西联系起来，通过大屏幕分享网络音视频资源、同时可以扩展手机和平板的显示内容，这是个发展方向，毋庸置疑的了。</p>
+
+<p>   下载xbian的镜像文件，官方地址：<a href="http://www.raspbmc.com/download/">http://www.raspbmc.com/download/</a></p>
+
+<p>   写入到树莓派，使用工具和过程与安装别的系统一样。</p>
+
+<p>    启动速度很快，第一步当然是把英文界面变成汉语，设置步骤就2步：首先鼠标依次点击 【SYSTEM】-【Settings】-【Appearance】-【Skin】，在右侧选择【Font】，翻页选中【Arial based】，稍等几秒钟；第二步是【Appearance】-【International】-在右侧选择【Language】，翻页选中【Chinese (Simple)】，稍等几秒钟，画面就是汉语的了。如果操作反了的话，哈哈，你就别想看清楚界面了。</p>
+
+<p>   想收看国内的视频网站和电视直播，只要安装视频插件库就可以了。推荐一个HDPfans，这儿有详细的安装步骤<a href="http://bbs.htpc1.com/thread-312488-1-1.html">http://bbs.htpc1.com/thread-312488-1-1.html</a>，基本上就是选择【系统设置】 -&gt; 【扩展功能】–&gt;【选择从zip文件安装】，选择下载好的zip文件就可以了。这只是安装了插件库，还差一步安装具体的插件，选择【获取扩展功能】，保证联网的情况下，就可以看到各个视频插件了，挨个点击安装吧。完事了就回到主界面选择视频–&gt;扩展功能，就可以看你想看的节目了。</p>
+
+<p>    第二个推荐的视频插件库是Chinese Add-on Repository for XBMC Eden ，下载地址<a href="http://xbmc-addons-chinese.googlecode.com/files/repository.googlecode.xbmc-addons-chinese-eden.zip">http://xbmc-addons-chinese.googlecode.com/files/repository.googlecode.xbmc-addons-chinese-eden.zip</a>，这个内容更丰富的。值得安装！热门电影、电视剧、美剧和娱乐一应俱全！</p>
+
+<p>    有个细节值得提一下：最好安装完xbain系统后，在windows系统下直接下载上述插件到SD卡的根目录下，这样选择安装插件库文件的时候就去找boot目录！</p>
+
+<p>附：【HDPfans插件库安装方法】</p>
+
+<p>目前HDP插件库已经聚合了HDP直播，HDP搜狐影视，178Dota视频等内容，获得了XBMC官方开发团队的技术支持，后续会有更多更好的插件发布，您只需要将HDP插件库安装到您的xbmc就能享受到不断更新和增加的hdpfans们提供的插件了。</p>
+
+<p>1、下载上面的安装文件，得到repository.hdpfans.xbmc-addons.zip这个文件，注意不需要解压缩！
+2、如果是安装到手机或者平板上的xbmc里，请把上述那个文件拷贝到sd卡插入手机或平板。
+3、下面是进入xbmc后的操作：</p>
+
+<p>     1）第一次进入xbmc是英文版的，需要做如下操作进入中文界面，进入system-&gt;appearance</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164400ug2dqqdzkgww2sqs.jpg.thumb.jpg" alt="" /></p>
+
+<p>     2)  选择skin，把fonts设置为arial based，这步很关键，不改fonts的话会导致中文字符无法显示。</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164401asny7ysb8qmdqfsz.jpg.thumb.jpg" alt="" /></p>
+
+<p>     3）到international里面设置lanuage为Chinese(simple)</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164402sw44kqpwp3pb4p49.jpg.thumb.jpg" alt="" /></p>
+
+<p>    4）系统语言设置好后，接下来就是安装插件了，进入 系统设置 -&gt; 扩展功能</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164403kd4suu0h4dta0kda.jpg.thumb.jpg" alt="" /></p>
+
+<p>   5） 选择从zip文件安装</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/1644040oidvp8sjsgj803y.jpg.thumb.jpg" alt="" /></p>
+
+<p>   6）选择我们之前下载好的那个安装文件：repository.hdpfans.xbmc-addons.zip 就完成了插件库的安装。
+   7）下面就是从HDPfans中文插件库里面选择安装你感兴趣的插件了。进入 获取扩展功能</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/1644049d0wwl9axdk66wen.jpg.thumb.jpg" alt="" /></p>
+
+<p>   8）选择HDPfans中文插件库（XBMC自带了一些其他的英文插件库）</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164405aia3j1334b4o3dbc.jpg.thumb.jpg" alt="" /></p>
+
+<p>   9）选择您感兴趣的插件，下面以HDP直播为例：</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164406rhdzk4xhcnvgntqg.jpg.thumb.jpg" alt="" /></p>
+
+<p>   10）选择安装该插件</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164407fsii1o0ojiwwpwg1.jpg.thumb.jpg" alt="" /></p>
+
+<p>   11） 安装好就能使用了，进入 视频 -&gt;扩展功能</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164408rvbqo6ouzwoljwte.jpg.thumb.jpg" alt="" /></p>
+
+<p>   12）选择进入HDP直播</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164409nw3ortj0m08rrphn.jpg.thumb.jpg" alt="" /></p>
+
+<p>   13）这里是分类列表</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164409k08pncprcouunar8.jpg.thumb.jpg" alt="" /></p>
+
+<p>   14）可以选择源</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164410y39vay4xvby1y4yg.jpg.thumb.jpg" alt="" /></p>
+
+<p>    15） 这个就是播放效果了</p>
+
+<p><img src="http://www.hdpfans.com/data/attachment/forum/201302/16/164359oqbsmkmocc9qgkbn.jpg.thumb.jpg" alt="" /></p>
+
+<p><a href="http://xbmc.hdpfans.com/repository.hdpfans.xbmc-addons.zip ">HDPfans插件库安装文件下载地址</a>  44.7KB</p>
+
+<p>转自网络</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

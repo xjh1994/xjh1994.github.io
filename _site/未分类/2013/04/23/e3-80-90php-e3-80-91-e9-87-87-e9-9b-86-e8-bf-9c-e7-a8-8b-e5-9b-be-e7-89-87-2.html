@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【PHP】采集远程图片</title>
+  <meta name="description" content="当我们需要采集网络上的某个网页内容时，如果目标网站上的图片做了防盗链的话，我们直接采集过来的图片在自己网站上是不可用的。那么我们使用程序将目标网站上的图片下载到我们网站服务器上，然后就可调用图片了。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2013/04/23/e3-80-90php-e3-80-91-e9-87-87-e9-9b-86-e8-bf-9c-e7-a8-8b-e5-9b-be-e7-89-87-2.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【PHP】采集远程图片</h1>
+    <p class="post-meta"><time datetime="2013-04-23T13:10:44+08:00" itemprop="datePublished">Apr 23, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>当我们需要采集网络上的某个网页内容时，如果目标网站上的图片做了防盗链的话，我们直接采集过来的图片在自己网站上是不可用的。那么我们使用程序将目标网站上的图片下载到我们网站服务器上，然后就可调用图片了。</p>
+
+<p>本文将使用PHP实现采集远程图片功能。基本流程：</p>
+
+<p>1、获取目标网站图片地址。</p>
+
+<p>2、读取图片内容。</p>
+
+<p>3、创建要保存图片的路径并命名图片名称。</p>
+
+<p>4、写入图片内容。</p>
+
+<p>5、完成。</p>
+
+<p>我们通过写几个函数来实现这一过程。</p>
+
+<p>函数make_dir()建立目录。判断要保存的图片文件目录是否存在，如果不存在则创建目录，并且将目录设置为可写权限。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+function make_dir($path){ 
+    if(!file_exists($path)){//不存在则建立 
+        $mk=@mkdir($path,0777); //权限 
+        @chmod($path,0777); 
+    } 
+    return true; 
+}
+</code></pre>
+</div>
+
+<p>函数read_filetext()取得图片内容。使用fopen打开图片文件，然后fread读取图片文件内容。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+function read_filetext($filepath){ 
+    $filepath=trim($filepath); 
+    $htmlfp=@fopen($filepath,"r"); 
+    //远程 
+    if(strstr($filepath,"://")){ 
+        while($data=@fread($htmlfp,500000)){ 
+            $string.=$data; 
+        } 
+    } 
+    //本地 
+    else{ 
+        $string=@fread($htmlfp,@filesize($filepath)); 
+    } 
+    @fclose($htmlfp); 
+    return $string; 
+}
+</code></pre>
+</div>
+
+<p>函数write_filetext()写文件，将图片内容fputs写入文件中，即保存图片文件。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+function write_filetext($filepath,$string){ 
+    //$string=stripSlashes($string); 
+    $fp=@fopen($filepath,"w"); 
+    @fputs($fp,$string); 
+    @fclose($fp); 
+}
+</code></pre>
+</div>
+
+<p>函数get_filename()获取图片名称，也可以自定义要保存的文件名。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+function get_filename($filepath){ 
+    $fr=explode("/",$filepath); 
+    $count=count($fr)-1; 
+    return $fr[$count]; 
+}
+</code></pre>
+</div>
+
+<p>然后将几个函数组合，在函数save_pic()中调用，最后返回保存后的图片路径。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+function save_pic($url,$savepath=''){ 
+    //处理地址 
+    $url=trim($url); 
+    $url=str_replace(" ","%20",$url); 
+    //读文件 
+    $string=read_filetext($url); 
+    if(empty($string)){ 
+        echo '读取不了文件';exit; 
+    } 
+    //文件名 
+    $filename = get_filename($url); 
+    //存放目录 
+    make_dir($savepath); //建立存放目录 
+    //文件地址 
+    $filepath = $savepath.$filename; 
+    //写文件 
+    write_filetext($filepath,$string); 
+    return $filepath; 
+}
+</code></pre>
+</div>
+
+<p>最后一步就是调用save_pic()函数保存图片，我们使用以下代码做测试。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+//目标图片地址 
+$pic = "http://img0.pconline.com.cn/pconline/1205/06/2776119_end1_thumb.jpg"; 
+//保存目录 
+$savepath = "images/"; 
+echo save_pic($pic,$savepath);
+</code></pre>
+</div>
+
+<p>实际应用中，我们可能会采集某个站点的内容，比如产品信息，包括采集防盗链的图片保存到网站上服务器上。这时我们可以使用正则匹配页面内容，将页面中相匹配的图片都找出来，然后分别下载到网站服务器上，完成图片的采集。以下代码仅供测试：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+function get_pic($cont,$path){ 
+    $pattern_src = '/&lt;[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg]))[\'|\"].*?[\/]?&gt;/'; 
+    $num = preg_match_all($pattern_src, $cont, $match_src); 
+    $pic_arr = $match_src[1]; //获得图片数组 
+    foreach ($pic_arr as $pic_item) { //循环取出每幅图的地址 
+        save_pic($pic_item,$path); //下载并保存图片 
+        echo "[OK]..!"; 
+    } 
+}
+</code></pre>
+</div>
+
+<p>然后我们通过分析页面内容，将主体内容找出来，调用get_pic()实现图片的保存。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+//我们采集太平洋电脑网上一篇关于手机报道内容页的图片 
+$url = "http://gz.pconline.com.cn/321/3215791.html"; 
+
+$content = file_get_contents($url);//获取网页内容 
+$preg = '#&lt;div class="art_con"&gt;(.*)&lt;div class="ivy620 ivy620Ex"&gt;&lt;/div&gt;#iUs'; 
+preg_match_all($preg, $content, $arr); 
+$cont = $arr[1][0];  
+get_pic($cont,'img/');
+</code></pre>
+</div>
+
+<p>还有些场景没考虑进去，比如目标网站做了302多次跳转的，目标网站做了多种防采集的，留给喜欢折腾的同学去试试吧。</p>
+
+<p>转自PHP100</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

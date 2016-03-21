@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HTML表单(Forms)</title>
+  <meta name="description" content="HTML表单(Form)是HTML的一个重要部分，主要用于采集和提交用户输入的信息。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/html&amp;css/2013/04/22/html-e8-a1-a8-e5-8d-95forms.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">HTML表单(Forms)</h1>
+    <p class="post-meta"><time datetime="2013-04-22T18:21:59+08:00" itemprop="datePublished">Apr 22, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>HTML表单(Form)是HTML的一个重要部分，主要用于采集和提交用户输入的信息。</p>
+
+<p>举个简单的例子，一个让用户输入姓名的HTML表单(Form)。示例代码如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;form action="http://www.codesth.com/html/asdocs/html_tutorials/yourname.asp" method="get"&gt;
+
+
+
+
+请输入你的姓名：
+
+
+
+
+&lt;input type="text" name="yourname"&gt;
+
+
+
+
+&lt;input type="submit" value="提交"&gt;
+
+
+
+
+&lt;/form&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/053_form_input_text.html">演示示例</a></p>
+
+<p>学习HTML表单(Form)最关键要掌握的有三个要点：</p>
+
+<ul>
+  <li>
+    <p>表单控件(Form Controls)</p>
+  </li>
+  <li>
+    <p>Action</p>
+  </li>
+  <li>
+    <p>Method</p>
+  </li>
+</ul>
+
+<p>先说表单控件(Form Controls)，通过HTML表单的各种控件，用户可以输入文字信息，或者从选项中选择，以及做提交的操作。比如上面的例句里，input type= “text”就是一个表单控件，表示一个单行输入框。</p>
+
+<p>用户填入表单的信息总是需要程序来进行处理，表单里的action就指明了处理表单信息的文件。比如上面例句里的http://www.admin5.com/html/asdocs/html_tutorials/yourname.asp。</p>
+
+<p>至于method，表示了发送表单信息的方式。method有两个值：get和post。get的方式是将表单控件的name/value信息经过编码之后，通过URL发送(你可以在地址栏里看到)。而post则将表单的内容通过http发送，你在地址栏看不到表单的提交信息。那什么时候用get，什么时候用post呢？一般是这样来判断的，如果只是为取得和显示数据，用get；一旦涉及数据的保存和更新，那么建议用post。</p>
+
+<h2 id="htmlformcontrols">HTML表单(Form)常用控件(Controls)</h2>
+
+<p>HTML表单(Form)常用控件有：</p>
+<table>
+<tbody>
+<tr>
+
+<td>表单控件(Form Contros)
+</td>
+
+<td>说明
+</td>
+</tr>
+<tr>
+
+<td>input type="text"
+</td>
+
+<td>单行文本输入框
+</td>
+</tr>
+<tr>
+
+<td>input type="submit"
+</td>
+
+<td>将表单(Form)里的信息提交给表单里action所指向的文件
+</td>
+</tr>
+<tr>
+
+<td>input type="checkbox"
+</td>
+
+<td>复选框
+</td>
+</tr>
+<tr>
+
+<td>input type="radio"
+</td>
+
+<td>单选框
+</td>
+</tr>
+<tr>
+
+<td>select
+</td>
+
+<td>下拉框
+</td>
+</tr>
+<tr>
+
+<td>textArea
+</td>
+
+<td>多行文本输入框
+</td>
+</tr>
+<tr>
+
+<td>input type="password"
+</td>
+
+<td>密码输入框(输入的文字用*表示)
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="form-controlinput-typetext">表单控件(Form Control)：单行文本输入框(input type=”text”)</h3>
+
+<p>单行文本输入框允许用户输入一些简短的单行信息，比如用户姓名。例句如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="text" name="yourname"&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/053_form_input_text.html">演示示例</a></p>
+
+<h3 id="form-controlinput-typecheckbox">表单控件(Form Control)：复选框(input type=”checkbox”)</h3>
+
+<p>复选框允许用户在一组选项里，选择多个。示例代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="checkbox" name="fruit" value ="apple"&gt;苹果&lt;br&gt;
+
+
+
+
+&lt;input type="checkbox" name="fruit" value ="orange"&gt;桔子&lt;br&gt;
+
+
+
+
+&lt;input type="checkbox" name="fruit" value ="mango"&gt;芒果&lt;br&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/055_form_input_check.html">演示示例</a></p>
+
+<p>用checked表示缺省已选的选项。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="checkbox" name="fruit" value ="orange" checked&gt;桔子&lt;br&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/056_form_input_check_checked.html">演示示例</a></p>
+
+<h3 id="form-controlinput-typeradio">表单控件(Form Control)：单选框(input type=”radio”)</h3>
+
+<p>使用单选框，让用户在一组选项里只能选择一个。示例代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="radio" name="fruit" value = "Apple"&gt;苹果&lt;br&gt;
+
+
+
+
+&lt;input type="radio" name="fruit" value = "Orange"&gt;桔子&lt;br&gt;
+
+
+
+
+&lt;input type="radio" name="fruit" value = "Mango"&gt;芒果&lt;br&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/057_form_input_radio.html">演示示例</a></p>
+
+<p>用checked表示缺省已选的选项。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="radio" name="fruit" value = "Orange" checked&gt;桔子&lt;br&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/058_form_input_radio_checked.html">演示示例</a></p>
+
+<h3 id="form-controlselect">表单控件(Form Control)：下拉框(select)</h3>
+
+<p>下拉框(Select)既可以用做单选，也可以用做复选。单选例句如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;select name="fruit" &gt;
+
+
+
+
+  &lt;option value="apple"&gt;苹果
+
+
+
+
+  &lt;option value="orange"&gt;桔子
+
+
+
+
+  &lt;option value="mango"&gt;芒果
+
+
+
+
+&lt;/select&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/059_form_select_01.html">演示示例</a></p>
+
+<p>如果要变成复选，加muiltiple即可。用户用Ctrl来实现多选。例句：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;select name="fruit" multiple&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/060_form_select_multiple.html">演示示例</a></p>
+
+<p>用户还可以用size属性来改变下拉框(Select)的大小。</p>
+
+<p><a href="http://www.admin5.com/html/html_examples/061_form_select_multiple_size1.html">演示示例</a></p>
+
+<h3 id="form-controltextarea">表单控件(Form Control)：多行输入框(textarea)</h3>
+
+<p>多行输入框(textarea)主要用于输入较长的文本信息。例句如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;textarea name="yoursuggest" cols ="50" rows = "3"&gt;&lt;/textarea&gt;
+</code></pre>
+</div>
+
+<p>其中cols表示textarea的宽度，rows表示textarea的高度。</p>
+
+<p><a href="http://www.admin5.com/html/html_examples/062_form_textarea.html">演示示例</a></p>
+
+<h3 id="form-controlinput-typepassword">表单控件(Form Control)：密码输入框(input type=”password”)</h3>
+
+<p>密码输入框(input type=”password”)主要用于一些保密信息的输入，比如密码。因为用户输入的时候，显示的不是输入的内容，而是黑点符号。。例句如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="password" name="yourpw"&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/054_form_input_text_password.html">演示示例</a></p>
+
+<h3 id="form-controlinput-typesubmit">表单控件(Form Control)：提交(input type=”submit”)</h3>
+
+<p>通过提交(input type=submit)可以将表单(Form)里的信息提交给表单里action所指向的文件。例句如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="submit" value="提交"&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/053_form_input_text.html">演示示例</a></p>
+
+<h3 id="form-controlinput-typeimage">表单控件(Form Control)：图片提交(input type=”image”)</h3>
+
+<p>input type=image 相当于 input type=submit，不同的是，input type=image 以一个图片作为表单的提交按钮，其中 src 属性表示图片的路径。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;input type="image" src ="&lt;a href="http://www.admin5.com/html/images/icons/go.gif"&gt;images/icons/go.gif&lt;/a&gt;"
+
+
+
+
+alt = "提交" NAME="imgsubmit"&gt;
+</code></pre>
+</div>
+
+<p><a href="http://www.admin5.com/html/html_examples/064_form_input_image.html">演示示例</a></p>
+
+<p>如何编写 ASP 网页获取 HTML 表单的提交信息，请参见教程：<a href="http://www.admin5.com/html/asp/010_asp_html_forms.html">ASP和HTML表单</a>。</p>
+
+<p>转自<a href="http://www.admin5.com/html/html_tutorials/030_html_frame.html">站长网</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

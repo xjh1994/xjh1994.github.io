@@ -1,0 +1,35 @@
+---
+author: xjh1994
+comments: true
+date: 2013-09-12 15:05:22+00:00
+layout: post
+slug: oracle%e6%8f%92%e5%85%a5%e7%b3%bb%e7%bb%9f%e5%bd%93%e5%89%8d%e6%97%b6%e9%97%b4
+title: Oracle插入系统当前时间
+wordpress_id: 486
+categories:
+- 未分类
+---
+
+[![oracle](http://bcs.duapp.com/blogxjh/blog/cem0MNTWB1s66.jpg)](http://bcs.duapp.com/blogxjh/blog/cem0MNTWB1s66.jpg)
+
+初学Oracle，今天在尝试插入系统当前时间的时候出现了问题，百度好久都没解决，最终不经意才发现了原因。
+
+我一开始是这样插入时间的:
+数据表名：cday
+字段：
+id int型
+cday date型
+
+    
+    insert into cday values(1, sysdate)
+
+
+然后在结果中查看时间，发现只有年月日是对的，时分秒显示的是12：00。
+用select cday from cday where id = 1;结果也是一样。
+最后才知道，Oracle里查询时间是要经过处理的。处理如下：
+
+    
+    select to_char(cday, 'YYYY-mm-dd HH24:mi:ss') from cday;
+
+
+这样结果才会出现精确的时分秒时间。

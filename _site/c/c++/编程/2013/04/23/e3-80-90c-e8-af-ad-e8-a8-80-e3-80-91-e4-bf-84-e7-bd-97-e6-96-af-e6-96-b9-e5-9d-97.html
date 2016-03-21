@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【C语言】俄罗斯方块</title>
+  <meta name="description" content="[sourcecode language=”plain”]#include  //为了使用API函数#include 	//为了使用定时器#include   //为了使用随机数">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/c/c++/%E7%BC%96%E7%A8%8B/2013/04/23/e3-80-90c-e8-af-ad-e8-a8-80-e3-80-91-e4-bf-84-e7-bd-97-e6-96-af-e6-96-b9-e5-9d-97.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【C语言】俄罗斯方块</h1>
+    <p class="post-meta"><time datetime="2013-04-23T20:01:56+08:00" itemprop="datePublished">Apr 23, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>[sourcecode language=”plain”]
+#include <windows.h> //为了使用API函数
+#include <time.h>	//为了使用定时器
+#include <stdlib.h>  //为了使用随机数</stdlib.h></time.h></windows.h></p>
+
+<p>#define BLOCKWIDTH		20  //单个方块大小
+#define NUMLINEBLOCKS	18  //行数
+#define NUMCOLUMNBLOCKS	10  //列数
+#define ID_TIMER		1	//定时器ID
+#define BLOCKSTYLES		(sizeof (Blocks) / sizeof (Blocks[0]))  //方块的种类数</p>
+
+<p>//游戏区各方格顶点布尔值，代表该方格是否有方块
+bool	GameClient[NUMCOLUMNBLOCKS][NUMLINEBLOCKS];
+static int		F, S, cF, cS;	//随机方块图形对应的第一、二纬
+static int		Score;  //得分</p>
+
+<p>//定义各方块形状，以点表示
+struct
+{
+	POINT	pt[4];
+}
+Blocks[][4] =
+{
+	//正7
+	0, 0, 1, 0, 1, 1, 1, 2,  2, 0, 0, 1, 1, 1, 2, 1,  1, 0, 1, 1, 1, 2, 2, 2,  0, 1, 1, 1, 2, 1, 0, 2,
+	//反7
+	1, 0, 2, 0, 1, 1, 1, 2,  0, 1, 1, 1, 2, 1, 2, 2,  1, 0, 1, 1, 0, 2, 1, 2,  0, 0, 0, 1, 1, 1, 2, 1,
+	//1
+	1, 0, 1, 1, 1, 2, 1, 3,  0, 1, 1, 1, 2, 1, 3, 1,  1, 0, 1, 1, 1, 2, 1, 3,  0, 1, 1, 1, 2, 1, 3, 1,
+	//Z
+	0, 0, 1, 0, 1, 1, 2, 1,  2, 0, 1, 1, 2, 1, 1, 2,  0, 0, 1, 0, 1, 1, 2, 1,  2, 0, 1, 1, 2, 1, 1, 2,
+	//反Z
+	1, 0, 2, 0, 0, 1, 1, 1,  1, 0, 1, 1, 2, 1, 2, 2,  1, 0, 2, 0, 0, 1, 1, 1,  1, 0, 1, 1, 2, 1, 2, 2,
+	//田字
+	0, 0, 1, 0, 0, 1, 1, 1,  0, 0, 1, 0, 0, 1, 1, 1,  0, 0, 1, 0, 0, 1, 1, 1,  0, 0, 1, 0, 0, 1, 1, 1,
+	//尖头
+	1, 0, 0, 1, 1, 1, 2, 1,  0, 0, 0, 1, 1, 1, 0, 2,  0, 0, 1, 0, 2, 0, 1, 1,  1, 0, 0, 1, 1, 1, 1, 2
+};</p>
+
+<p>LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);</p>
+
+<p>int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	WNDCLASS wndcls;
+	TCHAR szClassName[] = TEXT(“Terics”),
+		  szWindowName[] = TEXT(“Aka’s Terics”);
+	static POINT Block[4];</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wndcls.cbClsExtra		= 0;
+wndcls.cbWndExtra		= 0;
+wndcls.hbrBackground	= static_cast&lt;HBRUSH&gt;(GetStockObject(WHITE_BRUSH));
+wndcls.hCursor			= LoadCursor(hInstance, IDC_ARROW);
+wndcls.hIcon			= LoadIcon(hInstance, IDI_APPLICATION);
+wndcls.hInstance		= hInstance;
+wndcls.lpfnWndProc		= WndProc;
+wndcls.lpszClassName	= szClassName;
+wndcls.lpszMenuName		= NULL;
+wndcls.style			= CS_HREDRAW | CS_VREDRAW;
+RegisterClass(&amp;wndcls);
+
+HWND hwnd = CreateWindow(szClassName, szWindowName, WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX,
+	CW_USEDEFAULT, CW_USEDEFAULT, (NUMCOLUMNBLOCKS + 10) * BLOCKWIDTH,
+	(NUMLINEBLOCKS + 3) * BLOCKWIDTH,
+	NULL, NULL, hInstance, NULL);
+ShowWindow(hwnd, SW_SHOWNORMAL);
+UpdateWindow(hwnd);
+
+MSG msg;
+while(GetMessage(&amp;msg, NULL, 0, 0))
+{
+	TranslateMessage(&amp;msg);
+	DispatchMessage(&amp;msg);
+}
+return msg.wParam; }
+</code></pre>
+</div>
+
+<p>//随机数函数定制版，用于随机出现的方块
+unsigned Random(int n);</p>
+
+<p>//判断是否可以下落，可以则返回true
+bool CanDown(POINT pt[]);</p>
+
+<p>//下落实现
+void Down(POINT pt[]);</p>
+
+<p>//判断是否可以左移
+bool CanLeft(POINT pt[]);</p>
+
+<p>//实现左移
+void Left(POINT pt[]);</p>
+
+<p>//判断是否可以右移
+bool CanRight(POINT pt[]);</p>
+
+<p>//实现右移
+void Right(POINT pt[]);</p>
+
+<p>//判断是否可以变形
+bool CanChange(POINT pt[]);</p>
+
+<p>//实现变形
+void Change(POINT pt[]);</p>
+
+<p>//消行处理以及分数结算
+void DelSqure(HWND);</p>
+
+<p>LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	POINT		TericsBorder[] = {-1, -1,
+		NUMCOLUMNBLOCKS * BLOCKWIDTH + 1, NUMLINEBLOCKS * BLOCKWIDTH + 1};
+	HDC			hdc;
+	PAINTSTRUCT	ps;
+	TEXTMETRIC	tm;
+	TCHAR		szNextTerics[] = TEXT(“下一个：”),
+				szSCore[] = TEXT(“得分：”);
+	static TCHAR szBufferScore[5];
+	static int	cxChar, cyChar;
+	static POINT Block[4], NextBlock[4];
+	int			x, y;
+	static bool		pause = false;  //暂停</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>switch(message)
+{
+case WM_CREATE:
+	hdc = GetDC(hwnd);
+
+	GetTextMetrics(hdc, &amp;tm);
+	cxChar = tm.tmAveCharWidth * 2;
+	cyChar = tm.tmExternalLeading + tm.tmHeight;
+	SetTimer(hwnd, ID_TIMER, 600, NULL);
+	//初始化第一个出现的方块
+	cS = Random(4);
+	cF = Random(BLOCKSTYLES);
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		Block[i].x = Blocks[cF][cS].pt[i].x + 4;
+		Block[i].y = Blocks[cF][cS].pt[i].y;
+		GameClient[Block[i].x][Block[i].y] = true;
+	}
+	S = Random(4);
+	F = Random(BLOCKSTYLES);
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		NextBlock[i].x = Blocks[F][S].pt[i].x;
+		NextBlock[i].y = Blocks[F][S].pt[i].y;
+	}
+
+	ReleaseDC(hwnd, hdc);
+	return 0;
+
+case WM_TIMER:
+	if(pause) return 0;
+	if(CanDown(Block))
+	{
+		Down(Block);
+	}
+	//不能下移，需要处理消行判断（结合分数），还需要处理下一个显示，和当前显示的方块
+	else
+	{
+		DelSqure(hwnd);
+		for(int i = 0; i &lt; 4; ++i)
+		{
+			Block[i].x = NextBlock[i].x + 4;
+			Block[i].y = NextBlock[i].y;
+			if(GameClient[Block[i].x][Block[i].y])
+			{
+				KillTimer(hwnd, ID_TIMER);
+			}
+			else
+				GameClient[Block[i].x][Block[i].y] = true;
+		}
+		cS = S;  cF = F;
+		S = Random(4);
+		F = Random(BLOCKSTYLES);
+		for(int i = 0; i &lt; 4; ++i)
+		{
+			NextBlock[i].x = Blocks[F][S].pt[i].x;
+			NextBlock[i].y = Blocks[F][S].pt[i].y;
+		}
+	}
+	InvalidateRect(hwnd, NULL, TRUE);
+	return 0;
+
+case WM_KEYDOWN:
+	if(pause &amp;&amp; wParam != VK_PAUSE) return 0;
+	switch(wParam)
+	{
+	case VK_LEFT:
+		if(CanLeft(Block))
+			Left(Block);
+		InvalidateRect(hwnd, NULL, TRUE);
+		break;
+
+	case VK_RIGHT:
+		if(CanRight(Block))
+			Right(Block);
+		InvalidateRect(hwnd, NULL, TRUE);
+		break;
+
+	case VK_UP:
+		if(CanChange(Block))
+			Change(Block);
+		InvalidateRect(hwnd, NULL, TRUE);
+		break;
+
+	case VK_DOWN:
+		while(CanDown(Block))
+			Down(Block);
+		InvalidateRect(hwnd, NULL, TRUE);
+		break;
+	case VK_PAUSE:
+		pause = !pause;
+		break;
+
+	default:
+		break;
+	}
+	return 0;
+
+case WM_CHAR:
+	if(wParam == 'p')
+		pause = !pause;
+	else if(wParam == 'r')
+	{
+		Score = 0;
+		for(int x = 0; x &lt; NUMCOLUMNBLOCKS; ++x)
+		{
+			for(int y = 0; y &lt; NUMLINEBLOCKS; ++y)
+				GameClient[x][y] = false;
+		}
+		cS = Random(4);
+		cF = Random(BLOCKSTYLES);
+		for(int i = 0; i &lt; 4; ++i)
+		{
+			Block[i].x = Blocks[cF][cS].pt[i].x + 4;
+			Block[i].y = Blocks[cF][cS].pt[i].y;
+			GameClient[Block[i].x][Block[i].y] = true;
+		}
+		S = Random(4);
+		F = Random(BLOCKSTYLES);
+		for(int i = 0; i &lt; 4; ++i)
+		{
+			NextBlock[i].x = Blocks[F][S].pt[i].x;
+			NextBlock[i].y = Blocks[F][S].pt[i].y;
+		}
+		pause = false;
+		InvalidateRect(hwnd, NULL, TRUE);
+	}
+	return 0;
+
+case WM_PAINT:
+	//if(pause) return 0;
+	hdc = BeginPaint(hwnd, &amp;ps);
+	SetViewportOrgEx(hdc, BLOCKWIDTH, BLOCKWIDTH, NULL);
+	SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+	SelectObject(hdc, GetStockObject(BLACK_PEN));
+
+	//画俄罗斯方块游戏的边框
+	Rectangle(hdc, TericsBorder[0].x, TericsBorder[0].y,
+		TericsBorder[1].x, TericsBorder[1].y);
+	//输出“下一个”字符串
+	TextOut(hdc, (NUMCOLUMNBLOCKS + 1) * BLOCKWIDTH, 0, szNextTerics, lstrlen(szNextTerics));
+
+	//输出“得分”字符串
+	TextOut(hdc, (NUMCOLUMNBLOCKS + 1) * BLOCKWIDTH, cyChar + 5 * BLOCKWIDTH,
+		szSCore, lstrlen(szSCore));
+	//
+	SetTextAlign(hdc, TA_RIGHT | TA_TOP);
+	TextOut(hdc, (NUMCOLUMNBLOCKS + 1) * BLOCKWIDTH + 3 * cxChar, 2 * cyChar + 5 * BLOCKWIDTH,
+		szBufferScore, wsprintf(szBufferScore, TEXT("%d"), Score));
+	SetTextAlign(hdc, TA_LEFT | TA_TOP);
+
+	SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+	SelectObject(hdc, GetStockObject(WHITE_PEN));
+	//显示游戏区的方块
+	for(x = 0; x &lt; NUMCOLUMNBLOCKS; ++x)
+	{
+		for(y = 0; y &lt; NUMLINEBLOCKS; ++y)
+		{
+			if(GameClient[x][y])
+			{
+				Rectangle(hdc, x * BLOCKWIDTH, y * BLOCKWIDTH,
+					(x + 1) * BLOCKWIDTH, (y + 1) * BLOCKWIDTH);
+			}
+		}
+	}
+	//显示下一个方块区域的方块
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		Rectangle(hdc, (NextBlock[i].x + NUMCOLUMNBLOCKS + 2) * BLOCKWIDTH, NextBlock[i].y * BLOCKWIDTH + cyChar,
+			(NextBlock[i].x + NUMCOLUMNBLOCKS + 3) * BLOCKWIDTH, (NextBlock[i].y + 1) * BLOCKWIDTH + cyChar);
+	}
+
+	EndPaint(hwnd, &amp;ps);
+	return 0;
+
+case WM_DESTROY:
+	PostQuitMessage(0);
+	return 0;
+}
+return DefWindowProc(hwnd, message, wParam, lParam); }
+</code></pre>
+</div>
+
+<p>//判断方块是否可以下落
+bool CanDown(POINT pt[])
+{
+	bool result = true;
+	//将方块所在格子先假设指定为无方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = false;
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		//假如继续落下超过下底边界，返回false；或者假如该小方块下落一格已经有方块，结果为false
+		if(pt[i].y + 1 == NUMLINEBLOCKS || GameClient[pt[i].x][pt[i].y + 1])
+		{
+			result = false;
+			break;
+		}
+	}
+	//恢复方块所在格子为有方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = true;
+	return result;
+}</p>
+
+<p>//判断是否可以左移
+bool CanLeft(POINT pt[])
+{
+	bool result = true;
+	//将方块所在格子先假设指定为无方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = false;
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		//假如继续左移超过左边边界，返回false；或者假如该小方块左移一格已经有方块，结果为false
+		if(!pt[i].x || GameClient[pt[i].x - 1][pt[i].y])
+		{
+			result = false;
+			break;
+		}
+	}
+	//恢复方块所在格子为有方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = true;
+	return result;
+}</p>
+
+<p>//判断是否可以右移
+bool CanRight(POINT pt[])
+{
+	bool result = true;
+	//将方块所在格子先假设指定为无方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = false;
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		//假如继续左移超过左边边界，返回false；或者假如该小方块左移一格已经有方块，结果为false
+		if(pt[i].x + 1 == NUMCOLUMNBLOCKS || GameClient[pt[i].x + 1][pt[i].y])
+		{
+			result = false;
+			break;
+		}
+	}
+	//恢复方块所在格子为有方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = true;
+	return result;
+}</p>
+
+<p>//判断是否可以旋转
+bool CanChange(POINT pt[])
+{
+	bool result = true;
+	//将方块所在格子先假设指定为无方块
+	for(int i = 0; i &lt; 4; ++i)
+		GameClient[pt[i].x][pt[i].y] = false;
+	int t = (cS + 1) % 4;
+	for(int k = 0; k &lt; 4; ++k)
+	{
+		int x = Blocks[cF][t].pt[k].x - Blocks[cF][cS].pt[k].x,
+			y = Blocks[cF][t].pt[k].y - Blocks[cF][cS].pt[k].y;
+		if(GameClient[pt[k].x + x][pt[k].y + y] ||  //该方格已经有方块
+			pt[k].x + x &gt; NUMCOLUMNBLOCKS - 1 ||  //x坐标超越了右边界
+			pt[k].x + x &lt; 0 ||   //x坐标超越了左边界
+			pt[k].y + y &gt; NUMLINEBLOCKS - 1)  //y坐标超越了下底边界
+		{
+			result = false;
+			break;
+		}
+	}</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//恢复方块所在格子为有方块
+for(int i = 0; i &lt; 4; ++i)
+	GameClient[pt[i].x][pt[i].y] = true;
+return result; }
+</code></pre>
+</div>
+
+<p>//实现旋转
+void Change(POINT pt[])
+{
+	int t = (cS + 1) % 4;
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		int x = Blocks[cF][t].pt[i].x - Blocks[cF][cS].pt[i].x,
+			y = Blocks[cF][t].pt[i].y - Blocks[cF][cS].pt[i].y;
+		GameClient[pt[i].x][pt[i].y] = false;
+		pt[i].x += x;
+		pt[i].y += y;
+		GameClient[pt[i].x][pt[i].y] = true;
+	}
+	cS = t;
+}</p>
+
+<p>//实现右移
+void Right(POINT pt[])
+{
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		GameClient[pt[i].x][pt[i].y] = false;
+		++pt[i].x;
+	}
+	for(int k = 0; k &lt; 4; ++k)
+		GameClient[pt[k].x][pt[k].y] = true;
+}</p>
+
+<p>//实现左移
+void Left(POINT pt[])
+{
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		GameClient[pt[i].x][pt[i].y] = false;
+		–pt[i].x;
+	}
+	for(int k = 0; k &lt; 4; ++k)
+		GameClient[pt[k].x][pt[k].y] = true;
+}</p>
+
+<p>//实现方块的下落
+void Down(POINT pt[])
+{
+	for(int i = 0; i &lt; 4; ++i)
+	{
+		GameClient[pt[i].x][pt[i].y] = false;
+		++pt[i].y;
+	}
+	for(int k = 0; k &lt; 4; ++k)
+		GameClient[pt[k].x][pt[k].y] = true;
+}</p>
+
+<p>//随机数函数定制版
+inline unsigned Random(int n)
+{
+	SYSTEMTIME st;
+	GetLocalTime(&amp;st);
+	srand(st.wMilliseconds);
+	return rand() % n;
+}</p>
+
+<p>//消行处理以及分数结算
+void DelSqure(HWND hwnd)
+{
+	int line = 0, temp;
+	for(int x = NUMLINEBLOCKS - 1; x &gt;= 0; –x)
+	{
+		bool result = true;
+		for(int y = 0; y &lt; NUMCOLUMNBLOCKS; ++y)
+		{
+			if(!GameClient[y][x])
+			{
+				result = false;
+				break;
+			}
+		}
+		//判断是否可以消行
+		if(result)
+		{
+			temp = x;
+			++line;
+			while(x &gt; 0)
+			{
+				for(int y = 0; y &lt; NUMCOLUMNBLOCKS; ++y)
+				{
+					GameClient[y][x] = GameClient[y][x - 1];
+				}
+				–x;
+			}
+			for(int y = 0; y &lt; NUMCOLUMNBLOCKS; ++y)
+				GameClient[y][0] = false;
+			x = temp + 1;
+		}
+	}
+	if(line)
+		Score += (line - 1) * 2 + 1;
+	InvalidateRect(hwnd, NULL, TRUE);
+}
+[/sourcecode]</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

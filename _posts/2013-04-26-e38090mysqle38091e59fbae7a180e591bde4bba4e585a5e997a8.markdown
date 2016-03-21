@@ -1,0 +1,194 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-26 01:51:09+00:00
+layout: post
+slug: '%e3%80%90mysql%e3%80%91%e5%9f%ba%e7%a1%80%e5%91%bd%e4%bb%a4%e5%85%a5%e9%97%a8'
+title: 【MySQL】基础命令入门
+wordpress_id: 127
+categories:
+- PHP&amp;MySQL
+tags:
+- MySQL
+- 命令
+---
+
+
+
+
+登陆到mysql
+
+
+
+
+mysql -u 用户名 -p [数据库]
+
+
+
+
+ 
+
+
+
+
+显示数据库
+
+
+
+
+show databases;
+
+
+
+
+ 
+
+
+
+
+使用一个数据库
+
+
+
+
+use 数据库名;
+
+
+
+
+ 
+
+
+
+
+显示表
+
+
+
+
+show tables;
+
+
+
+
+ 
+
+
+
+
+纠正数据库编码
+
+
+
+
+set names '编码';
+
+
+
+
+ 
+
+
+
+
+创建一个数据库
+
+
+
+
+create database '库名';
+
+
+
+
+ 
+
+
+
+
+创建一个表
+
+
+
+
+create table 表名(
+
+
+
+
+字段名 类型(长度) 参数，
+
+
+
+
+....，
+
+
+
+
+....
+
+
+
+
+);
+
+
+
+
+ 
+
+
+
+
+退出mysql
+
+
+
+
+quit;
+
+
+
+
+ 
+
+
+
+
+=======================
+
+
+
+
+备份导出
+
+
+
+
+mysqldump -u 用户名 -p 数据库 > 路径+文件名
+
+
+
+
+ 
+
+
+
+
+导入>>>>
+
+
+
+
+1、创建一个库
+
+
+
+
+2、进入这个库
+
+
+
+
+3、source 路径+文件名

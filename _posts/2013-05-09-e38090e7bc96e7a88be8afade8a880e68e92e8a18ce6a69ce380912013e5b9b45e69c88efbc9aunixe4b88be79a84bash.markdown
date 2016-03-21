@@ -1,0 +1,470 @@
+---
+author: xjh1994
+comments: true
+date: 2013-05-09 04:37:56+00:00
+layout: post
+slug: '%e3%80%90%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80%e6%8e%92%e8%a1%8c%e6%a6%9c%e3%80%912013%e5%b9%b45%e6%9c%88%ef%bc%9aunix%e4%b8%8b%e7%9a%84bash'
+title: 【编程语言排行榜】2013年5月：UNIX下的Bash
+wordpress_id: 144
+categories:
+- IT资讯
+- Linux
+- 编程
+tags:
+- Bash
+- Linux
+- UNIX
+---
+
+2013年5月9日，Tiobe公司发布新一期编程语言排行榜。新一期榜单前10位没有太多的变化，只是Objective-C与C++，Ruby与JavsScript在互相交换位置罢了。今天我们要关注的是排在TOP 20后半部的一门语言——Bash。
+
+大家先请看本期TOP20榜单
+
+
+[![](http://img.cnbeta.com/newsimg/130509/1101200548369122.jpg)](http://img.cnbeta.com/newsimg/130509/1101200548369122.jpg)
+
+
+从2013年4月的编程语言排行榜我们惊异的发现Bash这门UNIX下的壳语言，竟然有了飞速的上升。从第34位最高上升到第13位。究竟这门语言有什么独特之处？
+
+
+[![](http://img.cnbeta.com/newsimg/130509/1101241616233161.jpg)](http://img.cnbeta.com/newsimg/130509/1101241616233161.jpg)
+
+
+**Bash语言2013年以来的增长势头**
+
+**Bash的诞生**
+
+Bash这个单词的来源十分晦涩，它的名字是一系列缩写：Bourne-Again SHell — 这是关于Bourne shell（sh）的一个双关语（Bourne again / born again）。
+
+[![](http://img.cnbeta.com/newsimg/130509/11012421708053299.jpg)](http://img.cnbeta.com/newsimg/130509/11012421708053299.jpg)
+
+**Bash语言之父Stephen R. Bourne**
+
+Bash 是大多数Linux系统以及Mac OS X v10.4默认的shell，它能运行于大多数Unix风格的操作系统之上，甚至被移植到了Microsoft Windows上的Cygwin系统中，以实现windows的POSIX虚拟接口。此外，它也被DJGPP项目移植到了MS-DOS上。
+
+Bash是Linux的敲门砖，如果不懂Bash那其他东西就不用学习了。Linux透过终端下达指令，都是通过Bash来执行。
+
+**Bash语法**
+
+用vi编辑器编辑一个hello文件如下：
+
+
+
+	
+  1. #!/bin/bash
+
+	
+  2. # This is a very simple example
+
+	
+  3. echo Hello World
+
+
+这样最简单的一个 BASH 程序就编写完了。这里有几个问题需要说明一下：
+
+一，第一行的 #! 是什么意思
+
+二，第一行的 /bin/bash 又是什么意思
+
+三，第二行是注释吗
+
+四，echo 语句
+
+如何执行该程序呢？有两种方法：一种是显式制定 BASH 去执行：
+
+$ bash hello 或$ sh hello（这里 sh 是指向 bash 的一个链接，“lrwxrwxrwx 1 root root 4 Aug 20 05:41 /bin/sh -> bash”）
+
+或者可以先将 hello 文件改为可以执行的文件，然后直接运行它，此时由于 hello 文件第一行的 "#! /bin/bash" 的作用，系统会自动用/bin/bash 程序去解释执行 hello 文件的：
+
+	
+  1. $ chmod u+x hello
+
+	
+  2. $ ./hello
+
+
+此处没有直接 “$ hello”是因为当前目录不是当前用户可执行文件的默认目录，而将当前目录“.”设为默认目录是一个不安全的设置。
+
+需要注意的是，BASH 程序被执行后，实际上 Linux 系统是另外开设了一个进程来运行的。
+
+**Bash命令行参数**
+
+在使用wget的时候，我喜欢加上一个-c的参数，这样可以让wget启用断点续传功能。这里的-c就是一个命令行参数。
+
+在写c语言的时候，我们使用字符串数组存储命令行参数，像我们所熟悉的argv[]。当然我们也需要命令行参数的个数，这存储在名为argc的整型变量中。argc和argv是约定俗成的名称，当然你可以使用自己的名称作为main函数的形参。
+
+在编写Bash脚本的时候，也同样可以使用命令行参数。在Bash函数中也可以使用参数，特殊的是，Bash中的函数是没有参数列表的，例如function foo
+
+这样便完成了一个函数头的定义，但是没有任何的形参名称，这是由于Bash中特殊的参数传递方法所致。
+
+这里需要说明的是，在Bash编程中命令行参数和函数的形参都采用统一的规则。
+
+**Bash的函数规则**
+
+在Bash中，所有变量在赋值是赋值号左侧直接写变量名。而在引用变量的值时，变量名的左侧需要加上$符号。写过PHP脚本可能对此深有印象，不过PHP是赋值和引用都要写。
+
+Bash的参数是按照位置传递的，而且自动给出变量名称，例如$1就表示第一个参数，当然$2就是第二个参数，参数之间用空格区分。这样你可以顺序写到$n（n表示一个正整数），有几个参数都可以按照顺序引用。
+
+$0表示当前运行命令的名称，这个其实是特殊的参数，但是往往很少用到。
+
+如果你想得到参数的个数，它保存在一个特殊名称的变量里，叫做$#。
+
+$*和$@表示所有的参数，具体区别和其他一些特殊参数请见这里。
+
+注： 后面我们会用到一个$?参数，这表示上一条独立命令运行的结果。我们才c语言写程序的时候，常常以return 0作为程序正常退出的标志，这个0就被返回给Bash，而$?可以引用到上一个程序运行的结果。还记得Bash函数的参数和命令行参数是相同的吗？如果刚 刚执行完一个Bash函数，$?里就保存着这个函数的运行结果，即return的值。
+
+Bash学习资料（繁体版）[http://linux.vbird.org/linux_basic/0320bash.php#bash](http://linux.vbird.org/linux_basic/0320bash.php#bash)
+
+Bash相关资源下载：[http://www.gnu.org/software/bash/](http://www.gnu.org/software/bash/)
+
+**前10名编程语言走势图**
+
+
+[![](http://img.cnbeta.com/newsimg/130509/11012531780146716.jpg)](http://img.cnbeta.com/newsimg/130509/11012531780146716.jpg)
+
+
+**20到50名语言排行**
+<table align="center" border="1" id="Table2" >
+<tbody >
+<tr >
+Position
+Programming Language
+Ratings
+</tr>
+<tr >
+
+<td >21
+</td>
+
+<td >MATLAB
+</td>
+
+<td >0.591%
+</td>
+</tr>
+<tr >
+
+<td >22
+</td>
+
+<td >SAS
+</td>
+
+<td >0.587%
+</td>
+</tr>
+<tr >
+
+<td >23
+</td>
+
+<td >Ada
+</td>
+
+<td >0.583%
+</td>
+</tr>
+<tr >
+
+<td >24
+</td>
+
+<td >R
+</td>
+
+<td >0.543%
+</td>
+</tr>
+<tr >
+
+<td >25
+</td>
+
+<td >ABAP
+</td>
+
+<td >0.501%
+</td>
+</tr>
+<tr >
+
+<td >26
+</td>
+
+<td >COBOL
+</td>
+
+<td >0.458%
+</td>
+</tr>
+<tr >
+
+<td >27
+</td>
+
+<td >Fortran
+</td>
+
+<td >0.419%
+</td>
+</tr>
+<tr >
+
+<td >28
+</td>
+
+<td >Scheme
+</td>
+
+<td >0.396%
+</td>
+</tr>
+<tr >
+
+<td >29
+</td>
+
+<td >Prolog
+</td>
+
+<td >0.326%
+</td>
+</tr>
+<tr >
+
+<td >30
+</td>
+
+<td >Haskell
+</td>
+
+<td >0.323%
+</td>
+</tr>
+<tr >
+
+<td >31
+</td>
+
+<td >Erlang
+</td>
+
+<td >0.315%
+</td>
+</tr>
+<tr >
+
+<td >32
+</td>
+
+<td >Common Lisp
+</td>
+
+<td >0.307%
+</td>
+</tr>
+<tr >
+
+<td >33
+</td>
+
+<td >Scratch
+</td>
+
+<td >0.303%
+</td>
+</tr>
+<tr >
+
+<td >34
+</td>
+
+<td >D
+</td>
+
+<td >0.301%
+</td>
+</tr>
+<tr >
+
+<td >35
+</td>
+
+<td >Scala
+</td>
+
+<td >0.300%
+</td>
+</tr>
+<tr >
+
+<td >36
+</td>
+
+<td >Logo
+</td>
+
+<td >0.282%
+</td>
+</tr>
+<tr >
+
+<td >37
+</td>
+
+<td >NXT-G
+</td>
+
+<td >0.243%
+</td>
+</tr>
+<tr >
+
+<td >38
+</td>
+
+<td >F#
+</td>
+
+<td >0.240%
+</td>
+</tr>
+<tr >
+
+<td >39
+</td>
+
+<td >Smalltalk
+</td>
+
+<td >0.237%
+</td>
+</tr>
+<tr >
+
+<td >40
+</td>
+
+<td >APL
+</td>
+
+<td >0.226%
+</td>
+</tr>
+<tr >
+
+<td >41
+</td>
+
+<td >Forth
+</td>
+
+<td >0.220%
+</td>
+</tr>
+<tr >
+
+<td >42
+</td>
+
+<td >ActionScript
+</td>
+
+<td >0.204%
+</td>
+</tr>
+<tr >
+
+<td >43
+</td>
+
+<td >ML
+</td>
+
+<td >0.204%
+</td>
+</tr>
+<tr >
+
+<td >44
+</td>
+
+<td >RPG (OS/400)
+</td>
+
+<td >0.178%
+</td>
+</tr>
+<tr >
+
+<td >45
+</td>
+
+<td >Awk
+</td>
+
+<td >0.162%
+</td>
+</tr>
+<tr >
+
+<td >46
+</td>
+
+<td >Tcl
+</td>
+
+<td >0.152%
+</td>
+</tr>
+<tr >
+
+<td >47
+</td>
+
+<td >PL/I
+</td>
+
+<td >0.149%
+</td>
+</tr>
+<tr >
+
+<td >48
+</td>
+
+<td >LabVIEW
+</td>
+
+<td >0.138%
+</td>
+</tr>
+<tr >
+
+<td >49
+</td>
+
+<td >Ladder Logic
+</td>
+
+<td >0.137%
+</td>
+</tr>
+<tr >
+
+<td >50
+</td>
+
+<td >JScript.NET
+</td>
+
+<td >0.136%
+</td>
+</tr>
+</tbody>
+</table>
+**下面是第50到100的编程语言排名**
+
+(Visual) FoxPro, ABC, Agilent VEE, Algol, Alice, Apex, ATLAS, AutoLISP, bc, BlitzMax, C shell, CFML, CL (OS/400), Clarion, Clipper, Clojure, Dart, Dylan, Eiffel, Emacs Lisp, Fantom, Gambas, Go, Groovy, Heron, Icon, IDL, Informix-4GL, J, JavaFX Script, Lasso, LPC, MUMPS, Oberon, OCaml, Occam, OpenCL, Oz, Pike, PowerShell, REXX, S, sed, SPARK, thinBasic, VBScript, VHDL, WebDNA, xBase, XSLT
+
+转自[http://www.cnbeta.com/articles/236668.htm](http://www.cnbeta.com/articles/236668.htm)

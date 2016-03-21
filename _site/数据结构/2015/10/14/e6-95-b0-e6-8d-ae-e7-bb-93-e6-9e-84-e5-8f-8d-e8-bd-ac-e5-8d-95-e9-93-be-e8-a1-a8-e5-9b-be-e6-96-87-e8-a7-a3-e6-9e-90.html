@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[数据结构]反转单链表图文解析（转）</title>
+  <meta name="description" content="如何把一个单链表进行反转？">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/2015/10/14/e6-95-b0-e6-8d-ae-e7-bb-93-e6-9e-84-e5-8f-8d-e8-bd-ac-e5-8d-95-e9-93-be-e8-a1-a8-e5-9b-be-e6-96-87-e8-a7-a3-e6-9e-90.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">[数据结构]反转单链表图文解析（转）</h1>
+    <p class="post-meta"><time datetime="2015-10-14T15:07:26+08:00" itemprop="datePublished">Oct 14, 2015</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>如何把一个单链表进行反转？</p>
+
+<p>方法1：将单链表储存为数组，然后按照数组的索引逆序进行反转。</p>
+
+<p>方法2：使用3个指针遍历单链表，逐个链接点进行反转。</p>
+
+<p>方法3：从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，最后将第一个节点挪到新表的表尾。</p>
+
+<p>方法4:   递归(相信我们都熟悉的一点是，对于树的大部分问题，基本可以考虑用递归来解决。但是我们不太熟悉的一点是，对于单链表的一些问题，也可以使用递归。可以认为单链表是一颗永远只有左(右)子树的树，因此可以考虑用递归来解决。或者说，因为单链表本身的结构也有自相似的特点，所以可以考虑用递归来解决)</p>
+
+<p>方法1：</p>
+
+<p>浪费空间。</p>
+
+<p>方法2:</p>
+
+<p>使用p和q两个指针配合工作，使得两个节点间的指向反向，同时用r记录剩下的链表。</p>
+
+<p>p = head;</p>
+
+<p>q = head-&gt;next;</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_13175655237TGo.gif" alt="" /></p>
+
+<p>head-&gt;next = NULL;</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317565566SEbH.gif" alt="" /></p>
+
+<p>现在进入循环体，这是第一次循环。</p>
+
+<p>r = q-&gt;next;</p>
+
+<p>q-&gt;next = p;</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317565598ry1Z.gif" alt="" /></p>
+
+<p>p = q;</p>
+
+<p>q =r;</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317565630444j.gif" alt="" /></p>
+
+<p>第二次循环。</p>
+
+<p>r = q-&gt;next</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317565688wHMQ.gif" alt="" /></p>
+
+<p>q-&gt;next = p;</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_13175657179L43.gif" alt="" /></p>
+
+<p>p = q;</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317565750az2H.gif" alt="" /></p>
+
+<p>q = r</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317565777WHOA.gif" alt="" /></p>
+
+<p>第三次循环。。。。。</p>
+
+<p>具体代码如下</p>
+
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">view plain</a> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">copy</a></p>
+
+<p> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">print</a><a href="http://blog.csdn.net/feliciafay/article/details/6841115#">?</a><a href="https://code.csdn.net/snippets/170513"><img src="https://code.csdn.net/assets/CODE_ico.png" alt="在CODE上查看代码片" /></a><a href="https://code.csdn.net/snippets/170513/fork"><img src="https://code.csdn.net/assets/ico_fork.svg" alt="派生到我的代码片" /></a></p>
+
+<ol>
+  <li>
+    <p>ActList<em> ReverseList2(ActList</em> head)  </p>
+  </li>
+  <li>
+    <p>{  </p>
+  </li>
+  <li>
+    <p>    //ActList* temp=new ActList;  </p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td> if(NULL==head</td>
+          <td> </td>
+          <td> NULL==head-&gt;next) return head;    //少于两个节点没有反转的必要。  </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>    ActList* p;  </p>
+  </li>
+  <li>
+    <p>    ActList* q;  </p>
+  </li>
+  <li>
+    <p>    ActList* r;  </p>
+  </li>
+  <li>
+    <p>    p = head;    </p>
+  </li>
+  <li>
+    <p>    q = head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>    head-&gt;next = NULL; //旧的头指针是新的尾指针，next需要指向NULL  </p>
+  </li>
+  <li>
+    <p>    while(q){  </p>
+  </li>
+  <li>
+    <p>        r = q-&gt;next; //先保留下一个step要处理的指针  </p>
+  </li>
+  <li>
+    <p>        q-&gt;next = p; //然后p q交替工作进行反向  </p>
+  </li>
+  <li>
+    <p>        p = q;   </p>
+  </li>
+  <li>
+    <p>        q = r;   </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>    head=p; // 最后q必然指向NULL，所以返回了p作为新的头指针  </p>
+  </li>
+  <li>
+    <p>    return head;      </p>
+  </li>
+  <li>}  </li>
+</ol>
+
+<p>updated 2014-01-24，重新非IDE环境写了一遍
+如果觉得上面的先成环再断环的过程不太好理解，那么可以考虑下面这个办法，增加一个中间变量，使用三个变量来实现。</p>
+
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">view plain</a> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">copy</a></p>
+
+<p> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">print</a><a href="http://blog.csdn.net/feliciafay/article/details/6841115#">?</a><a href="https://code.csdn.net/snippets/170513"><img src="https://code.csdn.net/assets/CODE_ico.png" alt="在CODE上查看代码片" /></a><a href="https://code.csdn.net/snippets/170513/fork"><img src="https://code.csdn.net/assets/ico_fork.svg" alt="派生到我的代码片" /></a></p>
+
+<ol>
+  <li>
+    <p>struct ListNode{  </p>
+  </li>
+  <li>
+    <p>    int val;  </p>
+  </li>
+  <li>
+    <p>    ListNode* next;  </p>
+  </li>
+  <li>
+    <p>    ListNode(int a):val(a),next(NULL){}  </p>
+  </li>
+  <li>
+    <p>};  </p>
+  </li>
+  <li>
+    <p>ListNode<em> reverseLinkedList3(ListNode</em> head){  </p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>        if(head==NULL</td>
+          <td> </td>
+          <td>head-&gt;next==NULL)  </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>            return  head;  </p>
+  </li>
+  <li>
+    <p>        ListNode* p=head; //指向head  </p>
+  </li>
+  <li>
+    <p>        ListNode* r=head-&gt;next; //指向待搬运的节点，即依次指向从第2个节点到最后一个节点的所有节点  </p>
+  </li>
+  <li>
+    <p>        ListNode* m=NULL; //充当搬运工作用的节点  </p>
+  </li>
+  <li>
+    <p>        ListNode* tail=head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        while(r!=NULL){  //bug2 循环语句写错了, while写成了if  </p>
+  </li>
+  <li>
+    <p>            m=r;  </p>
+  </li>
+  <li>
+    <p>            r=r-&gt;next;  </p>
+  </li>
+  <li>
+    <p>            m-&gt;next=p-&gt;next;  </p>
+  </li>
+  <li>
+    <p>            p-&gt;next=m;  </p>
+  </li>
+  <li>
+    <p>            //if(r!=NULL)  </p>
+  </li>
+  <li>
+    <p>                //std::cout«“m=”«m-&gt;val«“ ,p=”«p-&gt;val«“ ,r=”«r-&gt;val«std::endl;  </p>
+  </li>
+  <li>
+    <p>            //else  </p>
+  </li>
+  <li>
+    <p>                //std::cout«“m=”«m-&gt;val«“ ,p=”«p-&gt;val«“ ,r=NULL”«std::endl;  </p>
+  </li>
+  <li>
+    <p>        }  </p>
+  </li>
+  <li>
+    <p>        head=p-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        tail-&gt;next=p;  </p>
+  </li>
+  <li>
+    <p>        p-&gt;next=NULL;  </p>
+  </li>
+  <li>
+    <p>        tail=p;  </p>
+  </li>
+  <li>
+    <p>        return head; // bug1 忘记了return  </p>
+  </li>
+  <li>    }  </li>
+</ol>
+
+<p>方法3</p>
+
+<p>还是先看图，</p>
+
+<p><img src="http://hi.csdn.net/attachment/201110/2/0_1317566020p320.gif" alt="" /></p>
+
+<p>从图上观察，方法是：对于一条链表，从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，(N-1)次这样的操作结束之后将第1个节点挪到新表的表尾即可。</p>
+
+<p>代码如下:</p>
+
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">view plain</a> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">copy</a></p>
+
+<p> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">print</a><a href="http://blog.csdn.net/feliciafay/article/details/6841115#">?</a><a href="https://code.csdn.net/snippets/170513"><img src="https://code.csdn.net/assets/CODE_ico.png" alt="在CODE上查看代码片" /></a><a href="https://code.csdn.net/snippets/170513/fork"><img src="https://code.csdn.net/assets/ico_fork.svg" alt="派生到我的代码片" /></a></p>
+
+<ol>
+  <li>
+    <p>ActList<em> ReverseList3(ActList</em> head)  </p>
+  </li>
+  <li>
+    <p>{  </p>
+  </li>
+  <li>
+    <p>    ActList* p;  </p>
+  </li>
+  <li>
+    <p>    ActList* q;  </p>
+  </li>
+  <li>
+    <p>    p=head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>    while(p-&gt;next!=NULL){  </p>
+  </li>
+  <li>
+    <p>        q=p-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        p-&gt;next=q-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        q-&gt;next=head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        head-&gt;next=q;  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>    p-&gt;next=head;//相当于成环  </p>
+  </li>
+  <li>
+    <p>    head=p-&gt;next-&gt;next;//新head变为原head的next  </p>
+  </li>
+  <li>
+    <p>    p-&gt;next-&gt;next=NULL;//断掉环  </p>
+  </li>
+  <li>
+    <p>    return head;    </p>
+  </li>
+  <li>
+    <p>}  </p>
+  </li>
+</ol>
+
+<p>附:</p>
+
+<p>完整的链表创建，显示，反转代码:</p>
+
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">view plain</a> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">copy</a></p>
+
+<p> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">print</a><a href="http://blog.csdn.net/feliciafay/article/details/6841115#">?</a><a href="https://code.csdn.net/snippets/170513"><img src="https://code.csdn.net/assets/CODE_ico.png" alt="在CODE上查看代码片" /></a><a href="https://code.csdn.net/snippets/170513/fork"><img src="https://code.csdn.net/assets/ico_fork.svg" alt="派生到我的代码片" /></a></p>
+
+<ol>
+  <li>
+    <p>//创建:用q指向当前链表的最后一个节点；用p指向即将插入的新节点。  </p>
+  </li>
+  <li>
+    <p>//反向:用p和q反转工作，r记录链表中剩下的还未反转的部分。  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>#include ”stdafx.h”  </p>
+  </li>
+  <li>
+    <p>#include <iostream>  </iostream></p>
+  </li>
+  <li>
+    <p>using namespace std;  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>struct ActList  </p>
+  </li>
+  <li>
+    <p>{  </p>
+  </li>
+  <li>
+    <p>    char ActName[20];  </p>
+  </li>
+  <li>
+    <p>    char Director[20];  </p>
+  </li>
+  <li>
+    <p>    int Mtime;  </p>
+  </li>
+  <li>
+    <p>    ActList *next;  </p>
+  </li>
+  <li>
+    <p>};  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>ActList* head;  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>ActList*  Create()  </p>
+  </li>
+  <li>
+    <p>{//start of CREATE()  </p>
+  </li>
+  <li>
+    <p>    ActList* p=NULL;  </p>
+  </li>
+  <li>
+    <p>    ActList* q=NULL;  </p>
+  </li>
+  <li>
+    <p>    head=NULL;  </p>
+  </li>
+  <li>
+    <p>    int Time;  </p>
+  </li>
+  <li>
+    <p>    cout«“Please input the length of the movie.”«endl;  </p>
+  </li>
+  <li>
+    <p>    cin»Time;  </p>
+  </li>
+  <li>
+    <p>    while(Time!=0){  </p>
+  </li>
+  <li>
+    <p>    p=new ActList;  </p>
+  </li>
+  <li>
+    <p>    //类似表达:  TreeNode* node = new TreeNode;//Noice that [new] should be written out.  </p>
+  </li>
+  <li>
+    <p>    p-&gt;Mtime=Time;  </p>
+  </li>
+  <li>
+    <p>    cout«“Please input the name of the movie.”«endl;  </p>
+  </li>
+  <li>
+    <p>    cin»p-&gt;ActName;  </p>
+  </li>
+  <li>
+    <p>    cout«“Please input the Director of the movie.”«endl;  </p>
+  </li>
+  <li>
+    <p>    cin»p-&gt;Director;  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>    if(head==NULL)  </p>
+  </li>
+  <li>
+    <p>    {  </p>
+  </li>
+  <li>
+    <p>    head=p;  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>    else  </p>
+  </li>
+  <li>
+    <p>    {  </p>
+  </li>
+  <li>
+    <p>    q-&gt;next=p;  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>    q=p;  </p>
+  </li>
+  <li>
+    <p>    cout«“Please input the length of the movie.”«endl;  </p>
+  </li>
+  <li>
+    <p>    cin»Time;  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>    if(head!=NULL)  </p>
+  </li>
+  <li>
+    <p>    q-&gt;next=NULL;  </p>
+  </li>
+  <li>
+    <p>    return head;  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>}//end of CREATE()  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>void DisplayList(ActList* head)  </p>
+  </li>
+  <li>
+    <p>{//start of display  </p>
+  </li>
+  <li>
+    <p>    cout«“show the list of programs.”«endl;  </p>
+  </li>
+  <li>
+    <p>    while(head!=NULL)  </p>
+  </li>
+  <li>
+    <p>    {  </p>
+  </li>
+  <li>
+    <p>        cout«head-&gt;Mtime«“\t”«head-&gt;ActName«“\t”«head-&gt;Director«“\t”«endl;  </p>
+  </li>
+  <li>
+    <p>        head=head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>}//end of display  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>ActList<em> ReverseList2(ActList</em> head)  </p>
+  </li>
+  <li>
+    <p>{  </p>
+  </li>
+  <li>
+    <p>    //ActList* temp=new ActList;  </p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td> if(NULL==head</td>
+          <td> </td>
+          <td> NULL==head-&gt;next) return head;      </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p>    ActList* p;  </p>
+  </li>
+  <li>
+    <p>    ActList* q;  </p>
+  </li>
+  <li>
+    <p>    ActList* r;  </p>
+  </li>
+  <li>
+    <p>    p = head;    </p>
+  </li>
+  <li>
+    <p>    q = head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>    head-&gt;next = NULL;  </p>
+  </li>
+  <li>
+    <p>    while(q){  </p>
+  </li>
+  <li>
+    <p>        r = q-&gt;next; //  </p>
+  </li>
+  <li>
+    <p>        q-&gt;next = p;      </p>
+  </li>
+  <li>
+    <p>        p = q; //  </p>
+  </li>
+  <li>
+    <p>        q = r; //  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>    head=p;  </p>
+  </li>
+  <li>
+    <p>    return head;      </p>
+  </li>
+  <li>
+    <p>}  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>ActList<em> ReverseList3(ActList</em> head)  </p>
+  </li>
+  <li>
+    <p>{  </p>
+  </li>
+  <li>
+    <p>    ActList* p;  </p>
+  </li>
+  <li>
+    <p>    ActList* q;  </p>
+  </li>
+  <li>
+    <p>    p=head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>    while(p-&gt;next!=NULL){  </p>
+  </li>
+  <li>
+    <p>        q=p-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        p-&gt;next=q-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        q-&gt;next=head-&gt;next;  </p>
+  </li>
+  <li>
+    <p>        head-&gt;next=q;  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>    p-&gt;next=head;//相当于成环  </p>
+  </li>
+  <li>
+    <p>    head=p-&gt;next-&gt;next;//新head变为原head的next  </p>
+  </li>
+  <li>
+    <p>    p-&gt;next-&gt;next=NULL;//断掉环  </p>
+  </li>
+  <li>
+    <p>    return head;    </p>
+  </li>
+  <li>
+    <p>}  </p>
+  </li>
+  <li>
+    <p>int main(int argc, char* argv[])  </p>
+  </li>
+  <li>
+    <p>{  </p>
+  </li>
+  <li>
+    <p>//  DisplayList(Create());  </p>
+  </li>
+  <li>
+    <p>//  DisplayList(ReverseList2(Create()));  </p>
+  </li>
+  <li>
+    <p>    DisplayList(ReverseList3(Create()));  </p>
+  </li>
+  <li>
+    <p>    return 0;  </p>
+  </li>
+  <li>}  </li>
+</ol>
+
+<p>方法4:  递归</p>
+
+<p>updated: 2014-01-24</p>
+
+<p>因为发现大部分问题都可以从递归角度想想，所以这道题目也从递归角度想了想。</p>
+
+<p>现在需要把A-&gt;B-&gt;C-&gt;D进行反转，
+可以先假设B-&gt;C-&gt;D已经反转好，已经成为了D-&gt;C-&gt;B,那么接下来要做的事情就是将D-&gt;C-&gt;B看成一个整体，让这个整体的next指向A，所以问题转化了反转B-&gt;C-&gt;D。那么，
+可以先假设C-&gt;D已经反转好，已经成为了D-&gt;C,那么接下来要做的事情就是将D-&gt;C看成一个整体，让这个整体的next指向B，所以问题转化了反转C-&gt;D。那么，
+可以先假设D(其实是D-&gt;NULL)已经反转好，已经成为了D(其实是head-&gt;D),那么接下来要做的事情就是将D(其实是head-&gt;D)看成一个整体，让这个整体的next指向C，所以问题转化了反转D。
+上面这个过程就是递归的过程，这其中最麻烦的问题是，如果保留新链表的head指针呢？想到了两个办法。</p>
+
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">view plain</a> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">copy</a></p>
+
+<p> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">print</a><a href="http://blog.csdn.net/feliciafay/article/details/6841115#">?</a><a href="https://code.csdn.net/snippets/170513"><img src="https://code.csdn.net/assets/CODE_ico.png" alt="在CODE上查看代码片" /></a><a href="https://code.csdn.net/snippets/170513/fork"><img src="https://code.csdn.net/assets/ico_fork.svg" alt="派生到我的代码片" /></a></p>
+
+<ol>
+  <li>
+    <p>// 递归版的第一种实现，借助类的成员变量m_phead来表示新链表的头指针。  </p>
+  </li>
+  <li>
+    <p>struct ListNode{  </p>
+  </li>
+  <li>
+    <p>    int val;  </p>
+  </li>
+  <li>
+    <p>    ListNode* next;  </p>
+  </li>
+  <li>
+    <p>    ListNode(int a):val(a),next(NULL){}  </p>
+  </li>
+  <li>
+    <p>};  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>class Solution{  </p>
+  </li>
+  <li>
+    <p>     ListNode<em> reverseLinkedList4(ListNode</em> head){ //输入: 旧链表的头指针  </p>
+  </li>
+  <li>
+    <p>        if(head==NULL)  </p>
+  </li>
+  <li>
+    <p>            return NULL;  </p>
+  </li>
+  <li>
+    <p>        if(head-&gt;next==NULL){  </p>
+  </li>
+  <li>
+    <p>            m_phead=head;  </p>
+  </li>
+  <li>
+    <p>            return head;  </p>
+  </li>
+  <li>
+    <p>        }  </p>
+  </li>
+  <li>
+    <p>        ListNode* new_tail=reverseLinkedList4(head-&gt;next);  </p>
+  </li>
+  <li>
+    <p>        new_tail-&gt;next=head;  </p>
+  </li>
+  <li>
+    <p>        head-&gt;next=NULL;  </p>
+  </li>
+  <li>
+    <p>        return head; //输出: 新链表的尾指针  </p>
+  </li>
+  <li>
+    <p>     }  </p>
+  </li>
+  <li>
+    <p>    ListNode<em> m_phead=NULL;//member variable defined for reverseLinkedList4(ListNode</em> head)  </p>
+  </li>
+  <li>
+    <p>};  </p>
+  </li>
+</ol>
+
+<p>第二个办法是，增加一个引用型参数 new_head，它用来保存新链表的头指针。</p>
+
+<p><strong>[cpp]</strong> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">view plain</a> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">copy</a></p>
+
+<p> <a href="http://blog.csdn.net/feliciafay/article/details/6841115#">print</a><a href="http://blog.csdn.net/feliciafay/article/details/6841115#">?</a><a href="https://code.csdn.net/snippets/170513"><img src="https://code.csdn.net/assets/CODE_ico.png" alt="在CODE上查看代码片" /></a><a href="https://code.csdn.net/snippets/170513/fork"><img src="https://code.csdn.net/assets/ico_fork.svg" alt="派生到我的代码片" /></a></p>
+
+<ol>
+  <li>
+    <p>struct ListNode{  </p>
+  </li>
+  <li>
+    <p>    int val;  </p>
+  </li>
+  <li>
+    <p>    ListNode* next;  </p>
+  </li>
+  <li>
+    <p>    ListNode(int a):val(a),next(NULL){}  </p>
+  </li>
+  <li>
+    <p>};  </p>
+  </li>
+  <li>
+    <p>  </p>
+  </li>
+  <li>
+    <p>class Solution{  </p>
+  </li>
+  <li>
+    <p>    ListNode<em> reverseLinkedList5(ListNode</em> head, ListNode* &amp; new_head){ //输入参数head为旧链表的头指针。new_head为新链表的头指针。  </p>
+  </li>
+  <li>
+    <p>        if(head==NULL)  </p>
+  </li>
+  <li>
+    <p>            return NULL;  </p>
+  </li>
+  <li>
+    <p>        if(head-&gt;next==NULL){  </p>
+  </li>
+  <li>
+    <p>            new_head=head; //当处理到了旧链表的尾指针，也就是新链表的头指针时，对new_head进行赋值。因为是引用型参数，所以在接下来调用中new_head的值逐层传递下去。  </p>
+  </li>
+  <li>
+    <p>            return head;  </p>
+  </li>
+  <li>
+    <p>        }  </p>
+  </li>
+  <li>
+    <p>        ListNode* new_tail=reverseLinkedList5(head-&gt;next,new_head);  </p>
+  </li>
+  <li>
+    <p>        new_tail-&gt;next=head;  </p>
+  </li>
+  <li>
+    <p>        head-&gt;next=NULL;  </p>
+  </li>
+  <li>
+    <p>        return head; //输出参数head为新链表的尾指针。  </p>
+  </li>
+  <li>
+    <p>    }  </p>
+  </li>
+  <li>
+    <p>};  </p>
+  </li>
+</ol>
+
+<p>转自CSDN：http://blog.csdn.net/feliciafay/article/details/6841115</p>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

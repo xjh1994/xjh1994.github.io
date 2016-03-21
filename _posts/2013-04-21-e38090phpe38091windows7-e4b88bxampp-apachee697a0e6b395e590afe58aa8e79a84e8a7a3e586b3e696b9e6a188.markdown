@@ -1,0 +1,30 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-21 13:01:28+00:00
+layout: post
+slug: '%e3%80%90php%e3%80%91windows7-%e4%b8%8bxampp-apache%e6%97%a0%e6%b3%95%e5%90%af%e5%8a%a8%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88'
+title: 【PHP】windows7 下xampp apache无法启动的解决方案
+wordpress_id: 109
+categories:
+- PHP&amp;MySQL
+- WordPress
+- 原创
+tags:
+- PHP
+- windows7
+- xampp
+- 解决方案
+---
+
+通常xampp中的apache无法启动，都是因为80端口被占用，如Skype,迅雷,电驴等软件占用80端口，如果xampp的启动顺序在其后，就无法启动apache。但这次发现这些软件均没有启动，那该是什么软件在占用80端口呢？
+
+记得在查看win7新功能的时候，有一个打开或关闭windows功能的程序。里面含盖了IE8等windows软件，类似于以前的添加删除windows组件的服务。
+
+于是乎，[akii](https://www.akii.org/)发现里面有IIS，于是开始实验关闭，得出结论如下：
+
+打开控制面板->程序->程序和功能->打开或关闭windows功能
+
+然后在选项Internet信息服务->万维网服务->安全性，把“请求筛选”前的勾去掉，然后确定即可。windows会执行一下程序的变更，然后，您猜怎么着xampp正常了，apache启动了。
+
+现在不用改了，应该是微软更新过一些补丁以后，就不用再修改此处了。

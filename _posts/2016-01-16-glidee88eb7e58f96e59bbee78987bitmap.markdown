@@ -1,0 +1,18 @@
+---
+author: xjh1994
+comments: true
+date: 2016-01-16 04:42:56+00:00
+layout: post
+slug: glide%e8%8e%b7%e5%8f%96%e5%9b%be%e7%89%87bitmap
+title: Glide获取图片Bitmap
+wordpress_id: 618
+categories:
+- 安卓
+---
+
+Glide.with(getBaseContext()).load(mPhotos.get(mPosition)).asBitmap().into(new SimpleTarget() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+    
+                        }
+    

@@ -1,0 +1,1649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>X的博客</title>
+    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</description>
+    <link>http://www.xjh1994.com/</link>
+    <atom:link href="http://www.xjh1994.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 21 Mar 2016 18:31:08 +0800</pubDate>
+    <lastBuildDate>Mon, 21 Mar 2016 18:31:08 +0800</lastBuildDate>
+    <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Android内存泄漏及解决方案汇总</title>
+        <description>&lt;p&gt;安卓系统本来内存就不够用，如果开发着对内存管理不加以优化，任由内存泄露，那么只会让安卓的软件生态越来越差。所以总结一下安卓开发中会出现的内存泄露问题，在开发中尽量避免内存泄露。&lt;/p&gt;
+
+&lt;p&gt;首先推荐一个工具：LeakCanary，可以帮助我们监测应用出现的内存泄露情况使用起来也很方便。&lt;/p&gt;
+
+&lt;p&gt;Github地址在这里：&lt;a href=&quot;https://github.com/square/leakcanary&quot;&gt;https://github.com/square/leakcanary&lt;/a&gt;。还有一个叫MAT，可以研究一下。&lt;/p&gt;
+
+&lt;p&gt;有兴趣的还可以看一下Bugly出的几篇文章：&lt;a href=&quot;http://bugly.qq.com/bbs/forum.php?mod=viewthread&amp;amp;tid=21&amp;amp;extra=page%3D1&quot;&gt;《内存泄露从入门到精通三部曲》&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下面进入正题，安卓开发内存泄露的几种情况：&lt;/p&gt;
+
+&lt;p&gt;一：Java的内存泄露&lt;/p&gt;
+
+&lt;p&gt;1、静态集合类引起内存泄露：在内存对象明明已经不需要的时候，还仍然保留着这块内存和它的访问方式（引用）&lt;/p&gt;
+
+&lt;p&gt;举例：&lt;/p&gt;
+
+&lt;p&gt;Vector v = new  Vector( 10 );
+for  ( int  i = 1 ;i &amp;lt; 100 ; i ++ ){
+Object o = new  Object();
+v.add(o);
+o = null ;
+}&lt;/p&gt;
+
+&lt;p&gt;在这个例子中，循环申请Object 对象，并将所申请的对象放入一个Vector 中，如果仅仅释放引用本身（o=null），那么Vector 仍然引用该对象，所以这个对象对GC 来说是不可回收的。因此，如果对象加入到Vector 后，还必须从Vector 中删除。&lt;/p&gt;
+
+&lt;p&gt;解决方法：将Vector对象设置为null。&lt;/p&gt;
+
+&lt;p&gt;2、当集合里面的对象属性被修改后，再调用remove（）方法时不起作用&lt;/p&gt;
+
+&lt;p&gt;Set&lt;person&gt; set = new HashSet&lt;person&gt;();
+Person p1 = new Person(&quot;name1&quot;,&quot;pwd1&quot;,25);
+Person p2 = new Person(&quot;name2&quot;,&quot;pwd2&quot;,26);
+Person p3 = new Person(&quot;name3&quot;,&quot;pwd3&quot;,27);
+set.add(p1);
+set.add(p2);
+set.add(p3);
+System.out.println(&quot;总共有:&quot;+set.size()+&quot; 个元素!&quot;); //共有3个元素
+p3.setAge(2); //修改p3的年龄,此时p3元素对应的hashcode值发生改变&lt;/person&gt;&lt;/person&gt;&lt;/p&gt;
+
+&lt;p&gt;set.remove(p3); //此时remove不掉，造成内存泄漏&lt;/p&gt;
+
+&lt;p&gt;set.add(p3); //重新添加，居然添加成功
+System.out.println(“总共有:”+set.size()+” 个元素!”); //结果：总共有4个元素!
+for (Person person : set)
+{
+System.out.println(person);
+}&lt;/p&gt;
+
+&lt;p&gt;3、监听器&lt;/p&gt;
+
+&lt;p&gt;一个应用当中会用到很多监听器，我们会调用一个控件的诸如addXXXListener()等方法来增加监听器，但往往在释放对象的时候却没有记住去删除这些监听器，从而增加了内存泄漏的机会。&lt;/p&gt;
+
+&lt;p&gt;4、单例模式
+不正确使用单例模式是引起内存泄露的一个常见问题，单例对象在被初始化后将在JVM的整个生命周期中存在（以静态变量的方式），如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露，考虑下面的例子：
+class A{
+public A(){
+B.getInstance().setA(this);
+}
+….
+}
+//B类采用单例模式
+class B{
+private A a;
+private static B instance=new B();
+public B(){}
+public static B getInstance(){
+return instance;
+}
+public void setA(A a){
+this.a=a;
+}
+//getter…
+}
+显然B采用singleton模式，它持有一个A对象的引用，而这个A类的对象将不能被回收。想象下如果A是个比较复杂的对象或者集合类型会发生什么情况&lt;/p&gt;
+
+&lt;p&gt;二：安卓的内存泄漏&lt;/p&gt;
+
+&lt;p&gt;1、对象没有反注册&lt;/p&gt;
+
+&lt;p&gt;2、资源未关闭&lt;/p&gt;
+
+&lt;p&gt;对于使用了BraodcastReceiver，ContentObserver，File，Cursor，Stream，Bitmap等资源的使用，应该在Activity销毁时及时关闭或者注销，否则这些资源将不会被回收，造成内存泄漏。&lt;/p&gt;
+
+&lt;p&gt;3、Bitmap没有及时回收&lt;/p&gt;
+
+&lt;p&gt;4、ListView Item没有复用&lt;/p&gt;
+
+&lt;p&gt;5、Handler造成的内存泄漏&lt;/p&gt;
+
+&lt;p&gt;这个就多见不怪了，我看过很多人包括我自己还有几年开发经验的人，用Handler图方便都是这样的：&lt;/p&gt;
+
+&lt;p&gt;public class MainActivity extends AppCompatActivity {
+private Handler mHandler = new Handler() {
+@Override
+public void handleMessage(Message msg) {
+//…
+}
+};
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+loadData();
+}
+private void loadData(){
+//…request
+Message message = Message.obtain();
+mHandler.sendMessage(message);
+}
+}&lt;/p&gt;
+
+&lt;p&gt;由于mHandler是Handler的非静态匿名内部类的实例，所以它持有外部类Activity的引用，我们知道消息队列是在一个Looper线程中不断轮询处理消息，那么当这个Activity退出时消息队列中还有未处理的消息或者正在处理消息，而消息队列中的Message持有mHandler实例的引用，mHandler又持有Activity的引用，所以导致该Activity的内存资源无法及时回收，引发内存泄漏。&lt;/p&gt;
+
+&lt;p&gt;解决办法：采用WeakReference弱引用&lt;/p&gt;
+
+&lt;p&gt;public class MainActivity extends AppCompatActivity {
+private MyHandler mHandler = new MyHandler(this);
+private TextView mTextView ;
+private static class MyHandler extends Handler {
+private WeakReference&lt;context&gt; reference;
+public MyHandler(Context context) {
+reference = new WeakReference&amp;lt;&amp;gt;(context);
+}
+@Override
+public void handleMessage(Message msg) {
+MainActivity activity = (MainActivity) reference.get();
+if(activity != null){
+activity.mTextView.setText(&quot;&quot;);
+}
+}
+}
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+mTextView = (TextView)findViewById(R.id.textview);
+loadData();
+}
+private void loadData() {
+//...request
+Message message = Message.obtain();
+mHandler.sendMessage(message);
+}
+}&lt;/context&gt;&lt;/p&gt;
+
+&lt;p&gt;创建一个静态Handler内部类，然后对Handler持有的对象使用弱引用，这样在回收时也可以回收Handler持有的对象，这样虽然避免了Activity泄漏，不过Looper线程的消息队列中还是可能会有待处理的消息，所以我们在Activity的Destroy时或者Stop时应该移除消息队列中的消息，更准确的做法如下：&lt;/p&gt;
+
+&lt;p&gt;public class MainActivity extends AppCompatActivity {
+private MyHandler mHandler = new MyHandler(this);
+private TextView mTextView ;
+private static class MyHandler extends Handler {
+private WeakReference&lt;context&gt; reference;
+public MyHandler(Context context) {
+reference = new WeakReference&amp;lt;&amp;gt;(context);
+}
+@Override
+public void handleMessage(Message msg) {
+MainActivity activity = (MainActivity) reference.get();
+if(activity != null){
+activity.mTextView.setText(&quot;&quot;);
+}
+}
+}
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+mTextView = (TextView)findViewById(R.id.textview);
+loadData();
+}
+private void loadData() {
+//...request
+Message message = Message.obtain();
+mHandler.sendMessage(message);
+}
+@Override
+protected void onDestroy() {
+super.onDestroy();
+mHandler.removeCallbacksAndMessages(null);
+}
+}&lt;/context&gt;&lt;/p&gt;
+
+&lt;p&gt;使用mHandler.removeCallbacksAndMessages(null);是移除消息队列中所有消息和所有的Runnable。当然也可以使用mHandler.removeCallbacks();或mHandler.removeMessages();来移除指定的Runnable和Message。&lt;/p&gt;
+
+&lt;p&gt;6、线程造成的内存泄露&lt;/p&gt;
+
+&lt;p&gt;//——————test1
+new AsyncTask&amp;lt;Void, Void, Void&amp;gt;() {
+@Override
+protected Void doInBackground(Void… params) {
+SystemClock.sleep(10000);
+return null;
+}
+}.execute();
+//——————test2
+new Thread(new Runnable() {
+@Override
+public void run() {
+SystemClock.sleep(10000);
+}
+}).start();&lt;/p&gt;
+
+&lt;p&gt;上面的异步任务和Runnable都是一个匿名内部类，因此它们对当前Activity都有一个隐式引用。如果Activity在销毁之前，任务还未完成，那么将导致Activity的内存资源无法回收，造成内存泄漏。&lt;/p&gt;
+
+&lt;p&gt;解决办法：使用静态内部类&lt;/p&gt;
+
+&lt;p&gt;static class MyAsyncTask extends AsyncTask&amp;lt;Void, Void, Void&amp;gt; {
+private WeakReference&lt;context&gt; weakReference;
+public MyAsyncTask(Context context) {
+weakReference = new WeakReference&amp;lt;&amp;gt;(context);
+}
+@Override
+protected Void doInBackground(Void... params) {
+SystemClock.sleep(10000);
+return null;
+}
+@Override
+protected void onPostExecute(Void aVoid) {
+super.onPostExecute(aVoid);
+MainActivity activity = (MainActivity) weakReference.get();
+if (activity != null) {
+//...
+}
+}
+}
+static class MyRunnable implements Runnable{
+@Override
+public void run() {
+SystemClock.sleep(10000);
+}
+}
+//——————
+new Thread(new MyRunnable()).start();
+new MyAsyncTask(this).execute();&lt;/context&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;一些建议&lt;/h3&gt;
+
+&lt;p&gt;1、对于生命周期比Activity长的对象如果需要应该使用ApplicationContext&lt;/p&gt;
+
+&lt;p&gt;2、在涉及到Context时先考虑ApplicationContext，当然它并不是万能的，对于有些地方则必须使用Activity的Context，对于Application，Service，Activity三者的Context的应用场景如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://img1.tuicool.com/UnmUnq.png!web&quot; alt=&quot;&quot; /&gt;&lt;strong&gt;其中：&lt;/strong&gt;NO1表示Application和Service可以启动一个Activity，不过需要创建一个新的task任务队列。而对于Dialog而言，只有在Activity中才能创建&lt;/p&gt;
+
+&lt;p&gt;3、对于需要在静态内部类中使用非静态外部成员变量（如：Context、View )，可以在静态内部类中使用弱引用来引用外部类的变量来避免内存泄漏&lt;/p&gt;
+
+&lt;p&gt;4、对于生命周期比Activity长的内部类对象，并且内部类中使用了外部类的成员变量，可以这样做避免内存泄漏：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;将内部类改为静态内部类&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;静态内部类中使用弱引用来引用外部类的成员变量&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;5、对于不再需要使用的对象，显示的将其赋值为null，比如使用完Bitmap后先调用recycle()，再赋为null6、保持对对象生命周期的敏感，特别注意单例、静态对象、全局性集合等的生命周期&lt;/p&gt;
+
+&lt;p&gt;参考资料：&lt;/p&gt;
+
+&lt;p&gt;http://blog.csdn.net/seelye/article/details/8269705&lt;/p&gt;
+
+&lt;p&gt;http://www.tuicool.com/articles/qMf6zmR&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 18 Mar 2016 11:36:21 +0800</pubDate>
+        <link>http://www.xjh1994.com/java/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/2016/03/18/android-e5-86-85-e5-ad-98-e6-b3-84-e6-bc-8f-e6-b1-87-e6-80-bb.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/java/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/2016/03/18/android-e5-86-85-e5-ad-98-e6-b3-84-e6-bc-8f-e6-b1-87-e6-80-bb.html</guid>
+        
+        
+        <category>Java</category>
+        
+        <category>原创</category>
+        
+        <category>安卓</category>
+        
+      </item>
+    
+      <item>
+        <title>Glide获取图片Bitmap</title>
+        <description>&lt;p&gt;Glide.with(getBaseContext()).load(mPhotos.get(mPosition)).asBitmap().into(new SimpleTarget() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, GlideAnimation&amp;lt;? super Bitmap&amp;gt; glideAnimation) {&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;                    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Sat, 16 Jan 2016 12:42:56 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E5%AE%89%E5%8D%93/2016/01/16/glide-e8-8e-b7-e5-8f-96-e5-9b-be-e7-89-87bitmap.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E5%AE%89%E5%8D%93/2016/01/16/glide-e8-8e-b7-e5-8f-96-e5-9b-be-e7-89-87bitmap.html</guid>
+        
+        
+        <category>安卓</category>
+        
+      </item>
+    
+      <item>
+        <title>“Attribute ”rippleColor“ has already been defined” in Android Studio</title>
+        <description>&lt;p&gt;引入第三方库时Gradle编译出错，提示“Attribute ”rippleColor“ has already been defined” 。检查了一下自己的color.xml。并没有定义这个属性，那么应该就是第三方库里使用了这个属性。&lt;/p&gt;
+
+&lt;p&gt;网上搜了一下，发现是MaterialDesignLibrary这个库的坑。因为用的是1.5aar版本，改成1.6即可。
+即把&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;compile &#39;com.github.navasmdc:MaterialDesign:1.5@aar&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;改成&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;compile &#39;com.github.vajro:MaterialDesignLibrary:1.6&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Github有人提了这个issue，官方升级之后修复了。&lt;a href=&quot;https://github.com/navasmdc/MaterialDesignLibrary/issues/289&quot;&gt;https://github.com/navasmdc/MaterialDesignLibrary/issues/289&lt;/a&gt;
+&lt;a href=&quot;https://github.com/vajro/MaterialDesignLibrary&quot;&gt;MaterialDesignLibrary Github地址&lt;/a&gt;
+但是改了之后又出现新的问题，这个库的最低版本支持是16，而我的项目最低是14，所以要在AndroidManifest.xml中加一行&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;uses-sdk tools:overridelibrary=&quot;冲突库的包名&quot;&amp;gt;&amp;lt;/uses-sdk&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;问题解决。以后引入第三方库要小心了，不能什么库都用，要看质量。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 08 Jan 2016 11:02:19 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E5%AE%89%E5%8D%93/2016/01/08/attribute-ripplecolor-has-already-been-defined-in-android-studio.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E5%AE%89%E5%8D%93/2016/01/08/attribute-ripplecolor-has-already-been-defined-in-android-studio.html</guid>
+        
+        <category>Android</category>
+        
+        <category>第三方库</category>
+        
+        
+        <category>安卓</category>
+        
+      </item>
+    
+      <item>
+        <title>Bmob 在Genymotion5.0模拟器上调试APK出现错误：Bluetooth binder is null</title>
+        <description>&lt;p&gt;AS后台Log显示错误信息：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;BluetoothAdapter: Bluetooth binder is null
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;原来是由于模拟器没有蓝牙设备，而权限获取申请了蓝牙权限。&lt;/p&gt;
+
+&lt;p&gt;解决方案：注释掉&lt;strong&gt;AndroidManifest.xml&lt;/strong&gt;以下内容&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;uses-permission android:name=&quot;android.permission.BLUETOOTH&quot;&amp;gt;&amp;lt;/uses-permission&amp;gt;
+&amp;lt;uses-permission android:name=&quot;android.permission.BLUETOOTH_ADMIN&quot;&amp;gt;&amp;lt;/uses-permission&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Mon, 30 Nov 2015 19:29:54 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/2015/11/30/bmob-exception-on-genymotion-5-0-null-bluetooth-binder-is-null.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/2015/11/30/bmob-exception-on-genymotion-5-0-null-bluetooth-binder-is-null.html</guid>
+        
+        <category>5.0</category>
+        
+        <category>Android</category>
+        
+        <category>Bmob</category>
+        
+        <category>Genymotion</category>
+        
+        <category>Null</category>
+        
+        <category>权限</category>
+        
+        <category>模拟器</category>
+        
+        
+        <category>原创</category>
+        
+        <category>安卓</category>
+        
+      </item>
+    
+      <item>
+        <title>Genymotion调试APK出现INSTALL_FAILED_NO_MATCHING_ABIS错误</title>
+        <description>&lt;p&gt;由于APK中使用了native libraries，库不支持Genymotion的cpu的体系结构，导致安装失败。&lt;/p&gt;
+
+&lt;p&gt;解决：下载支持库&lt;a href=&quot;http://download.csdn.net/detail/wjr2012/9017005&quot;&gt;http://download.csdn.net/detail/wjr2012/9017005&lt;/a&gt;（支持5.1系统）&lt;/p&gt;
+
+&lt;p&gt;转自：http://blog.csdn.net/wjr2012/article/details/16359113&lt;/p&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2015 11:31:58 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E5%AE%89%E5%8D%93/2015/11/23/genymotion-e8-b0-83-e8-af-95apk-e5-87-ba-e7-8e-b0install_failed_no_matching_abis-e9-94-99-e8-af-af.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E5%AE%89%E5%8D%93/2015/11/23/genymotion-e8-b0-83-e8-af-95apk-e5-87-ba-e7-8e-b0install_failed_no_matching_abis-e9-94-99-e8-af-af.html</guid>
+        
+        <category>Android</category>
+        
+        <category>Genymotion</category>
+        
+        <category>模拟器</category>
+        
+        <category>调试</category>
+        
+        
+        <category>安卓</category>
+        
+      </item>
+    
+      <item>
+        <title>记录那些Android开发的坑</title>
+        <description>&lt;ol&gt;
+  &lt;li&gt;Fragment中给Adapter初始化数据context一定要在onAttach()方法之后，比如onCreateView()中。不能在成员变量中通过getActivity()获取Context，比如:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SampleAdapter adapter = new SampleAdapter(getActivity(), datas);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Wed, 18 Nov 2015 10:41:00 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2015/11/18/e8-ae-b0-e5-bd-95-e9-82-a3-e4-ba-9bandroid-e5-bc-80-e5-8f-91-e7-9a-84-e5-9d-91.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2015/11/18/e8-ae-b0-e5-bd-95-e9-82-a3-e4-ba-9bandroid-e5-bc-80-e5-8f-91-e7-9a-84-e5-9d-91.html</guid>
+        
+        
+        <category>未分类</category>
+        
+      </item>
+    
+      <item>
+        <title>［算法］合并两个有序数组</title>
+        <description>&lt;p&gt;&lt;strong&gt;没有算法版本：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;//两个有序数组的合并函数&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;int[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;MergeList(int&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;a[],int&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;b[])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;result[];&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  
+        &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;if(checkSort(a)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;checkSort(b))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;//检查传入的数组是否是有序的&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;int[a.length+b.length];&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            
+            &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;i=0,j=0,k=0;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;//i:用于标示a数组&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;j：用来标示b数组&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;k：用来标示传入的数组&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+            &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;while(i&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;a[j])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;false;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;change&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;false;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;        
+    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    
+    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;打印函数&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;print(int&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+         &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;for(int&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;i=0;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;采用从后往前合并，首先计算出总长度，设置一个指针从a数组最后往前移动&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include 
+#include 
+#include 
+using namespace std;
+
+#define MAX 1024
+
+void combine(int *a, int *b, int len1, int len2)
+{
+	if(a == NULL || b == NULL || (len1 + len2) &amp;gt; MAX)
+		return ;
+
+	int new_point;
+	int a_point = len1 - 1;
+	int b_point = len2 - 1;
+
+	new_point = len1 + len2 -1;	//总的长度
+
+	while(a_point &amp;gt;= 0 &amp;amp;&amp;amp; b_point &amp;gt;= 0)
+	{
+		if(a[a_point] &amp;gt; b[b_point])
+		{
+			a[new_point--] = a[a_point--];
+		}
+		else
+		{
+			a[new_point--] = b[b_point--];
+		}
+	}
+
+	while(a_point &amp;gt;= 0)
+	{
+		a[new_point--] = a[a_point--];
+	}
+
+	while(b_point &amp;gt;= 0)
+	{
+		a[new_point--] = b[b_point--];
+	}
+
+	return ;
+}
+
+int main()
+{
+	int b[MAX] = {1,2,3,4};
+	int a[MAX] = {5,6,7,8};
+
+	combine(a, b, 4, 4);
+
+	for(int i =0 ; i &amp;lt;= 4 + 4 -1; i++)
+	{
+		cout &amp;lt;&amp;lt; a[i] &amp;lt;&amp;lt; &quot; &quot;;
+	}
+
+	return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;1、用temp数组作为中间变量，保存两个有序子数组的合并结果数组，再复制回原数组。
+空间复杂度O(N)，时间复杂度O(m+n)，m、n为两个有序子数组的长度
+//将有二个有序数列a[first…mid]和a[mid…last]合并。
+void mergearray(int a[], int first, int mid, int last, int temp[])
+{
+int i = first, j = mid + 1;
+int m = mid, n = last;
+int k = 0;&lt;/p&gt;
+
+&lt;p&gt;while (i &amp;lt;= m &amp;amp;&amp;amp; j &amp;lt;= n)
+{
+if (a[i] &amp;lt;= a[j])
+temp[k++] = a[i++];
+else
+temp[k++] = a[j++];
+}&lt;/p&gt;
+
+&lt;p&gt;while (i &amp;lt;= m)
+temp[k++] = a[i++];&lt;/p&gt;
+
+&lt;p&gt;while (j &amp;lt;= n)
+temp[k++] = a[j++];&lt;/p&gt;
+
+&lt;p&gt;for (i = 0; i &amp;lt; k; i++)
+a[first + i] = temp[i];
+}&lt;/p&gt;
+
+&lt;p&gt;2、没有中间变量temp，要求空间复杂度为O(1)，通过交换+移位实现
+空间复杂度O(1)，时间复杂度最坏为O(N*N)
+void swap(int *a, int *b)
+{
+int tmp;&lt;/p&gt;
+
+&lt;p&gt;tmp = *a;
+*a = *b;
+*b = tmp;
+}&lt;/p&gt;
+
+&lt;p&gt;void func(int a[], int n)
+{
+int i,j;&lt;/p&gt;
+
+&lt;p&gt;if (n&amp;lt;=0)
+{
+return;
+}
+i = 0;
+j = n/2;&lt;/p&gt;
+
+&lt;p&gt;while(j {
+if (a[i]&amp;lt;=a[j]) { i++; } else { swap(a[i], a[j]); for (int k=j-1;k&amp;gt;i; k–) // 每次发现一个a[i]&amp;gt;a[j]交换后，需要把i+1到j的子数组循环右移一
+{ // 位，(i+1)~（j）保持有序，这里可以优化
+swap(a[k], a[k+1]);
+}
+i++;
+j++;
+}
+}&lt;/p&gt;
+
+&lt;p&gt;}
+3、优化第二种方法，交换+循环移位（不用中间变量，通过交换反转实现），第二种方法中，每次移动的单位是一个数，效率低，可以采用块循环移动（单位是连续几个数）进行优化
+空间复杂度O(1),时间复杂度应该比O(m+n)要小！
+void Reverse(int *a , int begin , int end ) //反转
+{
+for(; begin &amp;lt; end; begin++ , end–) swap(a[begin] , a[end]); } void RotateRight(int *a , int begin , int end , int k) //循环右移，a[begin:end]段向右循环移位k位 { int len = end - begin + 1; //数组的长度 k %= len; Reverse(a , begin , end - k); Reverse(a , end - k + 1 , end); Reverse(a , begin , end); } // 将有序数组a[begin…mid] 和 a[mid+1…end] 进行合并 void Merge(int *a , int begin , int end ) { int i , j , k; i = begin; j = 1 + ((begin + end)»1); //位运算的优先级比较低，需要加一个括号
+while(i &amp;lt;= end &amp;amp;&amp;amp; j &amp;lt;= end &amp;amp;&amp;amp; i&amp;lt;j)
+{
+while(i &amp;lt;= end &amp;amp;&amp;amp; a[i] &amp;lt; a[j])
+i++;
+k = j; //暂时保存指针j的位置
+while(j &amp;lt;= end &amp;amp;&amp;amp; a[j] &amp;lt; a[i]) // 找到连续的j索引列都小于a[i]，进行块循环移动 j++; if(j &amp;gt; k)
+RotateRight(a , i , j-1 , j-k); //数组a[i…j-1]循环右移j-k次，a[i..j-1]始终有序
+i += (j-k+1); //第一个指针往后移动，因为循环右移后，数组a[i….i+j-k]是有序的
+}
+}&lt;/p&gt;
+
+&lt;p&gt;转自：http://blog.163.com/l_greatsea/blog/static/204986044201521303816600/&lt;/p&gt;
+</description>
+        <pubDate>Sat, 14 Nov 2015 15:43:44 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E7%AE%97%E6%B3%95/2015/11/14/ef-bc-bb-e7-ae-97-e6-b3-95-ef-bc-bd-e5-90-88-e5-b9-b6-e4-b8-a4-e4-b8-aa-e6-9c-89-e5-ba-8f-e6-95-b0-e7-bb-84.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E7%AE%97%E6%B3%95/2015/11/14/ef-bc-bb-e7-ae-97-e6-b3-95-ef-bc-bd-e5-90-88-e5-b9-b6-e4-b8-a4-e4-b8-aa-e6-9c-89-e5-ba-8f-e6-95-b0-e7-bb-84.html</guid>
+        
+        
+        <category>算法</category>
+        
+      </item>
+    
+      <item>
+        <title>使用Bmob+ThinkPHP三步开发微信公众账号教程</title>
+        <description>&lt;p&gt;最近需要开发一个微信公众号，服务端用的是&lt;a href=&quot;http://www.bmob.cn/&quot;&gt;Bmob&lt;/a&gt;，Bmob也提供了云端代码开发微信，但只能使用JS语法，不够灵活 。于是准备用PHP来开发。ThinkPHP是国内最普及的PHP开发框架。（没有使用过的朋友可以去&lt;a href=&quot;http://www.thinkphp.cn/&quot;&gt;官网&lt;/a&gt;了解一下，上手很快）&lt;/p&gt;
+
+&lt;p&gt;ThinkPHP的使用者还为微信公众号开发了配套的SDK，使用很方便，例如只需调用$wechat-&amp;gt;reply(“回复内容”);即可回复公众号信息。&lt;/p&gt;
+
+&lt;p&gt;闲话不多说，接下来我们看一下怎么用ThinkPHP三步开发微信公众账号。&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;所需下载文件：&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;a href=&quot;http://www.thinkphp.cn/extend/673.html&quot;&gt;微信ThinkPHP开发包&lt;/a&gt; &lt;/strong&gt; 这是ThinkPHP网友开发的微信扩展包，不光可以用ThinkPHP开发，只要是PHP都可以。Github地址：&lt;a href=&quot;https://github.com/gaoming13/wechat-php-sdk&quot;&gt;https://github.com/gaoming13/wechat-php-sdk&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;已完成的功能模块&lt;/h2&gt;
+
+&lt;p&gt;Wechat （处理自动接入、获取与回复微信消息）(&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#wechat-%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E&quot;&gt;使用说明&lt;/a&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#wechat-%E6%8E%A5%E6%94%B6%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF%E4%BA%8B%E4%BB%B6%E6%8E%A8%E9%80%81&quot;&gt;接收普通消息/事件推送&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#wechat-%E8%A2%AB%E5%8A%A8%E5%9B%9E%E5%A4%8D%E6%96%87%E6%9C%AC%E5%9B%BE%E7%89%87%E8%AF%AD%E9%9F%B3%E8%A7%86%E9%A2%91%E9%9F%B3%E4%B9%90%E5%9B%BE%E6%96%87&quot;&gt;被动回复（文本、图片、语音、视频、音乐、图文）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#wechat-%E8%BD%AC%E5%8F%91%E5%88%B0%E5%A4%9A%E5%AE%A2%E6%9C%8D%E6%8E%A5%E5%8F%A3&quot;&gt;转发到多客服接口&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Api （处理需要access_token的主动接口）(&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api-%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E&quot;&gt;使用说明&lt;/a&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E5%8F%91%E9%80%81%E5%AE%A2%E6%9C%8D%E6%B6%88%E6%81%AF%E6%96%87%E6%9C%AC%E5%9B%BE%E7%89%87%E8%AF%AD%E9%9F%B3%E8%A7%86%E9%A2%91%E9%9F%B3%E4%B9%90%E5%9B%BE%E6%96%87&quot;&gt;主送发送客服消息（文本、图片、语音、视频、音乐、图文）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E5%A4%9A%E5%AE%A2%E6%9C%8D%E5%8A%9F%E8%83%BD%E5%AE%A2%E6%9C%8D%E7%AE%A1%E7%90%86%E5%A4%9A%E5%AE%A2%E6%9C%8D%E5%9B%9E%E8%AF%9D%E6%8E%A7%E5%88%B6%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%9C%8D%E8%81%8A%E5%A4%A9%E8%AE%B0%E5%BD%95%E7%AD%89&quot;&gt;多客服功能（客服管理、多客服回话控制、获取客服聊天记录等）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E7%B4%A0%E6%9D%90%E7%AE%A1%E7%90%86%E4%B8%B4%E6%97%B6%E7%B4%A0%E6%9D%90%E6%B0%B8%E4%B9%85%E7%B4%A0%E6%9D%90%E7%B4%A0%E6%9D%90%E7%BB%9F%E8%AE%A1&quot;&gt;素材管理（临时素材、永久素材、素材统计）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E8%87%AA%E5%AE%9A%E4%B9%89%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86%E5%88%9B%E5%BB%BA%E6%9F%A5%E8%AF%A2%E5%88%A0%E9%99%A4%E8%8F%9C%E5%8D%95&quot;&gt;自定义菜单管理（创建、查询、删除菜单）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E5%BE%AE%E4%BF%A1jssdk%E7%94%9F%E6%88%90%E5%BE%AE%E4%BF%A1jssdk%E6%89%80%E9%9C%80%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF&quot;&gt;微信JSSDK（生成微信JSSDK所需的配置信息）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86%E7%94%9F%E6%88%90%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84%E4%BA%8C%E7%BB%B4%E7%A0%81%E9%95%BF%E9%93%BE%E6%8E%A5%E8%BD%AC%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%8E%A5%E5%8F%A3&quot;&gt;账号管理（生成带参数的二维码、长链接转短链接接口）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://github.com/xjh1994/wechat-php-sdk-2#api%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7%E5%88%86%E7%BB%84%E7%AE%A1%E7%90%86%E8%AE%BE%E7%BD%AE%E7%94%A8%E6%88%B7%E5%A4%87%E6%B3%A8%E5%90%8D%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF&quot;&gt;用户管理（用户分组管理、设置用户备注名、获取用户基本信息、获取用户列表、网页授权获取用户基本信息）&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;数据统计接口（开发中…）&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt; &lt;a href=&quot;http://www.thinkphp.cn/&quot;&gt;ThinkPHP完整包&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;** &lt;a href=&quot;https://github.com/bmob/bmob-php-sdk/archive/master.zip&quot;&gt;Bmob PHP SDK&lt;/a&gt; **（只需要其中的lib目录下文件） &lt;a href=&quot;https://github.com/bmob/bmob-php-sdk&quot;&gt;Github地址&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;thinkphptp&quot;&gt;&lt;strong&gt;开发步骤&lt;/strong&gt;：（以下有必要ThinkPHP简称TP）&lt;/h1&gt;
+
+&lt;h4 id=&quot;wechat-php-sdk-src--gaoming13--thinkphplibrary-gaoming13&quot;&gt;&lt;strong&gt;一：&lt;/strong&gt;将wechat-php-sdk内 src 文件夹重命名为 Gaoming13, 拷贝至 ThinkPHP/Library/ 下。（文件内有Gaoming13命名空间，可以自行修改，建议不要修改，尊重作者劳动成果）&lt;/h4&gt;
+
+&lt;h4 id=&quot;tpindexcontrollerappidwechat-php-sdkdemodemothinkphpphp&quot;&gt;二：在TP默认的IndexController中调用以下代码，具体appid等值需自行配置。（详细代码件wechat-php-sdk/demo/demo_thinkPHP.php文件）&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// 开发者中心-配置项-AppID(应用ID)
+$appId = &#39;wx733d7f24bd29224a&#39;;
+// 开发者中心-配置项-AppSecret(应用密钥)
+$appSecret = &#39;c6d165c5785226806f42440e376a410e&#39;;
+// 开发者中心-配置项-服务器配置-Token(令牌)
+$token = &#39;gaoming13&#39;;
+// 开发者中心-配置项-服务器配置-EncodingAESKey(消息加解密密钥)
+$encodingAESKey = &#39;072vHYArTp33eFwznlSvTRvuyOTe5YME1vxSoyZbzaV&#39;;
+
+// wechat模块 - 处理用户发送的消息和回复消息
+$wechat = new \Gaoming13\WechatPhpSdk\Wechat(array(
+&#39;appId&#39; =&amp;gt; $appId,
+&#39;token&#39; =&amp;gt; $token,
+&#39;encodingAESKey&#39; =&amp;gt; $encodingAESKey //可选
+));
+// api模块 - 包含各种系统主动发起的功能
+$api = new \Gaoming13\WechatPhpSdk\Api(
+array(
+&#39;appId&#39; =&amp;gt; $appId,
+&#39;appSecret&#39; =&amp;gt; $appSecret,
+&#39;get_access_token&#39; =&amp;gt; function(){
+// 用户需要自己实现access_token的返回
+return S(&#39;wechat_token&#39;);
+},
+&#39;save_access_token&#39; =&amp;gt; function($token) {
+// 用户需要自己实现access_token的保存
+S(&#39;wechat_token&#39;, $token);
+}
+)
+);
+
+// 获取微信消息
+$msg = $wechat-&amp;gt;serve();
+
+// 回复文本消息
+if ($msg-&amp;gt;MsgType == &#39;text&#39; &amp;amp;&amp;amp; $msg-&amp;gt;Content == &#39;你好&#39;) {
+$wechat-&amp;gt;reply(&quot;你也好！ - 这是我回复的额！&quot;);
+} else {
+$wechat-&amp;gt;reply(&quot;听不懂！ - 这是我回复的额！&quot;);
+}
+
+// 主动发送
+$api-&amp;gt;send($msg-&amp;gt;FromUserName, &#39;这是我主动发送的一条消息&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;bmob-phpsdk&quot;&gt;三、使用Bmob PHPSDK&lt;/h3&gt;
+
+&lt;h4 id=&quot;sdklibbmobthinkphplibrary-classphpnamespace-bmobtp32httppanbaiducoms1jg3zo8y&quot;&gt;将下载好的SDK下lib目录修改为Bmob，然后复制到ThinkPHP/Library/ 下，并且将里面的每个.class.php文件前加上命名空间：namespace Bmob;（这是TP3.2的要求，之前的版本可忽略此修改）&lt;a href=&quot;http://pan.baidu.com/s/1jG3zO8Y&quot;&gt;不想麻烦的同学点这里下载&lt;/a&gt;修改好的文件&lt;/h4&gt;
+
+&lt;p&gt;修改BmobConfig.class.php，填写AppID和SecretKey信息。如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class BmobConfig{
+const APPID = &#39;&#39;; //替换后台&quot;应用密钥&quot;中的Application ID
+const RESTKEY = &#39;&#39;; //后台&quot;应用密钥&quot;中的REST API Key
+const BMOBURL = &#39;https://api.bmob.cn/1/&#39;; //保持不变
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注意在TP的Controller中调用时要加命名空间信息：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;use Bmob\BmobUser;
+use Bmob\BmobObject;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后通过以下代码获取数据，再用上一步的方法返回给微信用户即可。&lt;/p&gt;
+
+&lt;p&gt;$bmobObj =newBmobObject(“GameScore”);&lt;/p&gt;
+
+&lt;p&gt;$res=$bmobObj-&amp;gt;get();// 获取所有GameScore对象&lt;/p&gt;
+
+&lt;p&gt;具体操作Bmob数据方法见&lt;a href=&quot;http://docs.bmob.cn/phpsdk/index.html?menukey=otherdoc&amp;amp;key=phpsdk#index_类库说明&quot;&gt;Bmob官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;注意点：&lt;/p&gt;
+
+&lt;p&gt;中文可能会出现乱码，在Controller construct方法中加入&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;header(&quot;content-type:text/html;charset=utf-8&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;即可&lt;/p&gt;
+</description>
+        <pubDate>Fri, 13 Nov 2015 23:20:21 +0800</pubDate>
+        <link>http://www.xjh1994.com/thinkphp/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/2015/11/13/use-bmob-and-thinkphp-to-develop-wechat.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/thinkphp/%E5%8E%9F%E5%88%9B/%E5%AE%89%E5%8D%93/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/2015/11/13/use-bmob-and-thinkphp-to-develop-wechat.html</guid>
+        
+        <category>Bmob</category>
+        
+        <category>ThinkPHP</category>
+        
+        <category>Wechat</category>
+        
+        <category>公众号</category>
+        
+        <category>微信</category>
+        
+        <category>教程</category>
+        
+        
+        <category>ThinkPHP</category>
+        
+        <category>原创</category>
+        
+        <category>安卓</category>
+        
+        <category>开源项目</category>
+        
+      </item>
+    
+      <item>
+        <title>BroadcastReceiver中使用Sharepreference，多进程数据共享出错</title>
+        <description>&lt;p&gt;&lt;strong&gt;问题描述：&lt;/strong&gt;
+在做一个开关修改配置的安卓程序中，在Activity中修改Sharepreference，到BroadcastReceiver中无法获取正确的值，一直都是修改前的数值。猜测是由于多个进程之间共享数据的问题，百度了一下果然是。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;解决方法：&lt;/strong&gt;
+将SharedPreference的&lt;strong&gt;MODE&lt;/strong&gt;设置为：&lt;strong&gt;MODE_MULTI_PROCESS&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;例如：
+&lt;strong&gt;SharedPreferences sp = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_WORLD_READABLE | Context.MODE_MULTI_PROCESS);&lt;/strong&gt;&lt;/p&gt;
+
+&lt;!-- more --&gt;
+
+&lt;p&gt;MODE_MULTI_PROCESS的说明：&lt;/p&gt;
+
+&lt;blockquote&gt;SharedPreference loading flag: when set, the file on disk will be checked for modification even if the shared preferences instance is already loaded in this process. This behavior is sometimes desired in cases where the application has multiple processes, all writing to the same SharedPreferences file. Generally there are better forms of communication between processes, though.
+This was the legacy (but undocumented) behavior in and before Gingerbread (Android 2.3) and this flag is implied when targetting such releases. For applications targetting SDK versions greater than Android 2.3, this flag must be explicitly set if desired.
+
+也就是说，MODE_MULTI_PROCESS这个值是一个标志，在Android 2.3及以前，这个标志位都是默认开启的，允许多个进程访问同一个SharedPrecferences对象。而以后的Android版本，必须通过明确的将MODE_MULTI_PROCESS这个值传递给mode参数，才能开启多进程访问。&lt;/blockquote&gt;
+</description>
+        <pubDate>Mon, 02 Nov 2015 14:03:58 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2015/11/02/broadcastreceiver-e4-b8-ad-e4-bd-bf-e7-94-a8sharepreference-ef-bc-8c-e5-a4-9a-e8-bf-9b-e7-a8-8b-e6-95-b0-e6-8d-ae-e5-85-b1-e4-ba-ab-e5-87-ba-e9-94-99.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2015/11/02/broadcastreceiver-e4-b8-ad-e4-bd-bf-e7-94-a8sharepreference-ef-bc-8c-e5-a4-9a-e8-bf-9b-e7-a8-8b-e6-95-b0-e6-8d-ae-e5-85-b1-e4-ba-ab-e5-87-ba-e9-94-99.html</guid>
+        
+        
+        <category>未分类</category>
+        
+      </item>
+    
+      <item>
+        <title>[数据结构]反转单链表图文解析（转）</title>
+        <description>&lt;p&gt;如何把一个单链表进行反转？&lt;/p&gt;
+
+&lt;p&gt;方法1：将单链表储存为数组，然后按照数组的索引逆序进行反转。&lt;/p&gt;
+
+&lt;p&gt;方法2：使用3个指针遍历单链表，逐个链接点进行反转。&lt;/p&gt;
+
+&lt;p&gt;方法3：从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，最后将第一个节点挪到新表的表尾。&lt;/p&gt;
+
+&lt;p&gt;方法4:   递归(相信我们都熟悉的一点是，对于树的大部分问题，基本可以考虑用递归来解决。但是我们不太熟悉的一点是，对于单链表的一些问题，也可以使用递归。可以认为单链表是一颗永远只有左(右)子树的树，因此可以考虑用递归来解决。或者说，因为单链表本身的结构也有自相似的特点，所以可以考虑用递归来解决)&lt;/p&gt;
+
+&lt;p&gt;方法1：&lt;/p&gt;
+
+&lt;p&gt;浪费空间。&lt;/p&gt;
+
+&lt;p&gt;方法2:&lt;/p&gt;
+
+&lt;p&gt;使用p和q两个指针配合工作，使得两个节点间的指向反向，同时用r记录剩下的链表。&lt;/p&gt;
+
+&lt;p&gt;p = head;&lt;/p&gt;
+
+&lt;p&gt;q = head-&amp;gt;next;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_13175655237TGo.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;head-&amp;gt;next = NULL;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317565566SEbH.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;现在进入循环体，这是第一次循环。&lt;/p&gt;
+
+&lt;p&gt;r = q-&amp;gt;next;&lt;/p&gt;
+
+&lt;p&gt;q-&amp;gt;next = p;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317565598ry1Z.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;p = q;&lt;/p&gt;
+
+&lt;p&gt;q =r;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317565630444j.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第二次循环。&lt;/p&gt;
+
+&lt;p&gt;r = q-&amp;gt;next&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317565688wHMQ.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;q-&amp;gt;next = p;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_13175657179L43.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;p = q;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317565750az2H.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;q = r&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317565777WHOA.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;第三次循环。。。。。&lt;/p&gt;
+
+&lt;p&gt;具体代码如下&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[cpp]&lt;/strong&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;view plain&lt;/a&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;print&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;?&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/CODE_ico.png&quot; alt=&quot;在CODE上查看代码片&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513/fork&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/ico_fork.svg&quot; alt=&quot;派生到我的代码片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;ActList&lt;em&gt; ReverseList2(ActList&lt;/em&gt; head)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    //ActList* temp=new ActList;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt; if(NULL==head&lt;/td&gt;
+          &lt;td&gt; &lt;/td&gt;
+          &lt;td&gt; NULL==head-&amp;gt;next) return head;    //少于两个节点没有反转的必要。  &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* q;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* r;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p = head;    &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    q = head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head-&amp;gt;next = NULL; //旧的头指针是新的尾指针，next需要指向NULL  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    while(q){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        r = q-&amp;gt;next; //先保留下一个step要处理的指针  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q-&amp;gt;next = p; //然后p q交替工作进行反向  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        p = q;   &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q = r;   &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head=p; // 最后q必然指向NULL，所以返回了p作为新的头指针  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    return head;      &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;}  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;updated 2014-01-24，重新非IDE环境写了一遍
+如果觉得上面的先成环再断环的过程不太好理解，那么可以考虑下面这个办法，增加一个中间变量，使用三个变量来实现。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[cpp]&lt;/strong&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;view plain&lt;/a&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;print&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;?&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/CODE_ico.png&quot; alt=&quot;在CODE上查看代码片&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513/fork&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/ico_fork.svg&quot; alt=&quot;派生到我的代码片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;struct ListNode{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    int val;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode* next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode(int a):val(a),next(NULL){}  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;};  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ListNode&lt;em&gt; reverseLinkedList3(ListNode&lt;/em&gt; head){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;        if(head==NULL&lt;/td&gt;
+          &lt;td&gt; &lt;/td&gt;
+          &lt;td&gt;head-&amp;gt;next==NULL)  &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            return  head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        ListNode* p=head; //指向head  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        ListNode* r=head-&amp;gt;next; //指向待搬运的节点，即依次指向从第2个节点到最后一个节点的所有节点  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        ListNode* m=NULL; //充当搬运工作用的节点  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        ListNode* tail=head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        while(r!=NULL){  //bug2 循环语句写错了, while写成了if  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            m=r;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            r=r-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            m-&amp;gt;next=p-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            p-&amp;gt;next=m;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            //if(r!=NULL)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;                //std::cout«“m=”«m-&amp;gt;val«“ ,p=”«p-&amp;gt;val«“ ,r=”«r-&amp;gt;val«std::endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            //else  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;                //std::cout«“m=”«m-&amp;gt;val«“ ,p=”«p-&amp;gt;val«“ ,r=NULL”«std::endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        head=p-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        tail-&amp;gt;next=p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        p-&amp;gt;next=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        tail=p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        return head; // bug1 忘记了return  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;    }  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;方法3&lt;/p&gt;
+
+&lt;p&gt;还是先看图，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://hi.csdn.net/attachment/201110/2/0_1317566020p320.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从图上观察，方法是：对于一条链表，从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，(N-1)次这样的操作结束之后将第1个节点挪到新表的表尾即可。&lt;/p&gt;
+
+&lt;p&gt;代码如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[cpp]&lt;/strong&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;view plain&lt;/a&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;print&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;?&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/CODE_ico.png&quot; alt=&quot;在CODE上查看代码片&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513/fork&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/ico_fork.svg&quot; alt=&quot;派生到我的代码片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;ActList&lt;em&gt; ReverseList3(ActList&lt;/em&gt; head)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* q;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p=head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    while(p-&amp;gt;next!=NULL){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q=p-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        p-&amp;gt;next=q-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q-&amp;gt;next=head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        head-&amp;gt;next=q;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p-&amp;gt;next=head;//相当于成环  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head=p-&amp;gt;next-&amp;gt;next;//新head变为原head的next  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p-&amp;gt;next-&amp;gt;next=NULL;//断掉环  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    return head;    &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;}  &lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;附:&lt;/p&gt;
+
+&lt;p&gt;完整的链表创建，显示，反转代码:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[cpp]&lt;/strong&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;view plain&lt;/a&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;print&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;?&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/CODE_ico.png&quot; alt=&quot;在CODE上查看代码片&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513/fork&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/ico_fork.svg&quot; alt=&quot;派生到我的代码片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;//创建:用q指向当前链表的最后一个节点；用p指向即将插入的新节点。  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;//反向:用p和q反转工作，r记录链表中剩下的还未反转的部分。  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;#include ”stdafx.h”  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;#include &lt;iostream&gt;  &lt;/iostream&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;using namespace std;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;struct ActList  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    char ActName[20];  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    char Director[20];  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    int Mtime;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList *next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;};  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ActList* head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ActList*  Create()  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{//start of CREATE()  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* p=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* q=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    int Time;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cout«“Please input the length of the movie.”«endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cin»Time;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    while(Time!=0){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p=new ActList;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    //类似表达:  TreeNode* node = new TreeNode;//Noice that [new] should be written out.  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p-&amp;gt;Mtime=Time;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cout«“Please input the name of the movie.”«endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cin»p-&amp;gt;ActName;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cout«“Please input the Director of the movie.”«endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cin»p-&amp;gt;Director;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    if(head==NULL)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    {  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head=p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    else  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    {  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    q-&amp;gt;next=p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    q=p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cout«“Please input the length of the movie.”«endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cin»Time;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    if(head!=NULL)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    q-&amp;gt;next=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    return head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;}//end of CREATE()  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;void DisplayList(ActList* head)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{//start of display  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    cout«“show the list of programs.”«endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    while(head!=NULL)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    {  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        cout«head-&amp;gt;Mtime«“\t”«head-&amp;gt;ActName«“\t”«head-&amp;gt;Director«“\t”«endl;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        head=head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;}//end of display  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ActList&lt;em&gt; ReverseList2(ActList&lt;/em&gt; head)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    //ActList* temp=new ActList;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt; if(NULL==head&lt;/td&gt;
+          &lt;td&gt; &lt;/td&gt;
+          &lt;td&gt; NULL==head-&amp;gt;next) return head;      &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* q;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* r;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p = head;    &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    q = head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head-&amp;gt;next = NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    while(q){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        r = q-&amp;gt;next; //  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q-&amp;gt;next = p;      &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        p = q; //  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q = r; //  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head=p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    return head;      &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;}  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ActList&lt;em&gt; ReverseList3(ActList&lt;/em&gt; head)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* p;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ActList* q;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p=head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    while(p-&amp;gt;next!=NULL){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q=p-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        p-&amp;gt;next=q-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        q-&amp;gt;next=head-&amp;gt;next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        head-&amp;gt;next=q;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p-&amp;gt;next=head;//相当于成环  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    head=p-&amp;gt;next-&amp;gt;next;//新head变为原head的next  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    p-&amp;gt;next-&amp;gt;next=NULL;//断掉环  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    return head;    &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;}  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;int main(int argc, char* argv[])  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;//  DisplayList(Create());  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;//  DisplayList(ReverseList2(Create()));  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    DisplayList(ReverseList3(Create()));  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    return 0;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;}  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;方法4:  递归&lt;/p&gt;
+
+&lt;p&gt;updated: 2014-01-24&lt;/p&gt;
+
+&lt;p&gt;因为发现大部分问题都可以从递归角度想想，所以这道题目也从递归角度想了想。&lt;/p&gt;
+
+&lt;p&gt;现在需要把A-&amp;gt;B-&amp;gt;C-&amp;gt;D进行反转，
+可以先假设B-&amp;gt;C-&amp;gt;D已经反转好，已经成为了D-&amp;gt;C-&amp;gt;B,那么接下来要做的事情就是将D-&amp;gt;C-&amp;gt;B看成一个整体，让这个整体的next指向A，所以问题转化了反转B-&amp;gt;C-&amp;gt;D。那么，
+可以先假设C-&amp;gt;D已经反转好，已经成为了D-&amp;gt;C,那么接下来要做的事情就是将D-&amp;gt;C看成一个整体，让这个整体的next指向B，所以问题转化了反转C-&amp;gt;D。那么，
+可以先假设D(其实是D-&amp;gt;NULL)已经反转好，已经成为了D(其实是head-&amp;gt;D),那么接下来要做的事情就是将D(其实是head-&amp;gt;D)看成一个整体，让这个整体的next指向C，所以问题转化了反转D。
+上面这个过程就是递归的过程，这其中最麻烦的问题是，如果保留新链表的head指针呢？想到了两个办法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[cpp]&lt;/strong&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;view plain&lt;/a&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;print&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;?&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/CODE_ico.png&quot; alt=&quot;在CODE上查看代码片&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513/fork&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/ico_fork.svg&quot; alt=&quot;派生到我的代码片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;// 递归版的第一种实现，借助类的成员变量m_phead来表示新链表的头指针。  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;struct ListNode{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    int val;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode* next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode(int a):val(a),next(NULL){}  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;};  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;class Solution{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;     ListNode&lt;em&gt; reverseLinkedList4(ListNode&lt;/em&gt; head){ //输入: 旧链表的头指针  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        if(head==NULL)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            return NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        if(head-&amp;gt;next==NULL){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            m_phead=head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            return head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        ListNode* new_tail=reverseLinkedList4(head-&amp;gt;next);  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        new_tail-&amp;gt;next=head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        head-&amp;gt;next=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        return head; //输出: 新链表的尾指针  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;     }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode&lt;em&gt; m_phead=NULL;//member variable defined for reverseLinkedList4(ListNode&lt;/em&gt; head)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;};  &lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;第二个办法是，增加一个引用型参数 new_head，它用来保存新链表的头指针。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[cpp]&lt;/strong&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;view plain&lt;/a&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;copy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt; &lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;print&lt;/a&gt;&lt;a href=&quot;http://blog.csdn.net/feliciafay/article/details/6841115#&quot;&gt;?&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/CODE_ico.png&quot; alt=&quot;在CODE上查看代码片&quot; /&gt;&lt;/a&gt;&lt;a href=&quot;https://code.csdn.net/snippets/170513/fork&quot;&gt;&lt;img src=&quot;https://code.csdn.net/assets/ico_fork.svg&quot; alt=&quot;派生到我的代码片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;struct ListNode{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    int val;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode* next;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode(int a):val(a),next(NULL){}  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;};  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;class Solution{  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    ListNode&lt;em&gt; reverseLinkedList5(ListNode&lt;/em&gt; head, ListNode* &amp;amp; new_head){ //输入参数head为旧链表的头指针。new_head为新链表的头指针。  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        if(head==NULL)  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            return NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        if(head-&amp;gt;next==NULL){  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            new_head=head; //当处理到了旧链表的尾指针，也就是新链表的头指针时，对new_head进行赋值。因为是引用型参数，所以在接下来调用中new_head的值逐层传递下去。  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;            return head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        ListNode* new_tail=reverseLinkedList5(head-&amp;gt;next,new_head);  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        new_tail-&amp;gt;next=head;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        head-&amp;gt;next=NULL;  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;        return head; //输出参数head为新链表的尾指针。  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;    }  &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;};  &lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;转自CSDN：http://blog.csdn.net/feliciafay/article/details/6841115&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 14 Oct 2015 15:07:26 +0800</pubDate>
+        <link>http://www.xjh1994.com/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/2015/10/14/e6-95-b0-e6-8d-ae-e7-bb-93-e6-9e-84-e5-8f-8d-e8-bd-ac-e5-8d-95-e9-93-be-e8-a1-a8-e5-9b-be-e6-96-87-e8-a7-a3-e6-9e-90.html</link>
+        <guid isPermaLink="true">http://www.xjh1994.com/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/2015/10/14/e6-95-b0-e6-8d-ae-e7-bb-93-e6-9e-84-e5-8f-8d-e8-bd-ac-e5-8d-95-e9-93-be-e8-a1-a8-e5-9b-be-e6-96-87-e8-a7-a3-e6-9e-90.html</guid>
+        
+        
+        <category>数据结构</category>
+        
+      </item>
+    
+  </channel>
+</rss>

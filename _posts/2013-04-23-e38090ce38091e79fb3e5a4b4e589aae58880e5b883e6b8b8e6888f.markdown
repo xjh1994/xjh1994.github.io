@@ -1,0 +1,159 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 12:19:33+00:00
+layout: post
+slug: '%e3%80%90c%e3%80%91%e7%9f%b3%e5%a4%b4%e5%89%aa%e5%88%80%e5%b8%83%e6%b8%b8%e6%88%8f'
+title: 【C++】石头剪刀布游戏
+wordpress_id: 100
+categories:
+- C/C++
+- 编程
+tags:
+- C++
+- 游戏
+- 石头剪刀布
+---
+
+[sourcecode language="plain"]
+#include<iostream>
+#include<string>
+#include<iomanip>
+using namespace std;
+void main()
+{string s,a;
+int m,n,count1(0),count2(0);
+static int b=1,f(0);
+while(1){cout<<setfill('*')<<setw(18)<<'*';
+cout<<"欢迎进入石头剪头布划拳游戏系统(比赛共进行3次)";
+cout<<setfill('*')<<setw(18)<<'*';
+cout<<"请输入参赛者甲的名字:"<<endl;
+cin>>s;
+cout<<"请输入参赛者乙的名字:"<<endl;
+cin>>a;
+z:cout<<"1--剪刀"<< endl;
+cout<<"2--石头"<<endl;
+cout<<"3--布"<<endl<<endl;
+cout<<"请"<<s<<"选择："<<endl;
+cin>>m;
+cout<<"请"<<a<<"选择:"<<endl;
+cin>>n;
+if(m==1&&n==1)
+{cout<<s<<"与"<<a<<"选择的都是剪刀,所以第"<<b<<"局打成平手"<<endl;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+f++;
+if(b==3)
+break;
+b++;
+if(f==3)
+break;
+goto z;}
+else if(m==1&&n==2)
+{cout<<s<<"选择的是剪刀而"<<a<<"选择的是石头，所以第"<<b<<"局"<<a<<"获胜"<<endl;
+count2++;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+if(b==3)
+break;
+b++;
+goto z;}
+else if(m==1&&n==3)
+{cout<<s<<"选择的是剪刀而"<<a<<"选择的是布，所以第"<<b<<"局"<<s<<"获胜"<<endl;
+count1++;
+if(b==3)
+break;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+b++;
+goto z;}
+else if(m==2&&n==1)
+{cout<<s<<"选择的是石头而"<<a<<"选择的是剪刀，所以第"<<b<<"局"<<s<<"获胜"<<endl;
+count1++;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+if(b==3)
+break;
+b++;
+goto z;}
+else if(m==2&&n==2)
+{cout<<s<<"与"<<a<<"选择的都是石头,所以第"<<b<<"局打成平手"<<endl;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+f++;
+if(b==3)
+break;
+b++;
+if(f==3)
+break;
+goto z;}
+else if(m==2&&n==3)
+{cout<<s<<"选择的是石头而"<<a<<"选择的是布，所以第"<<b<<"局"<<a<<"获胜"<<endl;
+count2++;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+if(b==3)
+break;
+b++;
+goto z;}
+else if(m==3&&n==1)
+{cout<<s<<"选择的是布而"<<a<<"选择的是剪刀，所以第"<<b<<"局"<<a<<"获胜"<<endl;
+count2++;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+if(b==3)
+break;
+b++;
+goto z;}
+else if(m==3&&n==2)
+{cout<<s<<"选择的是布而"<<a<<"选择的是石头，所以第"<<b<<"局"<<s<<"获胜"<<endl;
+count1++;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+if(b==3)
+break;
+b++;
+goto z;}
+else if(m==3&&n==3)
+{cout<<s<<"与"<<a<<"选择的都是布,所以第"<<b<<"局打成平手"<<endl;
+if(b!=3)
+cout<<"进入第"<<b+1<<"局比赛"<<endl;
+else
+;
+f++;
+if(b==3)
+break;
+b++;
+if(f==3)
+break;
+goto z;}
+else
+{cout<<"输入有误请重新输入"<<endl;
+goto z;}}
+if(count1>count2)
+{cout<<endl;
+cout<<"最后赢家为"<<s<<endl;}
+if(count1<count2)
+{cout<<endl;
+cout<<"最后赢家为"<<a<<endl;}
+if(count1==count2)
+cout<<s<<"和"<<a<<"最终打成了平手"<<endl;
+if(f==3)
+cout<<s<<"和"<<a<<"最终打成了平手"<<endl;}
+[/sourcecode]

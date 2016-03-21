@@ -1,0 +1,27 @@
+---
+author: xjh1994
+comments: true
+date: 2013-09-14 02:48:32+00:00
+layout: post
+slug: '%e6%89%b9%e5%a4%84%e7%90%86%e4%b8%80%e9%94%ae%e6%b7%bb%e5%8a%a0java%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f'
+title: 批处理一键添加java环境变量
+wordpress_id: 487
+categories:
+- 未分类
+---
+
+[![设置环境变量](http://bcs.duapp.com/blogxjh/blog/3.png)](http://bcs.duapp.com/blogxjh/blog/3.png)
+
+开发Java程序都要设置环境变量，有时候我们换了一台电脑，就要重新设置一次。环境变量有点不太好记（反正我每次都是百度==），而且每次都要设置很浪费时间，所以我想用个批处理，一键设置环境变量，避免重复劳动。
+
+    
+    @reg add "HKEY_LOCAL_MACHINESYSTEMCurrentControlSetControlSession ManagerEnvironment" /v ClassPath /t reg_expand_sz /d ".;%%Java_Home%%libdt.jar;%%Java_Home%%libtools.jar;%%Java_Home%%libhtmlconverter.jar" /f
+    
+    @reg add "HKEY_LOCAL_MACHINESYSTEMCurrentControlSetControlSession ManagerEnvironment" /v path /t reg_expand_sz /d ".;%path%;%%Java_Home%%bin" /f
+    
+    @reg add "HKEY_LOCAL_MACHINESYSTEMCurrentControlSetControlSession ManagerEnvironment" /v Java_Home /t reg_sz /d "%cd%" /f
+
+
+将以上代码保存为env.bat，放在JDK安装目录下，双击打开即可设置环境变量。
+
+因批处理知识有限，所以参考了网上的做法，这里贴上参考内容的链接。[http://www.slyar.com/blog/xp-java-reg-env.html](http://www.slyar.com/blog/xp-java-reg-env.html)

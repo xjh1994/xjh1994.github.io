@@ -1,0 +1,83 @@
+---
+author: xjh1994
+comments: true
+date: 2013-06-11 10:16:31+00:00
+layout: post
+slug: '%e8%8b%b9%e6%9e%9c%e5%bc%80%e5%8f%91%e8%80%85%e5%a4%a7%e4%bc%9awwdc2013'
+title: 苹果开发者大会(WWDC2013)
+wordpress_id: 264
+categories:
+- IOS
+- 创意
+- 手机
+- 操作系统
+- 趣闻轶事
+- 软件应用
+---
+
+![](http://ww4.sinaimg.cn/bmiddle/59183920gw1e5jy49wiqvj206o0bsq4k.jpg)
+
+
+
+**苹果全球开发者大会于北京时间6月11日凌晨在美国旧金山召开，大会清算了乔布斯的左倾错误，确立了蒂姆库克同志和乔纳森·艾维同志在苹果产品中的领导地位，发布了有史以来改动最大的iOS7 ，这是一个时代的开始，或者一个时代的终结。**
+
+
+
+[caption id="" align="alignnone" width="440"]![一张图看清iOS 7](http://ww4.sinaimg.cn/bmiddle/70e9ff21jw1e5jqf35l9ej20c83nralj.jpg) 一张图看清iOS 7[/caption]
+
+
+
+**全新设计的UI。3D主屏幕桌面。全新通知中心。全新多任务系统，真正的多任务。App会自动后台更新。新功能控制中心可以关闭WiFi蓝牙调节音量亮度等。AirDrop功能实现局域网共享文件。新功能有100多个，支持iPhone 4和iPad 2之后所有机型。正式版秋季上市，今天提供测试版下载。**
+
+
+
+![](http://ww1.sinaimg.cn/bmiddle/612edf3ajw1e5jymwcmsmj20go2ustoi.jpg)
+
+**苹果在北京时间今天凌晨举办的WWDC 2013开幕式上公布了iOS 7移动操作系统、OS X 10.9桌面操作系统，以及新款Macbook Air和MAC Pro电脑硬件。通过上面这张信息图，你可以了解本次大会的所有信息。**
+
+
+
+
+
+	
+  * 1、移动操作系统iOS 7，颠覆性全新界面设计；
+
+	
+  * 2、全新Mac电脑系统，强化文件管理功能，加入地图等功能；
+
+	
+  * 3、升级超薄笔记本MacBook Air，拥有更长待机和更佳性能；
+
+	
+  * 4、全新Mac Pro工作站，筒状设计体积降至此前八分之一，完全在美国设计生产。 
+
+
+
+
+** 官方介绍视频:**
+
+
+                                                                                           
+
+
+评论:
+
+
+<blockquote>
+
+> 
+> 
+	
+>   * **[罗永浩](http://weibo.com/laoluoyonghao):   呵呵，作为锤子科技的CEO，我只希望苹果不要因为压力大再把ui风格改回来，希望强纳肾顶住压力一意孤行。另外，由于我心中最牛的行业老大选择自杀，我开始相信做生意运气比能力更重要了。**
+> 
+	
+>   * **[IT程序猿](http://weibo.com/kuqin):  一张图告诉你iOS6和iOS7的区别。![](http://ww1.sinaimg.cn/bmiddle/612edf3ajw1e5kci6vkasj20bp0gtdh3.jpg)**
+> 
+	
+>   * **[李开复](http://weibo.com/kaifulee):  一个公司的基因很难改变；苹果很难成为真正意义上的互联网公司，所以只有靠最炫的硬件产品。这些产品可以很好的用上互联网，但是这不意味着苹果可以成为互联网公司。**
+> 
+	
+>   * [陈粲然 Ray](http://www.pingwest.com/author/ray/):  **从界面风格上来看，iOS 7有一种既想突破自身又不希望被看做是向Google和微软看齐的矛盾感，它就像一份未想清楚答案又迫于时间而匆匆交上的考卷.([完整](http://www.pingwest.com/great-job-for-ive-bad-job-for-tim/))**
+> 
+
+</blockquote>

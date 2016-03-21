@@ -1,0 +1,23 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-27 04:58:11+00:00
+layout: post
+slug: '%e3%80%90linux%e3%80%91%e8%8e%b7%e5%8f%96%e7%b3%bb%e7%bb%9f%e7%9a%84root%e6%9d%83%e9%99%90'
+title: 【Linux】获取系统的ROOT权限
+wordpress_id: 134
+categories:
+- Linux
+tags:
+- Linux
+- Root
+---
+
+如果没设置root密码可以使用
+    sudo passwd root设置密码
+    然后切换到root使用
+    su root
+    如果不想切换root但是想拥有大部分root权限
+    可以在使用命令时候 加上 sudo，
+    sudo mount 挂载
+    sudo 命令

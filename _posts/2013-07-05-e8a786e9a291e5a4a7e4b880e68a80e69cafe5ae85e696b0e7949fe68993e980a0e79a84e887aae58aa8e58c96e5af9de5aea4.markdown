@@ -1,0 +1,25 @@
+---
+author: xjh1994
+comments: true
+date: 2013-07-05 10:18:09+00:00
+layout: post
+slug: '%e8%a7%86%e9%a2%91%e5%a4%a7%e4%b8%80%e6%8a%80%e6%9c%af%e5%ae%85%e6%96%b0%e7%94%9f%e6%89%93%e9%80%a0%e7%9a%84%e8%87%aa%e5%8a%a8%e5%8c%96%e5%af%9d%e5%ae%a4'
+title: '[视频]大一技术宅新生打造的自动化寝室'
+wordpress_id: 300
+categories:
+- 创意
+- 未分类
+- 趣闻轶事
+tags:
+- 创意
+- 技术宅
+- 效果
+- 游戏
+- 解决方案
+- 高端
+---
+
+![title](http://static.cnbetacdn.com/topics/people.png)
+
+对大多数人来说，上大学就是念书、恋爱、玩游戏……至于改造自己的寝室，相信没几个大学生会有这样的想法吧？ 近日，**来自UC Berkeley（加州大学伯克莱分校）的大一学生Derek Low恰巧就是这样一位敢想又敢做的技术宅，通过将手机、平板电脑、笔记本电脑与寝室内的各种电器设备相连，他成功为自己打造了这间名为 BRAD（Berkeley Ridiculously Automated Dorm，译为“伯克莱搞怪自动屋”）的自动化寝室。下面就跟着视频一起去看看这间高科技寝室吧。**
+

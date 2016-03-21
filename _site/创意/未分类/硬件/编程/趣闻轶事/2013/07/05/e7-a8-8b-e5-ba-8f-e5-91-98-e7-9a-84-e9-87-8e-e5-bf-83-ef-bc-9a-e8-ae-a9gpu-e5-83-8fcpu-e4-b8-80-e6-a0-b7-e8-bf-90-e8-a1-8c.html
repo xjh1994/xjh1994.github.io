@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>程序员的野心：让GPU像CPU一样运行</title>
+  <meta name="description" content="GPU代表的是图形处理单元，但是，这些小小芯片除了处理图形功能，还有其它用处。比如，Google使用GPU来为人脑建模，Salesforce则依赖GPU分析Twitter微博数据流。GPU很适合并行处理运算，也就是同时执行成千上万个任务。怎么做呢？你得开发一个新软件，让它挖掘GPU芯片的潜力。最近美国印第安纳大学...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E5%88%9B%E6%84%8F/%E6%9C%AA%E5%88%86%E7%B1%BB/%E7%A1%AC%E4%BB%B6/%E7%BC%96%E7%A8%8B/%E8%B6%A3%E9%97%BB%E8%BD%B6%E4%BA%8B/2013/07/05/e7-a8-8b-e5-ba-8f-e5-91-98-e7-9a-84-e9-87-8e-e5-bf-83-ef-bc-9a-e8-ae-a9gpu-e5-83-8fcpu-e4-b8-80-e6-a0-b7-e8-bf-90-e8-a1-8c.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">程序员的野心：让GPU像CPU一样运行</h1>
+    <p class="post-meta"><time datetime="2013-07-05T18:22:44+08:00" itemprop="datePublished">Jul 5, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>GPU代表的是图形处理单元，但是，这些小小芯片除了处理图形功能，还有其它用处。比如，Google使用GPU来为人脑建模，Salesforce则依赖GPU分析Twitter微博数据流。GPU很适合并行处理运算，也就是同时执行成千上万个任务。怎么做呢？你得开发一个新软件，让它挖掘GPU芯片的潜力。<strong>最近美国印第安纳大学计算机博士埃里克-浩克（Eric Holk）就作出尝试，他开发了一个应用程序来运行GPU。浩克说：“GPU编程仍然需要程序员管理许多低层细节，这些细节是与GPU执行的主要任务分离 的。我们想开发一个系统，帮助程序员管理这些细节，让GPU在提高生产力的同时仍然有很好的性能。”</strong></p>
+
+<p><a href="http://static.cnbetacdn.com/newsimg/2013/0705/01372976770.jpg"><img src="http://static.cnbetacdn.com/newsimg/2013/0705/01372976770.jpg_w600.jpg" alt="http://static.cnbetacdn.com/newsimg/2013/0705/01372976770.jpg_w600.jpg" /></a></p>
+
+<p>一般来说，电脑计算任务大多由CPU完成。一个CPU处理一个计算序列，也就是所谓的一次处理一个线程，它必须尽可能快地执行。GPU的设计初衷是一次处理多个线程，这些线程处理速度慢很多，但程序可以利用并行优势执行得更快一些，就像超级电脑一样。</p>
+
+<p>浩克称，今天，CPU已经能执行并行运算了，多核也很流行，但它们主要还是针对单线程优化的。</p>
+
+<p>GPU术语直到1999年才出现，但在此之前已经有早期的视频处理芯片了，它们于1970-1980年推出。当时，视频处理芯片严重依赖CPU进行图形处理，1990年代图形显卡更流行了，也更强大了，主要是因为3D显卡出现。</p>
+
+<p>乔治亚科技大学克里斯-麦克拉纳罕（Chris McClanahan）认为，GPU硬件架构已经进化，以前它只是特定单一核心，现在向一组高并行、可编程核心转变，它可以用来处理更通用的计算。毫无疑 问，随着GPU技术的发展，它会增加更多可编程性、更多并行性，变得越来越像CPU，可以用于通用计算。麦克拉纳罕说，CPU和GPU最终会融合。同时， 开发者也开始挖掘GPU的能力，用于不同的应用中，包括物理系统建模、强化智能手机等。</p>
+
+<p>浩克解释道：“GPU的内存带宽也比CPU高很多，在对海量数据进行简单计算时，它的效率更好。”</p>
+
+<p>已经有一些GPU编程语言存在，包括CUDA和OpenCL。汉克开发了新语言Harlan，它可以控制GPU。实际上，Harlan被编译成 OpenCL。但与其它语言不同，Harlan语言的抽象思维更多与高级编程语言相近，比如Python、Ruby。浩克称：“Harlan的另一个目标 是想回答一个问题：如果从一开始就开发一门语言，它最初的目标就是支持GPU编程，那会怎样呢？目前的大多系统将GPU编程嵌入到现有语言中，开发者不得 不处理旧语言的所有问题。Harlan可以让开发者更好地为目标硬件、程序作决策。”</p>
+
+<p>Harlan语法基于Scheme，它是Lisp语言的现代变种，Scheme是所有好语言的始祖。为了让编程语言更“正常”一些，浩克还用到 了Rust语言，这种语言主要面向开发系统，它可以操作硬件底层。浩克的目的是让程序员编写的代码更有效，因为Harlan能生产更好的GPU代码。</p>
+
+<p><img src="http://static.cnbetacdn.com/newsimg/2013/0705/11372976770.png" alt="http://static.cnbetacdn.com/newsimg/2013/0705/11372976770.png" /></p>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

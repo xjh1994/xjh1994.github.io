@@ -1,0 +1,265 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-23 12:27:37+00:00
+layout: post
+slug: '%e3%80%90c%e8%af%ad%e8%a8%80%e3%80%9121%e4%bd%8d%e6%b0%b4%e4%bb%99%e8%8a%b1%e6%95%b0-2'
+title: 【C语言】21位水仙花数
+wordpress_id: 460
+categories:
+- 未分类
+---
+
+[sourcecode language="plain"]
+/*21位水仙花数问题
+耗时: 约11s
+By: 熊勋泉
+At: 2012年1月15日
+---深度优先搜索---
+---递归---
+---高精度计算---
+---算法优化---
+---各种编程技巧的综合运用---*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#define DIG 21
+#define LIMIT DIG
+#define MAX 100
+
+char ncf[10][DIG+10];
+char ncf21bei[10][DIG+1][DIG+10];
+//char goal[MAX][DIG+10];
+
+//字符串相加函数
+void add_str(char x[], const char y[])
+{
+    int i, temp, lenx, leny;
+
+    for(i=0,temp=0; x[i]!='\0' && y[i]!='\0'; i++)
+    {
+        temp=x[i]-'0'+y[i]-'0'+temp;
+        x[i]=temp%10+'0';
+        temp/=10;
+    }
+    lenx=strlen(x);
+    leny=strlen(y);
+    while(i<lenx)
+    {
+    	temp=x[i]-'0'+temp;
+        x[i]=temp%10+'0';
+        temp/=10;
+       	i++;
+    }
+    while(i<leny)
+    {
+        temp=y[i]-'0'+temp;
+        x[i]=temp%10+'0';
+        temp/=10;
+       	i++;
+    }
+    while(temp)
+    {
+        x[i]=temp%10+'0';
+        temp/=10;
+        i++;
+    }
+    x[i]='\0';
+}
+
+//字符串乘以一个整数
+int chengyi_str(char x[], int n)
+{
+    char temp[DIG+10], i, j;
+
+    if(n<=0)
+    {
+        x[0]='0';
+        x[1]='\0';
+        return 0;
+    }
+    else
+    {
+        strcpy(temp, x);
+        i=1;
+        while(i<n/2) i*=2;
+        j=i;
+        for(; i>1; i/=2)
+            add_str(x, x);
+        while(j<n)
+        {
+            add_str(x, temp);
+            j++;
+        }
+        return 0;
+    }
+}
+
+void init()
+{
+    int i,j;
+    ncf[0][0]='0';
+    ncf[0][1]='\0';
+    ncf[1][0]='1';
+    ncf[1][1]='\0';
+    for(i=2; i<10; i++)
+    {
+        ncf[i][0]=i+'0';
+        ncf[i][1]='\0';
+        for(j=1; j<DIG; j++)
+        {
+            chengyi_str(ncf[i], i);
+        }
+    }
+    for(i=0; i<10; i++)
+    {
+        ncf21bei[i][0][0]='0';
+        ncf21bei[i][0][1]='\0';
+        strcpy(ncf21bei[i][1], ncf[i]);
+        for(j=2; j<=DIG; j++)
+        {
+            strcpy(ncf21bei[i][j], ncf21bei[i][j-1]);
+            add_str(ncf21bei[i][j], ncf[i]);
+        }
+    }
+    /*for(i=0; i<10; i++)
+    {
+        for(j=0; j<=DIG; j++)
+        printf("%d的%d倍：%s\n", i, j, ncf21bei[i][j]);
+        system("pause");
+    }*/
+}
+
+//穷举法搜索
+/*void find()
+{
+    char  a[DIG+10], b[DIG+10];
+    int i, k, cnta[10], cntb[10];
+    //cnta\cntb统计当前数a\b中各数字出现的次数
+    //a为当前要判断的数，b为对a求出的水仙花数，c为b排序后的数
+    memset(a,0,(DIG+10)*sizeof(char));
+    memset(cnta,0,10*sizeof(int));
+    for(i=0; i<DIG-1; i++)
+    {
+        a[i]='0';
+        cnta[0]++;
+    }
+    a[i]='1';
+    cnta[1]++;
+    a[i+1]='\0';
+    do
+    {
+        //初始化数据
+        memset(b,0,(DIG+10)*sizeof(char));
+        memset(cntb,0,10*sizeof(int));
+        b[0]='0';
+        b[1]='\0';
+        //计算b
+        for(i=0; i<10; i++)
+        {
+            if(cnta[i])
+            add_str(b, ncf21bei[i][cnta[i]]);
+        }
+        for(i=0; b[i]!='\0'; i++)
+            cntb[b[i]-'0']++;
+            cntb[0]+=DIG-i;
+        //判断是否是水仙花数
+        for(i=0; i<10; i++)
+            if(cnta[i]!=cntb[i])
+            break;
+        if(i==10 && strlen(b)==DIG)
+        {
+        	for(i=DIG-1; i>=0; i--)
+        	printf("%c", b[i]);
+            printf("\n", b);
+            printf("已耗时：%fs\n", 1.0*clock()/CLOCKS_PER_SEC);
+        }
+        //取下一个要判断的数
+        i=DIG-1;
+        while(i>=0 && a[i]=='9')
+        {
+            cnta[a[i]-'0']--;
+            i--;
+        }
+        if(cnta[a[i]-'0'])
+        cnta[a[i]-'0']--;
+        k=a[i]+1;
+        while(i<DIG)
+        {
+            cnta[k-'0']++;
+            a[i++]=k;
+        }
+    }while(a[0]!='9');
+}*/
+
+int na[10], nb[10];
+char b[DIG+10];
+void dfs(int step, int nn)
+{
+	int i;
+    if(nn==0)//step==10 ||
+    {
+    	//不是DIG位数直接否决
+        if(b[DIG]!='\0') return;
+       	memset(nb,0,sizeof(nb));
+       	for(i=0; b[i]!='\0'; i++)
+        	nb[b[i]-'0']++;
+        //判断是否是水仙花数
+		for(i=0; i<10; i++)
+			if(na[i]!=nb[i])
+				return;
+		//打印出水仙花数
+		for(i=DIG-1; i>=0; i--)
+			printf("%c", b[i]);
+		printf("\n");
+		//printf("已耗时：%fs\n", 1.0*clock()/CLOCKS_PER_SEC);
+		return;
+    }
+    char temp[DIG+10]="\0";
+    if(step==9)
+    {
+    	strcpy(temp, b);
+    	na[9]=nn;
+    	if(nn)
+    		add_str(b, ncf21bei[9][na[9]]);
+    	dfs(10, 0);
+    	strcpy(b, temp);
+    	na[9]=0;
+    	return ;
+    }
+    if(step<9)
+    {
+    	//下列语句可以缩短程序运行时间，但是理论上影响程序的准确性
+    	/*==============================*/
+    	if(na[step-1]>LIMIT) return;
+    	/*==============================*/
+
+    	for(i=0; i<=nn; i++)
+    	{
+    		strcpy(temp, b);
+    		na[step]=i;
+    		if(i)
+    			add_str(b, ncf21bei[step][i]);
+    		dfs(step+1, nn-i);
+    		strcpy(b, temp);
+    		na[step]=0;
+    	}
+    	return ;
+    }
+}
+
+int main()
+{
+    char x[DIG+1]="5", y[DIG+1]="9";
+    int n=5;
+    init();
+    dfs(0, DIG);//深度优先搜索
+    //system("pause");
+    //find();//穷举搜索
+    printf("\n共耗时：%fs\n", 1.0*clock()/CLOCKS_PER_SEC);
+    return 0;
+}
+[/sourcecode]

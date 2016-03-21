@@ -1,0 +1,182 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 11:00:11+00:00
+layout: post
+slug: 2012%e5%b9%b4%e6%8e%92%e5%90%8d%e5%89%8d20%e4%bd%8d%e7%9a%84-css-%e7%bd%91%e7%ab%99%e4%bd%9c%e5%93%81
+title: 2012年排名前20位的 CSS 网站作品
+wordpress_id: 61
+categories:
+- HTML&amp;CSS
+tags:
+- CSS
+- 网站
+---
+
+2012年涌现出众多独特的，令人印象深刻的 CSS 网站作品，要从中挑选出年度应用 [**CSS**](http://www.cnblogs.com/lhb25/category/146075.html) 的最佳网站列表一个严峻的挑战，因为 CSS 涵盖了媒体查询（CSS3 Media Queries）、[**CSS**](http://www.cnblogs.com/lhb25/category/146075.html) 动画和3D转换等众多特性。我根据过去 CSS 典型的应用场景挑选了其中的优秀作品组成一个列表，如果你有收藏更好的作品，欢迎留言向大家分享。
+
+
+### 1. Beercamp
+
+
+这个啤酒节的活动网站充分应用了 3D CSS Transform 技术，充满立体感的旋转和折叠效果。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413244370.jpg)](http://2012.beercamp.com/)
+
+
+### 2. Spelltower
+
+
+Spelltower 不仅是一个令人上瘾的游戏，它也有一个网站，充满乐趣和个性。
+
+使用的俏皮动画和过渡效果，让你想抓住一个 iPhone 并启动游戏。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243281.jpg)](http://www.spelltower.com/)
+
+
+### 3. Envy Labs
+
+
+[Envy Labs](http://envylabs.com/) 的其中一个标语是“我们创造的乐趣”。采用CSS3 Transform 和 Transition 呈现一个很有趣的旋转木马！
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243249.jpg)](http://envylabs.com/)
+
+
+### 4. Fine Goods
+
+
+这个可爱的网站组合使用各种 CSS 属性实现个性的设计。价格标签会旋转变换和动画，抽屉形式的导航个性十足，甚至会让你大吃一惊。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243298.jpg)](http://www.finegoodsmarket.com/)
+
+
+### 5. Mammoth Booth
+
+
+微妙的动画，外加一些打孔的插图，转换和边框阴影让图片带给人们真实照片的感觉。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413244388.jpg)](http://mammothbooth.com/)
+
+
+### 6. Postable
+
+
+由 Kevin Kneifel 开发的 Web 应用程序，充满特色。聪明的悬停和过渡相结合，有趣插图让网站能够吸引用户。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243241.jpg)](http://postable.com/)
+
+
+### 7. Lift Interactive
+
+
+这个网站在互动方面做了非常了不起的工作，保持良好的设计和使用各种效果兼顾得很好。
+
+我最喜欢的是书本上的3D转换效果，鼠标悬停的时候增添了一丝的惊喜。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413244356.jpg)](http://www.liftinteractive.com/)
+
+
+### 8. Impress a Penguin
+
+
+很可爱的企鹅，创新的设计带给用户良好的故事阅读体验。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243357.jpg)](http://impressapenguin.com/)
+
+
+### 9. Microsoft
+
+
+Paravel 为微软设计了一个全新的主页，这个网站最大的特色在于响应式设计。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413284748.jpg)](http://www.microsoft.com/en-us/default.aspx)
+
+
+### 10. Stuff & Nonsense
+
+
+这个太搞了，极具创意的响应式设计！缩小浏览器窗口浏览试试，有惊喜哦！
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243389.jpg)](http://stuffandnonsense.co.uk/)
+
+
+### 11. Hammer
+
+
+使用了让人耳目一新的鼠标悬停过渡效果，和图片传送带形成互动。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243335.jpg)](http://hammerformac.com/)
+
+
+### 12. Lab Partners
+
+
+精心策划的布局，使用非典型的旋图片传送带效果。
+
+该网站是用于时尚艺术与设计工作室的，通过他们所选择的颜色和对细节的关注向访客传达了一个强烈的信息。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243352.jpg)](http://lp-sf.com/)
+
+
+### 13. Always Creative
+
+
+总部设在休斯顿的一个创意机构的网站，他们添加了一点点的变焦旋转效果以及很多微妙的动画。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243367.jpg)](http://alwayscreative.net/)
+
+
+### 14. Chartbeat
+
+
+让你在其网站上从选择颜色和类型开始，微妙的触摸动画和转换，滚动的产品描述能够让你充满好奇。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243327.jpg)](http://chartbeat.com/)
+
+
+### 15. OPower UX
+
+
+这个创意的网页显示出一个充满个性的团队，使用各种时尚的元素和简单的图标页面告诉你其团队成员信息。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243312.jpg)](http://opower.com/careers/ux)
+
+
+### 16. Circles Conference
+
+
+使用各种形式的圆形元素技巧，加入强力的配色，体现了会议的相关的各种信息的网站，让人充满期待。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243362.jpg)](http://circlesconference.com/)
+
+
+### 17. Two Paperdolls
+
+
+这个优雅的网站在首页提供了两个入口途径，在鼠标悬停的时候给图像着色（默认是灰白风格）。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243479.jpg)](http://twopaperdolls.com/)
+
+
+### 18. Jukely
+
+
+这是网页只是一个即将发布的服务的着陆页（Landing Page），但它很有特色。
+
+为每个元素设置的动画和渐变页面背景融合在一起，让人订阅的时候充满了惊奇和喜悦。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413354325.jpg)](http://jukely.com/)
+
+
+### 19. Station Four
+
+
+有趣的导航设计，它采用大圆形形象的呈现主要链接。导航使用双层圆环设计，并增加了一些热点动画。[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243457.jpg)](http://www.stationfour.com/Expertise)
+
+
+### 20. United Pixelworkers
+
+
+这个网站今年进行了两个版本的更新，使用了奇妙的响应布局和页面排版，让你挑选衬衫的过程充满乐趣。
+
+[![](http://pic002.cnblogs.com/images/2012/36987/2012121413243417.jpg)](http://www.unitedpixelworkers.com/)

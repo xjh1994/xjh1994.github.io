@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>媲美TortoiseSVN的LINUX版SVN客户端软件RabbitVCS</title>
+  <meta name="description" content="[caption id=”” align=”alignnone” width=”827”] RabbitVCS[/caption]">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/linux/mac/php&amp;mysql/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7/%E8%BD%AF%E4%BB%B6%E5%BA%94%E7%94%A8/2013/06/08/inux-svn-rabbitvcs.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">媲美TortoiseSVN的LINUX版SVN客户端软件RabbitVCS</h1>
+    <p class="post-meta"><time datetime="2013-06-08T13:42:20+08:00" itemprop="datePublished">Jun 8, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>[caption id=”” align=”alignnone” width=”827”]<img src="http://www.48474.com/wp-content/uploads/2010/09/context_menu.png" alt="RabbitVCS" /> RabbitVCS[/caption]</p>
+
+<p>如果想在Linux环境下使用图形化界面的SVN客户端软件，那么RabbitVCS绝对是首选，可以媲美Windows环境下用的TortoiseSVN，甚至连操作都基本一样，所以强烈推荐给各位童鞋。
+RabbitVCS基本支持所有的Linux发行版本包括Ubuntu、Debian、Fedora、Arch Linux、Gentoo、Mandriva、OpenSUSE、RHEL、CentOS 5等。其官网地址为http://www.rabbitvcs.org/
+<strong>在ubuntu下安装</strong>
+首先添加源：</p>
+
+<p>sudo add-apt-repository ppa:rabbitvcs/ppa
+sudo vi /etc/apt/sources.list</p>
+
+<p>按SHIFT + g 跳转到尾行 按 o 回车输入</p>
+
+<p>deb http://ppa.launchpad.net/rabbitvcs/ppa/ubuntu karmic main</p>
+
+<p>按ESC后按SHIFT + z + z 保存并退出
+下面是导入key并安装</p>
+
+<p>sudo apt-key adv –keyserver keyserver.ubuntu.com –recv-keys 34EF4A35
+sudo apt-get update
+sudo apt-get install rabbitvcs-cli rabbitvcs-core rabbitvcs-gedit rabbitvcs-nautilus rabbitvcs-thunar thunarx-python</p>
+
+<p><strong>在Fedora12或更高版本</strong></p>
+
+<p>yum install rabbitvcs*</p>
+
+<p><strong>在Arch Linux中</strong></p>
+
+<p>yaourt -S python-nautilus python-configobj pygtk pysvn dbus-python subversion meld rabbitvcs</p>
+
+<p><strong>在Gentoo中</strong></p>
+
+<p>emerge rabbitvcs</p>
+
+<p>安装完毕后，注销一下，重新登录，在文件夹和文件夹内点击鼠标右键就用RabbitVCS操作工具了。</p>
+
+<p><a href="http://orannis.hmdc.harvard.edu/rpmforge/rabbitvcs/rabbitvcs-0.13.3-1.el5.i386.rpm">rabbitvcs-0.13.3-1.el5.i386.rpm</a></p>
+
+<p><a href="http://orannis.hmdc.harvard.edu/rpmforge/rabbitvcs/">http://orannis.hmdc.harvard.edu/rpmforge/rabbitvcs/</a></p>
+
+<p>转自<a href="http://zhumeng8337797.blog.163.com/blog/static/100768914201152174958234/">http://zhumeng8337797.blog.163.com/blog/static/100768914201152174958234/</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

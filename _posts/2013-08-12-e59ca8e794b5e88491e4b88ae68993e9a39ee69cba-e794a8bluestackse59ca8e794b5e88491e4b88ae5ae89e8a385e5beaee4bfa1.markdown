@@ -1,0 +1,193 @@
+---
+author: xjh1994
+comments: true
+date: 2013-08-12 08:03:15+00:00
+layout: post
+slug: '%e5%9c%a8%e7%94%b5%e8%84%91%e4%b8%8a%e6%89%93%e9%a3%9e%e6%9c%ba-%e7%94%a8bluestacks%e5%9c%a8%e7%94%b5%e8%84%91%e4%b8%8a%e5%ae%89%e8%a3%85%e5%be%ae%e4%bf%a1'
+title: 在电脑上打飞机 -- 用BlueStacks在电脑上安装微信
+wordpress_id: 482
+categories:
+- 未分类
+---
+
+1、先到BlueStacfks[官网](http://www.bluestacks.net.cn/)下载BlueStacks安装包。下载地址：[http://www.shouzhi.net.cn/z/bluestacks.html](http://www.shouzhi.net.cn/z/bluestacks.html)
+
+2、解压下载好的压缩包，运行BlueStacks_HD_AppPlayerPro_setup_0.7.16.910_REL_KP(1).msi
+
+3、完成安装后，程序会自动打开。在微信官网上下载微信5.0的客户端。（一定要在微信官网下，否则没有游戏中心功能！）
+
+4、下载好客户端以后双击就可以安装到BlueStacks。然后就可以在BlueStacks程序窗口中找到微信了。这时就和手机操作一样了，只是触屏变成了鼠标。
+
+
+
+* * *
+
+
+
+
+
+附：（以下转自[百度经验](http://jingyan.baidu.com/article/fc07f9893c9c4412ffe519b1.html)）
+
+BlueStacks屏幕窗口的调整方法：
+
+1、打开注册表，方法：点击电脑“开始”按钮选择运行，或者按快捷键 win+r直接打开。
+
+输入命令regedit点击确定或者直接按键盘上的回车键。
+
+[![BlueStacks安卓模拟器屏幕窗口大小的调整方法](http://c.hiphotos.baidu.com/exp/w=500/sign=4d18924fd933c895a67e987be1127397/4bed2e738bd4b31cc53d716387d6277f9f2ff8e1.jpg)](http://jingyan.baidu.com/album/fc07f9893c9c4412ffe519b1.html?picindex=2)
+
+
+
+
+2、找到注册表地址：[HKEY_LOCAL_MACHINESOFTWAREBlueStacksGuestsAndroidFrameBuffer]
+
+
+
+
+
+
+
+
+
+[![BlueStacks安卓模拟器屏幕窗口大小的调整方法](http://g.hiphotos.baidu.com/exp/w=500/sign=97187da3d11373f0f53f6f9f940e4b8b/8601a18b87d6277fd874d7e028381f30e824fc80.jpg)](http://jingyan.baidu.com/album/fc07f9893c9c4412ffe519b1.html?picindex=3)
+
+
+
+
+
+
+
+
+
+3、修改对应项：Width（宽），Height（高）。
+
+默认为十六进制，
+
+可以选十进制修改值（相对好调整些而已）。
+
+
+
+
+
+
+
+
+
+[![BlueStacks安卓模拟器屏幕窗口大小的调整方法](http://b.hiphotos.baidu.com/exp/w=500/sign=01f3a2e60cf3d7ca0cf63f76c21dbe3c/b17eca8065380cd708f24735a144ad345882817e.jpg)](http://jingyan.baidu.com/album/fc07f9893c9c4412ffe519b1.html?picindex=4)
+
+
+
+
+[![BlueStacks安卓模拟器屏幕窗口大小的调整方法](http://d.hiphotos.baidu.com/exp/w=500/sign=5b7fced8e924b899de3c79385e071d59/d6ca7bcb0a46f21fcd4eba8bf6246b600d33aef4.jpg)](http://jingyan.baidu.com/album/fc07f9893c9c4412ffe519b1.html?picindex=5)
+
+
+
+
+
+
+
+
+
+4、修改完成后重启BlueStacks就可以看到效果了，可以右键点击电脑右下角BlueStacks图标，选择“重新开始”。
+
+
+
+
+
+
+
+
+
+[![BlueStacks安卓模拟器屏幕窗口大小的调整方法](http://h.hiphotos.baidu.com/exp/w=500/sign=e774d8ccab18972ba33a00cad6cc7b9d/f703738da9773912847961b9f8198618377ae28f.jpg)](http://jingyan.baidu.com/album/fc07f9893c9c4412ffe519b1.html?picindex=6)
+
+
+
+
+
+
+
+## 修改后的效果
+
+
+
+
+
+
+
+
+	
+  * 
+
+
+
+
+修改成高600 宽400的效果图
+
+
+
+
+
+
+
+
+
+[![BlueStacks安卓模拟器屏幕窗口大小的调整方法](http://f.hiphotos.baidu.com/exp/w=500/sign=be8865ad43a98226b8c12b27ba83b97a/0bd162d9f2d3572c44937b048a13632763d0c3f1.jpg)](http://jingyan.baidu.com/album/fc07f9893c9c4412ffe519b1.html?picindex=7)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+电脑屏幕不够大的话体验还是不如移动设备好的，只是觉得好玩而已。
+
+
+
+* * *
+
+
+
+**BlueStacks 简介：**
+
+BlueStacks 为 Windows 系统开发了 Android 运行时环境，让 Android 应用能运行在微软的操作系统上.
+
+2011年底它发布了 Windows 7 的早期测试版
+
+2012年3月27日，它发布了 beta 版本。
+
+App Player 是一种模拟器，让 Android 应用程序运行在 Windows 7、Vista 和 XP 上，可以运行包括《愤怒小鸟》和《水果忍者》在内的 45 万应用程序。除了 PC 外，它也支持 Windows 平板电脑。
+
+
+
+在智能手机、平板电脑大行其道的今天，越来越多的人已经将传统电脑上的娱乐应用转移到新的智能设备上面。对于很多使用安卓手机和平板电脑的用户来说，丰富的应用和出色的娱乐性能使其津津乐道。随着安卓经典游戏的诞生，一批具有代表性的经典游戏开始成为人们茶余饭后乐此不疲的娱乐活动。虽然如此，但是手机屏幕小，续航短，性能较低的特点使其仍然无法与传统电脑抗衡。于是很多人就想能不能把手机上的经典游戏拿到电脑上面玩呢，除了一般的安装开发工具的方法以外，有没有简单的方法呢，就想安装游戏一样简单。其实这样的软件已经有了，这就是BlueStacks！
+
+BlueStacks是一款在PC上面运行，安装简单，功能强大的安卓软件模拟器，可以运行绝大多数安卓的应用，方便一般大众玩家的使用，是我们可以把那些经典的、好玩的软件搬到大屏幕的PC上来，再配合触控显示器，体验绝佳的游戏体验。
+
+视频：
+

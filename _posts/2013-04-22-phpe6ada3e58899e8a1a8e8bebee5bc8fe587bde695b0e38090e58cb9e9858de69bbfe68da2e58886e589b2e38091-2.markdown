@@ -1,0 +1,48 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 11:49:41+00:00
+layout: post
+slug: php%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e5%87%bd%e6%95%b0%e3%80%90%e5%8c%b9%e9%85%8d%e6%9b%bf%e6%8d%a2%e5%88%86%e5%89%b2%e3%80%91-2
+title: PHP正则表达式函数【匹配替换分割】
+wordpress_id: 453
+categories:
+- 未分类
+---
+
+[php]
+preg_match_all();                //匹配（采集）
+
+ $mode = "/{(.*)}/U";            //防止贪婪匹配
+
+ $source = "dsf{title}fdsa{author}rdgf{content}";
+
+ if(preg_match_all($mode, $source, $arr))
+ 	print_r ($arr);
+ else
+ 	echo "失败";
+
+preg_replace();                    //替换
+
+$mode = array("/{title}/", "/{author}/", "/{content}/");
+ $met = array("PHP中文", "xjh", "学习门户");
+ $source = "标题：{title}<br />作者:{author}<br />内容：{content}";
+
+ //echo str_replace("{title}", "中文", $source);
+ echo preg_replace($mode, $met, $source);
+
+ $mode = "/([a-z])/ie";
+ $source = "123122a22453b453c";
+
+ echo preg_replace($mode, "md5(\\1)", $source);        //$source 后可选参数控制替换次数
+
+ preg_split();                    //分割
+
+$mode = "/[,.]/";
+
+ $source = "123,122.a224,53b453c";
+
+ $arr = preg_split($mode, $source);
+ print_r($arr);
+
+[/php]

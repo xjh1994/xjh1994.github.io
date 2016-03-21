@@ -1,0 +1,1095 @@
+---
+author: xjh1994
+comments: true
+date: 2015-10-14 07:07:26+00:00
+layout: post
+slug: '%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e5%8f%8d%e8%bd%ac%e5%8d%95%e9%93%be%e8%a1%a8%e5%9b%be%e6%96%87%e8%a7%a3%e6%9e%90'
+title: '[数据结构]反转单链表图文解析（转）'
+wordpress_id: 609
+categories:
+- 数据结构
+---
+
+如何把一个单链表进行反转？
+
+
+
+
+方法1：将单链表储存为数组，然后按照数组的索引逆序进行反转。
+
+
+
+
+方法2：使用3个指针遍历单链表，逐个链接点进行反转。
+
+
+
+
+方法3：从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，最后将第一个节点挪到新表的表尾。
+
+
+
+
+方法4:   递归(相信我们都熟悉的一点是，对于树的大部分问题，基本可以考虑用递归来解决。但是我们不太熟悉的一点是，对于单链表的一些问题，也可以使用递归。可以认为单链表是一颗永远只有左(右)子树的树，因此可以考虑用递归来解决。或者说，因为单链表本身的结构也有自相似的特点，所以可以考虑用递归来解决)
+
+
+
+
+
+
+
+方法1：
+
+
+
+
+浪费空间。
+
+
+
+
+
+
+
+
+
+
+方法2:
+
+
+
+
+使用p和q两个指针配合工作，使得两个节点间的指向反向，同时用r记录剩下的链表。
+
+
+
+
+
+
+
+p = head;
+
+
+
+
+q = head->next;
+
+
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_13175655237TGo.gif)
+
+
+
+
+
+
+
+head->next = NULL;
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317565566SEbH.gif)
+
+
+
+
+
+现在进入循环体，这是第一次循环。
+
+
+
+
+r = q->next;
+
+
+
+
+q->next = p;
+
+
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317565598ry1Z.gif)
+
+
+
+
+
+
+
+p = q;
+
+
+q =r;
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317565630444j.gif)
+
+
+
+
+
+
+
+第二次循环。
+
+
+
+
+r = q->next
+
+
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317565688wHMQ.gif)
+
+
+
+
+
+
+
+q->next = p;
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_13175657179L43.gif)
+
+
+
+
+
+p = q;
+
+
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317565750az2H.gif)
+
+
+
+
+
+
+
+q = r
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317565777WHOA.gif)
+
+
+第三次循环。。。。。
+
+
+
+
+
+
+
+
+
+
+具体代码如下
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**[cpp]** [view plain](http://blog.csdn.net/feliciafay/article/details/6841115#) [copy](http://blog.csdn.net/feliciafay/article/details/6841115#)
+
+
+
+ [print](http://blog.csdn.net/feliciafay/article/details/6841115#)[?](http://blog.csdn.net/feliciafay/article/details/6841115#)[![在CODE上查看代码片](https://code.csdn.net/assets/CODE_ico.png)](https://code.csdn.net/snippets/170513)[![派生到我的代码片](https://code.csdn.net/assets/ico_fork.svg)](https://code.csdn.net/snippets/170513/fork)
+
+
+
+
+
+
+
+
+	
+  1. ActList* ReverseList2(ActList* head)  
+
+	
+  2. {  
+
+	
+  3.     //ActList* temp=new ActList;  
+
+	
+  4.  if(NULL==head|| NULL==head->next) return head;    //少于两个节点没有反转的必要。  
+
+	
+  5.     ActList* p;  
+
+	
+  6.     ActList* q;  
+
+	
+  7.     ActList* r;  
+
+	
+  8.     p = head;    
+
+	
+  9.     q = head->next;  
+
+	
+  10.     head->next = NULL; //旧的头指针是新的尾指针，next需要指向NULL  
+
+	
+  11.     while(q){  
+
+	
+  12.         r = q->next; //先保留下一个step要处理的指针  
+
+	
+  13.         q->next = p; //然后p q交替工作进行反向  
+
+	
+  14.         p = q;   
+
+	
+  15.         q = r;   
+
+	
+  16.     }  
+
+	
+  17.     head=p; // 最后q必然指向NULL，所以返回了p作为新的头指针  
+
+	
+  18.     return head;      
+
+	
+  19. }  
+
+
+
+
+
+
+
+
+updated 2014-01-24，重新非IDE环境写了一遍
+如果觉得上面的先成环再断环的过程不太好理解，那么可以考虑下面这个办法，增加一个中间变量，使用三个变量来实现。
+
+
+
+
+
+
+
+
+
+
+
+**[cpp]** [view plain](http://blog.csdn.net/feliciafay/article/details/6841115#) [copy](http://blog.csdn.net/feliciafay/article/details/6841115#)
+
+
+
+ [print](http://blog.csdn.net/feliciafay/article/details/6841115#)[?](http://blog.csdn.net/feliciafay/article/details/6841115#)[![在CODE上查看代码片](https://code.csdn.net/assets/CODE_ico.png)](https://code.csdn.net/snippets/170513)[![派生到我的代码片](https://code.csdn.net/assets/ico_fork.svg)](https://code.csdn.net/snippets/170513/fork)
+
+
+
+
+
+
+
+
+	
+  1. struct ListNode{  
+
+	
+  2.     int val;  
+
+	
+  3.     ListNode* next;  
+
+	
+  4.     ListNode(int a):val(a),next(NULL){}  
+
+	
+  5. };  
+
+	
+  6. ListNode* reverseLinkedList3(ListNode* head){  
+
+	
+  7.         if(head==NULL||head->next==NULL)  
+
+	
+  8.             return  head;  
+
+	
+  9.         ListNode* p=head; //指向head  
+
+	
+  10.         ListNode* r=head->next; //指向待搬运的节点，即依次指向从第2个节点到最后一个节点的所有节点  
+
+	
+  11.         ListNode* m=NULL; //充当搬运工作用的节点  
+
+	
+  12.         ListNode* tail=head->next;  
+
+	
+  13.         while(r!=NULL){  //bug2 循环语句写错了, while写成了if  
+
+	
+  14.             m=r;  
+
+	
+  15.             r=r->next;  
+
+	
+  16.             m->next=p->next;  
+
+	
+  17.             p->next=m;  
+
+	
+  18.             //if(r!=NULL)  
+
+	
+  19.                 //std::cout<<"m="<<m->val<<" ,p="<<p->val<<" ,r="<<r->val<<std::endl;  
+
+	
+  20.             //else  
+
+	
+  21.                 //std::cout<<"m="<<m->val<<" ,p="<<p->val<<" ,r=NULL"<<std::endl;  
+
+	
+  22.         }  
+
+	
+  23.         head=p->next;  
+
+	
+  24.         tail->next=p;  
+
+	
+  25.         p->next=NULL;  
+
+	
+  26.         tail=p;  
+
+	
+  27.         return head; // bug1 忘记了return  
+
+	
+  28.     }  
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+方法3
+
+
+
+
+还是先看图，
+
+
+
+
+![](http://hi.csdn.net/attachment/201110/2/0_1317566020p320.gif)
+
+
+
+
+从图上观察，方法是：对于一条链表，从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，(N-1)次这样的操作结束之后将第1个节点挪到新表的表尾即可。
+
+
+
+
+代码如下:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**[cpp]** [view plain](http://blog.csdn.net/feliciafay/article/details/6841115#) [copy](http://blog.csdn.net/feliciafay/article/details/6841115#)
+
+
+
+ [print](http://blog.csdn.net/feliciafay/article/details/6841115#)[?](http://blog.csdn.net/feliciafay/article/details/6841115#)[![在CODE上查看代码片](https://code.csdn.net/assets/CODE_ico.png)](https://code.csdn.net/snippets/170513)[![派生到我的代码片](https://code.csdn.net/assets/ico_fork.svg)](https://code.csdn.net/snippets/170513/fork)
+
+
+
+
+
+
+
+
+	
+  1. ActList* ReverseList3(ActList* head)  
+
+	
+  2. {  
+
+	
+  3.     ActList* p;  
+
+	
+  4.     ActList* q;  
+
+	
+  5.     p=head->next;  
+
+	
+  6.     while(p->next!=NULL){  
+
+	
+  7.         q=p->next;  
+
+	
+  8.         p->next=q->next;  
+
+	
+  9.         q->next=head->next;  
+
+	
+  10.         head->next=q;  
+
+	
+  11.     }  
+
+	
+  12.   
+
+	
+  13.     p->next=head;//相当于成环  
+
+	
+  14.     head=p->next->next;//新head变为原head的next  
+
+	
+  15.     p->next->next=NULL;//断掉环  
+
+	
+  16.     return head;    
+
+	
+  17. }  
+
+
+
+
+
+
+
+
+
+
+
+附:
+
+
+
+
+完整的链表创建，显示，反转代码:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**[cpp]** [view plain](http://blog.csdn.net/feliciafay/article/details/6841115#) [copy](http://blog.csdn.net/feliciafay/article/details/6841115#)
+
+
+
+ [print](http://blog.csdn.net/feliciafay/article/details/6841115#)[?](http://blog.csdn.net/feliciafay/article/details/6841115#)[![在CODE上查看代码片](https://code.csdn.net/assets/CODE_ico.png)](https://code.csdn.net/snippets/170513)[![派生到我的代码片](https://code.csdn.net/assets/ico_fork.svg)](https://code.csdn.net/snippets/170513/fork)
+
+
+
+
+
+
+
+
+	
+  1. //创建:用q指向当前链表的最后一个节点；用p指向即将插入的新节点。  
+
+	
+  2. //反向:用p和q反转工作，r记录链表中剩下的还未反转的部分。  
+
+	
+  3.   
+
+	
+  4. #include "stdafx.h"  
+
+	
+  5. #include <iostream>  
+
+	
+  6. using namespace std;  
+
+	
+  7.   
+
+	
+  8. struct ActList  
+
+	
+  9. {  
+
+	
+  10.     char ActName[20];  
+
+	
+  11.     char Director[20];  
+
+	
+  12.     int Mtime;  
+
+	
+  13.     ActList *next;  
+
+	
+  14. };  
+
+	
+  15.   
+
+	
+  16. ActList* head;  
+
+	
+  17.   
+
+	
+  18. ActList*  Create()  
+
+	
+  19. {//start of CREATE()  
+
+	
+  20.     ActList* p=NULL;  
+
+	
+  21.     ActList* q=NULL;  
+
+	
+  22.     head=NULL;  
+
+	
+  23.     int Time;  
+
+	
+  24.     cout<<"Please input the length of the movie."<<endl;  
+
+	
+  25.     cin>>Time;  
+
+	
+  26.     while(Time!=0){  
+
+	
+  27.     p=new ActList;  
+
+	
+  28.     //类似表达:  TreeNode* node = new TreeNode;//Noice that [new] should be written out.  
+
+	
+  29.     p->Mtime=Time;  
+
+	
+  30.     cout<<"Please input the name of the movie."<<endl;  
+
+	
+  31.     cin>>p->ActName;  
+
+	
+  32.     cout<<"Please input the Director of the movie."<<endl;  
+
+	
+  33.     cin>>p->Director;  
+
+	
+  34.   
+
+	
+  35.     if(head==NULL)  
+
+	
+  36.     {  
+
+	
+  37.     head=p;  
+
+	
+  38.     }  
+
+	
+  39.     else  
+
+	
+  40.     {  
+
+	
+  41.     q->next=p;  
+
+	
+  42.     }  
+
+	
+  43.     q=p;  
+
+	
+  44.     cout<<"Please input the length of the movie."<<endl;  
+
+	
+  45.     cin>>Time;  
+
+	
+  46.     }  
+
+	
+  47.     if(head!=NULL)  
+
+	
+  48.     q->next=NULL;  
+
+	
+  49.     return head;  
+
+	
+  50.   
+
+	
+  51. }//end of CREATE()  
+
+	
+  52.   
+
+	
+  53.   
+
+	
+  54. void DisplayList(ActList* head)  
+
+	
+  55. {//start of display  
+
+	
+  56.     cout<<"show the list of programs."<<endl;  
+
+	
+  57.     while(head!=NULL)  
+
+	
+  58.     {  
+
+	
+  59.         cout<<head->Mtime<<"\t"<<head->ActName<<"\t"<<head->Director<<"\t"<<endl;  
+
+	
+  60.         head=head->next;  
+
+	
+  61.     }  
+
+	
+  62. }//end of display  
+
+	
+  63.   
+
+	
+  64.   
+
+	
+  65. ActList* ReverseList2(ActList* head)  
+
+	
+  66. {  
+
+	
+  67.     //ActList* temp=new ActList;  
+
+	
+  68.  if(NULL==head|| NULL==head->next) return head;      
+
+	
+  69.     ActList* p;  
+
+	
+  70.     ActList* q;  
+
+	
+  71.     ActList* r;  
+
+	
+  72.     p = head;    
+
+	
+  73.     q = head->next;  
+
+	
+  74.     head->next = NULL;  
+
+	
+  75.     while(q){  
+
+	
+  76.         r = q->next; //  
+
+	
+  77.         q->next = p;      
+
+	
+  78.         p = q; //  
+
+	
+  79.         q = r; //  
+
+	
+  80.     }  
+
+	
+  81.     head=p;  
+
+	
+  82.     return head;      
+
+	
+  83. }  
+
+	
+  84.   
+
+	
+  85. ActList* ReverseList3(ActList* head)  
+
+	
+  86. {  
+
+	
+  87.     ActList* p;  
+
+	
+  88.     ActList* q;  
+
+	
+  89.     p=head->next;  
+
+	
+  90.     while(p->next!=NULL){  
+
+	
+  91.         q=p->next;  
+
+	
+  92.         p->next=q->next;  
+
+	
+  93.         q->next=head->next;  
+
+	
+  94.         head->next=q;  
+
+	
+  95.     }  
+
+	
+  96.   
+
+	
+  97.     p->next=head;//相当于成环  
+
+	
+  98.     head=p->next->next;//新head变为原head的next  
+
+	
+  99.     p->next->next=NULL;//断掉环  
+
+	
+  100.     return head;    
+
+	
+  101. }  
+
+	
+  102. int main(int argc, char* argv[])  
+
+	
+  103. {  
+
+	
+  104. //  DisplayList(Create());  
+
+	
+  105. //  DisplayList(ReverseList2(Create()));  
+
+	
+  106.     DisplayList(ReverseList3(Create()));  
+
+	
+  107.     return 0;  
+
+	
+  108. }  
+
+
+
+
+
+
+
+
+
+
+方法4:  递归
+
+
+
+
+updated: 2014-01-24
+
+
+
+
+因为发现大部分问题都可以从递归角度想想，所以这道题目也从递归角度想了想。
+
+
+
+
+现在需要把A->B->C->D进行反转，
+可以先假设B->C->D已经反转好，已经成为了D->C->B,那么接下来要做的事情就是将D->C->B看成一个整体，让这个整体的next指向A，所以问题转化了反转B->C->D。那么，
+可以先假设C->D已经反转好，已经成为了D->C,那么接下来要做的事情就是将D->C看成一个整体，让这个整体的next指向B，所以问题转化了反转C->D。那么，
+可以先假设D(其实是D->NULL)已经反转好，已经成为了D(其实是head->D),那么接下来要做的事情就是将D(其实是head->D)看成一个整体，让这个整体的next指向C，所以问题转化了反转D。
+上面这个过程就是递归的过程，这其中最麻烦的问题是，如果保留新链表的head指针呢？想到了两个办法。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**[cpp]** [view plain](http://blog.csdn.net/feliciafay/article/details/6841115#) [copy](http://blog.csdn.net/feliciafay/article/details/6841115#)
+
+
+
+ [print](http://blog.csdn.net/feliciafay/article/details/6841115#)[?](http://blog.csdn.net/feliciafay/article/details/6841115#)[![在CODE上查看代码片](https://code.csdn.net/assets/CODE_ico.png)](https://code.csdn.net/snippets/170513)[![派生到我的代码片](https://code.csdn.net/assets/ico_fork.svg)](https://code.csdn.net/snippets/170513/fork)
+
+
+
+
+
+
+
+
+	
+  1. // 递归版的第一种实现，借助类的成员变量m_phead来表示新链表的头指针。  
+
+	
+  2. struct ListNode{  
+
+	
+  3.     int val;  
+
+	
+  4.     ListNode* next;  
+
+	
+  5.     ListNode(int a):val(a),next(NULL){}  
+
+	
+  6. };  
+
+	
+  7.   
+
+	
+  8. class Solution{  
+
+	
+  9.      ListNode* reverseLinkedList4(ListNode* head){ //输入: 旧链表的头指针  
+
+	
+  10.         if(head==NULL)  
+
+	
+  11.             return NULL;  
+
+	
+  12.         if(head->next==NULL){  
+
+	
+  13.             m_phead=head;  
+
+	
+  14.             return head;  
+
+	
+  15.         }  
+
+	
+  16.         ListNode* new_tail=reverseLinkedList4(head->next);  
+
+	
+  17.         new_tail->next=head;  
+
+	
+  18.         head->next=NULL;  
+
+	
+  19.         return head; //输出: 新链表的尾指针  
+
+	
+  20.      }  
+
+	
+  21.     ListNode* m_phead=NULL;//member variable defined for reverseLinkedList4(ListNode* head)  
+
+	
+  22. };  
+
+
+
+
+
+
+
+
+
+
+
+第二个办法是，增加一个引用型参数 new_head，它用来保存新链表的头指针。
+
+
+
+
+
+
+
+
+
+
+
+
+**[cpp]** [view plain](http://blog.csdn.net/feliciafay/article/details/6841115#) [copy](http://blog.csdn.net/feliciafay/article/details/6841115#)
+
+
+
+ [print](http://blog.csdn.net/feliciafay/article/details/6841115#)[?](http://blog.csdn.net/feliciafay/article/details/6841115#)[![在CODE上查看代码片](https://code.csdn.net/assets/CODE_ico.png)](https://code.csdn.net/snippets/170513)[![派生到我的代码片](https://code.csdn.net/assets/ico_fork.svg)](https://code.csdn.net/snippets/170513/fork)
+
+
+
+
+
+
+
+
+	
+  1. struct ListNode{  
+
+	
+  2.     int val;  
+
+	
+  3.     ListNode* next;  
+
+	
+  4.     ListNode(int a):val(a),next(NULL){}  
+
+	
+  5. };  
+
+	
+  6.   
+
+	
+  7. class Solution{  
+
+	
+  8.     ListNode* reverseLinkedList5(ListNode* head, ListNode* & new_head){ //输入参数head为旧链表的头指针。new_head为新链表的头指针。  
+
+	
+  9.         if(head==NULL)  
+
+	
+  10.             return NULL;  
+
+	
+  11.         if(head->next==NULL){  
+
+	
+  12.             new_head=head; //当处理到了旧链表的尾指针，也就是新链表的头指针时，对new_head进行赋值。因为是引用型参数，所以在接下来调用中new_head的值逐层传递下去。  
+
+	
+  13.             return head;  
+
+	
+  14.         }  
+
+	
+  15.         ListNode* new_tail=reverseLinkedList5(head->next,new_head);  
+
+	
+  16.         new_tail->next=head;  
+
+	
+  17.         head->next=NULL;  
+
+	
+  18.         return head; //输出参数head为新链表的尾指针。  
+
+	
+  19.     }  
+
+	
+  20. };  
+
+
+转自CSDN：http://blog.csdn.net/feliciafay/article/details/6841115
+
+

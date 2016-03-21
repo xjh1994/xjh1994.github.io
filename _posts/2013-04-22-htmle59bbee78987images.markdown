@@ -1,0 +1,76 @@
+---
+author: xjh1994
+comments: true
+date: 2013-04-22 10:22:50+00:00
+layout: post
+slug: html%e5%9b%be%e7%89%87images
+title: HTML图片(Images)
+wordpress_id: 165
+categories:
+- HTML&amp;CSS
+tags:
+- HTML
+- 图片
+---
+
+用 <img> 这个 Tag 可以在HTML里面插入图片。最基本的语法如下：
+
+    
+    <img src="url">
+
+
+url表示图片的路径和文件名。比如 url 可以是 [images/logo/blabla_logo01.gif](http://www.admin5.com/html/images/logo/blabla_logo01.gif)，也可以是个相对路径 "../images/logo/blabla_logo01.gif"。
+
+[示例](http://www.admin5.com/html/html_examples/045_insert_image.html)
+
+
+## 图片alt属性
+
+
+<img>中有一个alt属性，英文叫alternate text。例句如下：
+
+    
+    <img src = "../images/html_tutorials/smile.jpg" alt="smile face">
+
+
+假使浏览器没有载入图片的功能，浏览器就会转而显示Alt属性的值。
+
+其实，现在大多数浏览器都支持图片载入。在此介绍Alt属性，是因为它的另外一个重要功能。目前搜索引擎抓取工具无法识别图像中所含的文字，所以用ALT属性写上图片的说明，便于搜索引擎抓取你网页的内容。
+
+[示例](http://www.admin5.com/html/html_examples/048_image_alt.html)
+
+
+## 图片align属性
+
+
+用align属性，可以改变图片的垂直(居上、居中、居下)对齐方式和水平对齐方式(居左、居中、居右)。
+
+[示例](http://www.admin5.com/html/html_examples/046_image_align.html)
+
+
+## 图片的大小
+
+
+在缺省状况下，图片显示原有的大小。你可以用height和width属性改变图片的大小。不过图片的大小一旦被改变，图片会相应放大或缩小，显示出来的结果可能会很难看。
+
+[示例](http://www.admin5.com/html/html_examples/047_image_size.html)
+
+
+## 建议
+
+
+图片相对文字，所占的字节数较多，比如一个全屏的图片，即使经过压缩，也要占去大约50k字节，这相当于25000字的文本。因此浏览器载入图片比较费时，建议一个HTML文件里不要包含过多的图片，否则会影响你的网页显示速度。
+
+
+## 更多示例
+
+
+[背景图片](http://www.admin5.com/html/html_examples/013_add_background_image.html)
+
+这个示例演示如何将一个图片作为HTML网页的背景图片。
+
+[将一个图片作为一个超链接](http://www.admin5.com/html/html_examples/018_set_image_as_hyperlink.html)
+
+这个示例演示了如何将一个图片作为一个超链接，即点击一个图片，可以连接到其它文件。
+
+转自[站长网](http://www.admin5.com/html/html_tutorials/030_html_frame.html)

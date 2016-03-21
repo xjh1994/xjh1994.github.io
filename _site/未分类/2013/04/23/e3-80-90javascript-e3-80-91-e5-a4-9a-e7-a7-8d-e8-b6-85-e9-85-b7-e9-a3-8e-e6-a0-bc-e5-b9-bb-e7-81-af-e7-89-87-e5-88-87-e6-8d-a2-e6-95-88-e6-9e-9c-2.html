@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>【JavaScript】多种超酷风格幻灯片切换效果</title>
+  <meta name="description" content="介绍一款多达十七种不同切换方式的幻灯片特效，底部按钮可以轻松控制切换样式，效果很不错">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2013/04/23/e3-80-90javascript-e3-80-91-e5-a4-9a-e7-a7-8d-e8-b6-85-e9-85-b7-e9-a3-8e-e6-a0-bc-e5-b9-bb-e7-81-af-e7-89-87-e5-88-87-e6-8d-a2-e6-95-88-e6-9e-9c-2.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">【JavaScript】多种超酷风格幻灯片切换效果</h1>
+    <p class="post-meta"><time datetime="2013-04-23T19:59:21+08:00" itemprop="datePublished">Apr 23, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>介绍一款多达十七种不同切换方式的幻灯片特效，底部按钮可以轻松控制切换样式，效果很不错</p>
+
+<p>[code lang=”js”]
+(function($){
+$.fn.highlight = function(element_params){
+var defaults = {
+// show source code tab
+source: true,
+// show zebra
+zebra: true,
+//indents: “tabs” or “space”
+indent: ‘tabs’,
+//ordered or unordered list
+list: ‘ol’
+}
+var params = $.extend({}, defaults, element_params);
+return this.each(function(){
+var code_container = $(this);
+var code_class = $(code_container).attr(‘class’);
+var code_lang = $(code_container).attr(‘lang’);
+var code_lang_class = ‘’;
+if(code_lang!=’’) {
+code_lang_class = ‘ ‘+code_lang;
+}
+$(code_container).wrap(‘&lt;div class=”highlight’+code_lang_class+’“&gt;&lt;/div&gt;’);
+var highlight_container = $(code_container).parent();
+var source = code_container.html();
+source = source.replace(/&lt;/gm, ‘&amp;lt;’);
+//replace tabs with spaces
+if(params.indent==’space’) {
+source = source.replace(/\t/g,’ ‘);
+}
+var code = source;
+//hightlight
+switch(code_lang) {
+case ‘html’:
+code = $.highlightCode.hightlight_html(code);
+break;
+case ‘css’:
+code = $.highlightCode.hightlight_css(code);
+break;
+case ‘php’:
+code = $.highlightCode.hightlight_php(code);
+break;
+default:
+code = $.highlightCode.hightlight(code);
+break;
+}
+code = code.replace(/(?:\r\n?|\n)$/, ‘’);
+code = ‘&lt;‘+params.list+’&gt;&lt;li&gt;‘+code.split(/\r\n|\n/).join(‘\n&lt;/li&gt;&lt;li&gt;’)+’\n&lt;/li&gt;&lt;/’+params.list+’&gt;’;
+//add source and tabs
+if(params.source==true) {
+source = ‘&lt;pre class=”source”&gt;‘+source+’&lt;/pre&gt;’;
+var tabs = ‘&lt;ul class=”tabs”&gt;&lt;li class=”code active”&gt;code&lt;/li&gt;&lt;li class=”source”&gt;source&lt;/li&gt;&lt;/ul&gt;’;
+$(code_container).after(source);
+$(code_container).before(tabs);
+}
+//init tabs
+if(params.source==true) {
+var tabs = $(highlight_container).find(‘ul.tabs li’);
+$.each(tabs , function(i,tab){
+$(tab).click(function() {
+$(tabs).removeClass(‘active’);
+var tab_class = $(tab).attr(‘class’);
+$(highlight_container).find(‘pre[class!=”‘+tab_class+’”]’).css(‘display’, ‘none’);
+$(highlight_container).find(‘pre[class^=”‘+tab_class+’”]’).css(‘display’, ‘block’);
+$(tab).addClass(‘active’);
+});
+});
+}
+//replace instead of html, because of IE bug
+$(code_container).replaceWith(‘&lt;pre class=”‘+code_class+’“&gt;‘+code+’&lt;/pre&gt;’);
+//zebra
+if(params.zebra==true) {
+$(highlight_container).find(‘pre[class=”‘+code_class+’”] ‘+params.list+’ li:even’).addClass(‘even’);
+}
+});
+};
+$.highlightCode = {
+//DEFAULT
+hightlight: function(code) {
+var comments = []; // store comments
+code = code
+//replace keywords
+.replace(/(var|function|typeof|new|return|if|for|in|while|break|do|continue|case|switch)([^a-z0-9$<em>])/gi,’&lt;span class=”kwd”&gt;$1&lt;/span&gt;$2’)
+//replace keywords
+.replace(/({|}|]|[||)/gi,’&lt;span class=”kwd”&gt;$1&lt;/span&gt;’)
+//replace strings
+.replace(/(‘.*?’)/g,’&lt;span class=”str”&gt;$1&lt;/span&gt;’)
+//replace multiline comments
+.replace(/\/*([\s\S]*?)*\//g, function(m, t)
+{ return ‘\0C’+push(comments, multiline_comments(m))+’\0’; })
+.replace(/\0C(\d+)\0/g, function(m, i)
+{ return comments[i]; })
+//replace one line comments
+.replace(/\/\/(.*$)/gm,’&lt;span class=”com”&gt;//$1&lt;/span&gt;’)
+//replace functons
+.replace(/([a-z_$][a-z0-9</em>]<em>)(/gi,’&lt;span class=”fnc”&gt;$1&lt;/span&gt;(‘);
+return code;
+},
+//PHP
+hightlight_php: function(code) {
+var comments = []; // store comments
+var funcs = ‘abs acos acosh addcslashes addslashes ‘ +
+‘array_change_key_case array_chunk array_combine array_count_values array_diff ‘+
+‘array_diff_assoc array_diff_key array_diff_uassoc array_diff_ukey array_fill ‘+
+‘array_filter array_flip array_intersect array_intersect_assoc array_intersect_key ‘+
+‘array_intersect_uassoc array_intersect_ukey array_key_exists array_keys array_map ‘+
+‘array_merge array_merge_recursive array_multisort array_pad array_pop array_product ‘+
+‘array_push array_rand array_reduce array_reverse array_search array_shift ‘+
+‘array_slice array_splice array_sum array_udiff array_udiff_assoc ‘+
+‘array_udiff_uassoc array_uintersect array_uintersect_assoc ‘+
+‘array_uintersect_uassoc array_unique array_unshift array_values array_walk ‘+
+‘array_walk_recursive atan atan2 atanh base64_decode base64_encode base_convert ‘+
+‘basename bcadd bccomp bcdiv bcmod bcmul bindec bindtextdomain bzclose bzcompress ‘+
+‘bzdecompress bzerrno bzerror bzerrstr bzflush bzopen bzread bzwrite ceil chdir ‘+
+‘checkdate checkdnsrr chgrp chmod chop chown chr chroot chunk_split class_exists ‘+
+‘closedir closelog copy cos cosh count count_chars date decbin dechex decoct ‘+
+‘deg2rad delete ebcdic2ascii echo empty end ereg ereg_replace eregi eregi_replace error_log ‘+
+‘error_reporting escapeshellarg escapeshellcmd eval exec exit exp explode extension_loaded ‘+
+‘feof fflush fgetc fgetcsv fgets fgetss file_exists file_get_contents file_put_contents ‘+
+‘fileatime filectime filegroup fileinode filemtime fileowner fileperms filesize filetype ‘+
+‘floatval flock floor flush fmod fnmatch fopen fpassthru fprintf fputcsv fputs fread fscanf ‘+
+‘fseek fsockopen fstat ftell ftok getallheaders getcwd getdate getenv gethostbyaddr gethostbyname ‘+
+‘gethostbynamel getimagesize getlastmod getmxrr getmygid getmyinode getmypid getmyuid getopt ‘+
+‘getprotobyname getprotobynumber getrandmax getrusage getservbyname getservbyport gettext ‘+
+‘gettimeofday gettype glob gmdate gmmktime in_array ini_alter ini_get ini_get_all ini_restore ini_set ‘+
+‘interface_exists intval ip2long is_a is_array is_bool is_callable is_dir is_double ‘+
+‘is_executable is_file is_finite is_float is_infinite is_int is_integer is_link is_long ‘+
+‘is_nan is_null is_numeric is_object is_readable is_real is_resource is_scalar is_soap_fault ‘+
+‘is_string is_subclass_of is_uploaded_file is_writable is_writeable mkdir mktime nl2br ‘+
+‘parse_ini_file parse_str parse_url passthru pathinfo readlink realpath rewind rewinddir rmdir ‘+
+‘round str_ireplace str_pad str_repeat str_replace str_rot13 str_shuffle str_split ‘+
+‘str_word_count strcasecmp strchr strcmp strcoll strcspn strftime strip_tags stripcslashes ‘+
+‘stripos stripslashes stristr strlen strnatcasecmp strnatcmp strncasecmp strncmp strpbrk ‘+
+‘strpos strptime strrchr strrev strripos strrpos strspn strstr strtok strtolower strtotime ‘+
+‘strtoupper strtr strval substr substr_compare’;
+var keywords = ‘and or xor array as break case ‘ +
+‘cfunction const continue declare default die do else ‘ +
+‘elseif enddeclare endfor endforeach endif endswitch endwhile ‘ +
+‘extends for foreach function include include_once global if ‘ +
+‘new old_function return static switch use require require_once ‘ +
+‘while abstract interface public implements extends private protected throw’;
+funcs = new RegExp(get_keywords(funcs), ‘gi’);
+keywords = new RegExp(get_keywords(keywords), ‘gi’);
+code = code
+//replace strings
+.replace(/(“.</em>?”)/g,’&lt;span class=”str”&gt;$1&lt;/span&gt;’)
+.replace(/(‘.<em>?’)/g,’&lt;span class=”str”&gt;$1&lt;/span&gt;’)
+//replace multiline comments
+.replace(/\/*([\s\S]</em>?)*\//g, function(m, t)
+{ return ‘\0C’+push(comments, multiline_comments(m))+’\0’; })
+.replace(/\0C(\d+)\0/g, function(m, i)
+{ return comments[i]; })
+//replace one line comments
+.replace(/\/\/(.<em>$)/gm,’&lt;span class=”com”&gt;//$1&lt;/span&gt;’)
+//replace variables
+.replace(/$(\w+)/g,’&lt;span class=”var”&gt;$$$1&lt;/span&gt;’)
+//replace functions
+.replace(funcs,’&lt;span class=”fnc”&gt;$1&lt;/span&gt;$2’)
+//replace keywords
+.replace(keywords,’&lt;span class=”kwd”&gt;$1&lt;/span&gt;$2’);
+return code;
+},
+//CSS
+hightlight_css: function(code) {
+var comments = []; // store comments
+var keywords = ‘background-color background-image background-position ‘ +
+‘background-repeat background border-collapse border-color border-spacing border-style border-top ‘ +
+‘border-right border-bottom border-left border-top-color border-right-color border-bottom-color border-left-color ‘ +
+‘border-top-style border-right-style border-bottom-style border-left-style border-top-width border-right-width ‘ +
+‘border-bottom-width border-left-width border-width border color cursor direction display ‘ +
+‘float font-size-adjust font-family font-size font-stretch font-style font-variant font-weight font ‘ +
+‘height left letter-spacing line-height list-style-image list-style-position list-style-type list-style margin-top ‘ +
+‘margin-right margin-bottom margin-left margin max-height max-width min-height min-width ‘ +
+‘outline-color outline-style outline-width outline overflow padding-top padding-right padding-bottom padding-left padding position’ +
+‘quotes right size src table-layout text-align top text-decoration text-indent text-shadow text-transform ‘ +
+‘vertical-align visibility white-space width word-spacing x-height z-index position -moz-border-radius -webkit-border-radius border-radius opacity’;
+var values = ‘absolute all attr auto baseline behind below black blink block blue bold bolder ‘+
+‘both bottom capitalize caption center center-left center-right circle close-quote collapse compact ‘+
+‘continuous cursive dashed decimal default digits disc dotted double embed expanded fixed format ‘+
+‘gray green groove help hidden hide high higher icon inline-table inline inset inside invert italic ‘+
+‘justify large larger left-side left leftwards level line-through list-item ‘+
+‘lowercase lower low ltr marker medium middle move none no-repeat normal nowrap oblique olive once outset ‘+
+‘outside overline pointer print purple red relative repeat repeat-x repeat-y rgb right rtl screen scroll show silver slower slow ‘+
+‘small small-caps small-caption smaller soft solid square s-resize static sub super ‘+
+‘table-caption table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group ‘+
+‘text-bottom text-top thick thin top transparent underline upper-alpha uppercase upper-latin ‘+
+‘upper-roman url visible wait white wider w-resize x-fast x-high x-large x-low x-small x-soft yellow’;
+var fonts = ‘[mM]onospace [tT]ahoma [vV]erdana [aA]rial [hH]elvetica [sS]ans-serif [sS]erif [cC]ourier New mono sans serif’;
+keywords = new RegExp(get_keywords(keywords), ‘gi’);
+values = new RegExp(get_keywords(values), ‘gi’);
+fonts = new RegExp(get_keywords(fonts), ‘gi’);
+code = code
+//replace comments
+.replace(/\/*([\s\S]</em>?)*\//g, function(m, t)
+{ return ‘\0C’+push(comments, multiline_comments(m))+’\0’; })
+.replace(/\0C(\d+)\0/g, function(m, i)
+{ return comments[i]; })
+//replace keywords
+.replace(keywords,’&lt;span class=”kwd”&gt;$1&lt;/span&gt;$2’)
+//replace values
+.replace(values,’&lt;span class=”pln”&gt;$1&lt;/span&gt;$2’)
+//replace fonts
+.replace(fonts,’&lt;span class=”str”&gt;$1&lt;/span&gt;$2’)
+//replace hex colors
+.replace(/(#[a-fA-F0-9]{3,6})/gi,’&lt;span class=”lit”&gt;$1&lt;/span&gt;’)
+//replace sizes
+.replace(/(-?\d+)(.\d+)?(px|em|pt|:|\%|)/gi,’&lt;span class=”lit”&gt;$1$3&lt;/span&gt;’);
+return code;
+},
+//HTML
+hightlight_html: function(code) {
+code = code
+//replace attributes
+.replace(/\s+([a-zA-Z-]{0,15})="([-a-z0-9_ \/.#:=\;]{0,49})"/gi,’ &lt;span class=”atn”&gt;$1&lt;/span&gt;=&lt;span class=”atv”&gt;“$2”&lt;/span&gt;’)
+//replace open tags
+.replace(/(&amp;lt;)(\w{0,15})(\s+|&amp;gt;|&gt;)/gi,’$1&lt;span class=”tag”&gt;$2&lt;/span&gt;$3’)
+//replace close tags
+.replace(/(&amp;lt;)\/(\w{0,15})(&amp;gt;|&gt;)/gi,’$1/&lt;span class=”tag”&gt;$2&lt;/span&gt;$3’)
+//replace doctype
+.replace(/(&amp;lt;!)([-a-z0-9_ \/.#:"]{0,150})(&amp;gt;|&gt;)/gi,’&lt;span class=”dec”&gt;$1$2$3&lt;/span&gt;’)
+//replace comments
+.replace(/(&amp;lt;|&lt;)!–([\s\S]<em>?)–(&amp;gt;|&gt;)/gm,’&lt;span class=”com”&gt;$1!–$2–$3&lt;/span&gt;’);
+return code;
+}
+};
+/</em>
+* helpers
+*/
+//prepare regexp template for keywords
+function get_keywords(str)
+{
+return ‘(‘ + str.replace(/ /g, ‘|’) + ‘)([^a-z0-9$_])’;
+}
+//process multiline comments
+function multiline_comments(text)
+{
+text = text.split(‘\n’);
+for(var i=0; i&lt;text.length; i++) {
+text[i] = ‘&lt;span class=”com”&gt;‘+text[i]+’&lt;/span&gt;’;
+}
+return text.join(‘\n’);
+}
+//add element, return index
+function push(array, element)
+{
+array.push(element);
+return array.length-1;
+}
+})(jQuery);
+[/code]</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

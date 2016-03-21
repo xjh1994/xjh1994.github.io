@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>TomCat双击startup.bat闪退</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://www.xjh1994.com/%E6%9C%AA%E5%88%86%E7%B1%BB/2013/09/08/tomcat-e5-8f-8c-e5-87-bbstartup-bat-e9-97-aa-e9-80-80.html">
+  <link rel="alternate" type="application/rss+xml" title="X的博客" href="http://www.xjh1994.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">X的博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/works/">Works</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">TomCat双击startup.bat闪退</h1>
+    <p class="post-meta"><time datetime="2013-09-08T11:28:07+08:00" itemprop="datePublished">Sep 8, 2013</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">xjh1994</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><a href="http://bcs.duapp.com/blogxjh/blog/132785521.jpg"><img src="http://bcs.duapp.com/blogxjh/blog/132785521.jpg" alt="Tomcat" /></a></p>
+
+<p>昨天同学装TomCat时，下载的zip双击startup.bat结果闪退，打不开http://localhost:8080，因为他用的是XP系统，我以为是系统问题，试了好久都不能解决，于是百度了一下，得到了解决方法：</p>
+
+<p>用文本编辑器打开startup.bat，可以看到里面有很多rem注释，去掉所有注释，完成以后如下</p>
+
+<hr />
+
+<p><strong>if “%OS%” == “Windows_NT” setlocal</strong>
+** set CURRENT_DIR=%cd%**
+** if not “%CATALINA_HOME%” == “” goto gotHome**
+** set CATALINA_HOME=%CURRENT_DIR%**
+** if exist “%CATALINA_HOME%bincatalina.bat” goto okHome**
+** cd ..**
+** set CATALINA_HOME=%cd%**
+** cd %CURRENT_DIR%**
+** :gotHome**
+** if exist “%CATALINA_HOME%bincatalina.bat” goto okHome**
+** echo The CATALINA_HOME environment variable is not defined correctly**
+** echo This environment variable is needed to run this program**
+** goto end**
+** :okHome**
+** set EXECUTABLE=%CATALINA_HOME%bincatalina.bat**
+** if exist “%EXECUTABLE%” goto okExec**
+** echo Cannot find %EXECUTABLE%**
+** echo This file is needed to run this program**
+** goto end**
+** :okExec**
+** set CMD_LINE_ARGS=**
+** :setArgs**
+** if ““%1””==”””” goto doneSetArgs**
+** set CMD_LINE_ARGS=%CMD_LINE_ARGS% %1**
+** shift**
+** goto setArgs**
+** :doneSetArgs**
+** call “%EXECUTABLE%” start %CMD_LINE_ARGS%**
+** :end**
+** pause**</p>
+
+<hr />
+
+<blockquote>注意在批处理最后加了pause
+
+
+
+再次双击startup，这下不是闪退而是暂停住了，提示JAVA_HOME环境变量无效，JAVA_HOME指定的是JRE目录而不是JDK目录。</blockquote>
+
+<p>再检查了下自定的安装目录，再打开D:Program Files,发现有个Java文件夹里有个JDK1.6.0_17。</p>
+
+<p>囧，原来安装时候指定的目录是JRE的目录，JDK安装到了默认的位置了，重新指定JAVA_HOME为D:Program FilesJavaJDK1.6.0_17，path后加;D:Program FilesJavaJDK1.6.0_17/bin。。再次startup，成功，打开<a href="http://localhost:8080">http://localhost:8080</a>。</p>
+
+<p>另外，tomcat5.x或以上版本不需要指定以下环境变量</p>
+
+<p><strong>CATALINA_HOME: C: Tomcat</strong>
+** CATALINA_BASE: C: Tomcat**
+** TOMCAT_HOME: C:Tomcat**
+** classpath=.;%JAVA_HOME%libdt.jar;%JAVA_HOME%libtools.jar;%**</p>
+
+<p>转自百度空间<a href="http://hi.baidu.com/nullmemory/item/5485fb494713a30c6cc2f0af">http://hi.baidu.com/nullmemory/item/5485fb494713a30c6cc2f0af</a></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">X的博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>X的博客</li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/xjh1994"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">xjh1994</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
