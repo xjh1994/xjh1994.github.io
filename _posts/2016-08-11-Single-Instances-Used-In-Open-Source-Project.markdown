@@ -13,4 +13,19 @@ tag:
 - Android
 ---
 
-# 常见开源项目中使用的单例模式
+# EventBus
+
+```
+static volatile EventBus defaultInstance;
+
+public static EventBus getDefault() {
+       if (defaultInstance == null) {
+           synchronized (EventBus.class) {
+               if (defaultInstance == null) {
+                   defaultInstance = new EventBus();
+               }
+           }
+       }
+       return defaultInstance;
+   }
+```
