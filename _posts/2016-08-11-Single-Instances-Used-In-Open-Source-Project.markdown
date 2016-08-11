@@ -19,13 +19,13 @@ tag:
 static volatile EventBus defaultInstance;
 
 public static EventBus getDefault() {
-       if (defaultInstance == null) {
-           synchronized (EventBus.class) {
-               if (defaultInstance == null) {
-                   defaultInstance = new EventBus();
-               }
+   if (defaultInstance == null) {
+       synchronized (EventBus.class) {
+           if (defaultInstance == null) {
+               defaultInstance = new EventBus();
            }
        }
-       return defaultInstance;
    }
+   return defaultInstance;
+}
 ```
