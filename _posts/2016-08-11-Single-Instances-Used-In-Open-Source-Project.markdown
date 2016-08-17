@@ -16,16 +16,36 @@ tag:
 # EventBus
 
 ```
-static volatile EventBus defaultInstance;
+    static volatile EventBus defaultInstance;
 
-public static EventBus getDefault() {
-   if (defaultInstance == null) {
-       synchronized (EventBus.class) {
-           if (defaultInstance == null) {
-               defaultInstance = new EventBus();
+    public static EventBus getDefault() {
+       if (defaultInstance == null) {
+           synchronized (EventBus.class) {
+               if (defaultInstance == null) {
+                   defaultInstance = new EventBus();
+               }
            }
        }
-   }
-   return defaultInstance;
-}
+       return defaultInstance;
+    }
+```
+
+# Universal-Image-Loader
+
+```
+    private volatile static ImageLoader instance;
+
+    public static ImageLoader getInstance() {
+        if (instance == null) {
+            synchronized (ImageLoader.class) {
+                if (instance == null) {
+                    instance = new ImageLoader();
+                }
+            }
+        }
+        return instance;
+    }
+
+    protected ImageLoader() {
+    }
 ```
