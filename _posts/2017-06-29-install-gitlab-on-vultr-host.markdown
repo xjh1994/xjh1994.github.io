@@ -13,7 +13,7 @@ tag:
 - Vultr
 ---
 
-在Vultr的单核1G主机上安装GitLab，访问时出现 `502 ，Whoops, GitLab is taking too much time to respond` 错误，已排除端口问题，最终在GitLab官网的 `Requirements` 里看到安装要求，1G内存的需要3GSwap空间，于是尝试了一下，最后成功了。
+在Vultr的单核1G主机上安装GitLab，访问时出现 `502 ，Whoops, GitLab is taking too much time to respond` 错误，已排除端口问题，最终在GitLab官网的 `Requirements` 里看到安装要求，1G内存的需要3G的Swap空间，于是尝试了一下，最后成功了。
 
 创建Swap空间的过程中也遇到了几个问题，记录一下：
 
